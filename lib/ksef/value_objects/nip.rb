@@ -3,7 +3,7 @@
 module KSEF
   module ValueObjects
     # Polish NIP (tax identification number)
-    class Nip
+    class NIP
       attr_reader :value
 
       def initialize(value)

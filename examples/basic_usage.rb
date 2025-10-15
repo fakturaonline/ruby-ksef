@@ -148,7 +148,7 @@ def example_error_handling
   puts "\n=== Error Handling Example ==="
 
   begin
-    KSEF::ValueObjects::Nip.new("invalid")
+    KSEF::ValueObjects::NIP.new("invalid")
   rescue KSEF::ValidationError => e
     puts "❌ Validation Error: #{e.message}"
   end

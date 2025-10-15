@@ -97,7 +97,7 @@ module KSEF
     # @param value [String] Polish NIP (tax identification number)
     def identifier(value)
       @config = @config.with_identifier(
-        ValueObjects::Nip.new(value)
+        ValueObjects::NIP.new(value)
       )
       self
     end
