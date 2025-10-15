@@ -13,13 +13,8 @@ module TestHelpers
       success?: status >= 200 && status < 300
     )
 
-    allow(http_client).to receive(:get).and_return(response)
-    allow(http_client).to receive(:post).and_return(response)
-    allow(http_client).to receive(:put).and_return(response)
-    allow(http_client).to receive(:delete).and_return(response)
-    allow(http_client).to receive(:config).and_return(
-      KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test))
-    )
+    allow(http_client).to receive_messages(get: response, post: response, put: response, delete: response,
+                                           config: KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test)))
 
     http_client
   end
@@ -35,7 +30,7 @@ module TestHelpers
       identifier: KSEF::ValueObjects::Nip.new("1111111111")
     }
 
-    KSEF::Config.new(**defaults.merge(options))
+    KSEF::Config.new(**defaults, **options)
   end
 
   # Stub KSEF API response
@@ -44,7 +39,7 @@ module TestHelpers
       .to_return(
         status: status,
         body: response_body.to_json,
-        headers: { 'Content-Type' => 'application/json' }
+        headers: { "Content-Type" => "application/json" }
       )
   end
 
@@ -60,7 +55,7 @@ module TestHelpers
   def valid_refresh_token
     KSEF::ValueObjects::RefreshToken.new(
       token: "refresh_token",
-      expires_at: Time.now + 86400 # 24 hours
+      expires_at: Time.now + 86_400 # 24 hours
     )
   end
 end

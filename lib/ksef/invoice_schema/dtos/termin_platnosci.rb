@@ -20,11 +20,11 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          termin_elem = doc.add_element('TerminPlatnosci')
+          termin_elem = doc.add_element("TerminPlatnosci")
 
-          add_element_if_present(termin_elem, 'Termin', @termin.strftime('%Y-%m-%d'))
-          add_element_if_present(termin_elem, 'FormaPlatnosci', @forma_platnosci)
-          add_element_if_present(termin_elem, 'SumaPlatnosci', format_decimal(@suma_platnosci)) if @suma_platnosci
+          add_element_if_present(termin_elem, "Termin", @termin.strftime("%Y-%m-%d"))
+          add_element_if_present(termin_elem, "FormaPlatnosci", @forma_platnosci)
+          add_element_if_present(termin_elem, "SumaPlatnosci", format_decimal(@suma_platnosci)) if @suma_platnosci
 
           doc
         end
@@ -33,7 +33,8 @@ module KSEF
 
         def format_decimal(value)
           return nil if value.nil?
-          '%.2f' % value
+
+          "%.2f" % value
         end
       end
     end

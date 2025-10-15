@@ -26,7 +26,7 @@ module KSEF
           public_key = certificate.public_key
 
           # Create payload: TOKEN|TIMESTAMP
-          payload = "#{@ksef_token.token}|#{challenge_response['timestamp']}"
+          payload = "#{@ksef_token.token}|#{challenge_response["timestamp"]}"
 
           # Encrypt with RSA-OAEP
           encrypted = public_key.public_encrypt(

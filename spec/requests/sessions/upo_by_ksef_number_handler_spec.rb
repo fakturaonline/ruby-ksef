@@ -3,13 +3,13 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Requests::Sessions::UpoByKsefNumberHandler do
+  subject { described_class.new(http_client) }
+
   let(:http_client) { instance_double(KSEF::HttpClient::Client) }
   let(:response) { instance_double(KSEF::HttpClient::Response, json: response_data) }
   let(:response_data) { { "upo" => "xml_content", "ksefNumber" => "1234567890" } }
   let(:session_ref) { "20241015-SE-ABC123" }
   let(:ksef_number) { "1234567890-20241015-ABCD-12" }
-
-  subject { described_class.new(http_client) }
 
   describe "#call" do
     it "sends GET request to correct endpoint" do

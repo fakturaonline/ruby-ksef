@@ -146,10 +146,10 @@ module KSEF
 
       # Authenticate based on method
       auth_response = if @config.certificate_path
-        authenticate_with_certificate(http_client, challenge_response)
-      elsif @config.ksef_token
-        authenticate_with_ksef_token(http_client, challenge_response)
-      end
+                        authenticate_with_certificate(http_client, challenge_response)
+                      elsif @config.ksef_token
+                        authenticate_with_ksef_token(http_client, challenge_response)
+                      end
 
       # Set temporary auth token
       temp_token = ValueObjects::AccessToken.new(
@@ -161,15 +161,15 @@ module KSEF
 
       # Wait for completion
       reference_number = auth_response["referenceNumber"]
-      status_response = wait_for_auth_completion(http_client, reference_number)
+      wait_for_auth_completion(http_client, reference_number)
 
       # Redeem tokens
       redeem_response = Requests::Auth::RedeemHandler.new(http_client).call
 
       # Set final tokens
       @config = @config
-        .with_access_token(ValueObjects::AccessToken.from_hash(redeem_response["accessToken"]))
-        .with_refresh_token(ValueObjects::RefreshToken.from_hash(redeem_response["refreshToken"]))
+                .with_access_token(ValueObjects::AccessToken.from_hash(redeem_response["accessToken"]))
+                .with_refresh_token(ValueObjects::RefreshToken.from_hash(redeem_response["refreshToken"]))
 
       http_client.config = @config
     end

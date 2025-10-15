@@ -63,39 +63,39 @@ module KSEF
 
       def to_rexml
         doc = REXML::Document.new
-        fa = doc.add_element('Fa')
+        fa = doc.add_element("Fa")
 
         # KodWaluty
-        add_element_if_present(fa, 'KodWaluty', @kod_waluty)
+        add_element_if_present(fa, "KodWaluty", @kod_waluty)
 
         # P_1 - datum vystavení
-        add_element_if_present(fa, 'P_1', @p_1.strftime('%Y-%m-%d'))
+        add_element_if_present(fa, "P_1", @p_1.strftime("%Y-%m-%d"))
 
         # P_1M - místo vystavení
-        add_element_if_present(fa, 'P_1M', @p_1m) if @p_1m
+        add_element_if_present(fa, "P_1M", @p_1m) if @p_1m
 
         # P_2 - číslo faktury
-        add_element_if_present(fa, 'P_2', @p_2)
+        add_element_if_present(fa, "P_2", @p_2)
 
         # P_6 - datum zdanitelného plnění (DUZP)
-        add_element_if_present(fa, 'P_6', @p_6.strftime('%Y-%m-%d')) if @p_6
+        add_element_if_present(fa, "P_6", @p_6.strftime("%Y-%m-%d")) if @p_6
 
         # P_13_* - sumy podle DPH sazeb
-        add_element_if_present(fa, 'P_13_1', format_decimal(@p_13_1)) if @p_13_1
-        add_element_if_present(fa, 'P_13_2', format_decimal(@p_13_2)) if @p_13_2
-        add_element_if_present(fa, 'P_13_3', format_decimal(@p_13_3)) if @p_13_3
-        add_element_if_present(fa, 'P_13_4', format_decimal(@p_13_4)) if @p_13_4
-        add_element_if_present(fa, 'P_13_5', format_decimal(@p_13_5)) if @p_13_5
-        add_element_if_present(fa, 'P_13_6', format_decimal(@p_13_6)) if @p_13_6
+        add_element_if_present(fa, "P_13_1", format_decimal(@p_13_1)) if @p_13_1
+        add_element_if_present(fa, "P_13_2", format_decimal(@p_13_2)) if @p_13_2
+        add_element_if_present(fa, "P_13_3", format_decimal(@p_13_3)) if @p_13_3
+        add_element_if_present(fa, "P_13_4", format_decimal(@p_13_4)) if @p_13_4
+        add_element_if_present(fa, "P_13_5", format_decimal(@p_13_5)) if @p_13_5
+        add_element_if_present(fa, "P_13_6", format_decimal(@p_13_6)) if @p_13_6
 
         # P_15 - částka celkem
-        add_element_if_present(fa, 'P_15', format_decimal(@p_15))
+        add_element_if_present(fa, "P_15", format_decimal(@p_15))
 
         # Adnotacje
         add_child_element(fa, @adnotacje)
 
         # RodzajFaktury
-        add_element_if_present(fa, 'RodzajFaktury', @rodzaj_faktury)
+        add_element_if_present(fa, "RodzajFaktury", @rodzaj_faktury)
 
         # FaWiersz - položky
         add_child_elements(fa, @fa_wiersz)
@@ -110,7 +110,8 @@ module KSEF
 
       def format_decimal(value)
         return nil if value.nil?
-        '%.2f' % value
+
+        "%.2f" % value
       end
     end
   end

@@ -89,14 +89,10 @@ module KSEF
         }
 
         # Add authorization header if access token exists
-        if @config.access_token
-          headers["Authorization"] = "Bearer #{@config.access_token.token}"
-        end
+        headers["Authorization"] = "Bearer #{@config.access_token.token}" if @config.access_token
 
         # Add encrypted key header if exists
-        if @config.encrypted_key
-          headers["EncryptedKey"] = @config.encrypted_key.to_s
-        end
+        headers["EncryptedKey"] = @config.encrypted_key.to_s if @config.encrypted_key
 
         headers.merge(additional_headers)
       end

@@ -22,18 +22,18 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          rachunek = doc.add_element('RachunekBankowy')
+          rachunek = doc.add_element("RachunekBankowy")
 
           # IBAN nebo NrRB podle formátu
           if @nr_rb =~ /^[A-Z]{2}\d{2}/
-            add_element_if_present(rachunek, 'NrRBIBAN', @nr_rb)
+            add_element_if_present(rachunek, "NrRBIBAN", @nr_rb)
           else
-            add_element_if_present(rachunek, 'NrRB', @nr_rb)
+            add_element_if_present(rachunek, "NrRB", @nr_rb)
           end
 
-          add_element_if_present(rachunek, 'SWIFT', @swift)
-          add_element_if_present(rachunek, 'NazwaBanku', @nazwa_banku)
-          add_element_if_present(rachunek, 'OpisRachunku', @opis_rachunku)
+          add_element_if_present(rachunek, "SWIFT", @swift)
+          add_element_if_present(rachunek, "NazwaBanku", @nazwa_banku)
+          add_element_if_present(rachunek, "OpisRachunku", @opis_rachunku)
 
           doc
         end

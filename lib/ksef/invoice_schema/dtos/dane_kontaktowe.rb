@@ -18,10 +18,10 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          kontakt = doc.add_element('DaneKontaktowe')
+          kontakt = doc.add_element("DaneKontaktowe")
 
-          add_element_if_present(kontakt, 'Email', @email)
-          add_element_if_present(kontakt, 'Telefon', @telefon)
+          add_element_if_present(kontakt, "Email", @email)
+          add_element_if_present(kontakt, "Telefon", @telefon)
 
           doc
         end

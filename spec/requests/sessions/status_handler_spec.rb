@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe KSEF::Requests::Sessions::StatusHandler do
+  subject { described_class.new(http_client) }
+
   let(:reference_number) { "20250115-SE-ABCDEF123456" }
   let(:http_client) { stub_http_client(response_body: session_status_response_fixture) }
-  subject { described_class.new(http_client) }
 
   describe "#call" do
     it "returns session status" do

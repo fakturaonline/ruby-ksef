@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/ksef'
+require_relative "../lib/ksef"
 
 # Příklad mappingu z FakturaOnline do KSeF FA(2) XML
 # Kompletní demo všech důležitých polí
@@ -8,57 +8,57 @@ require_relative '../lib/ksef'
 # Simulace dat z FakturaOnline
 invoice_data = {
   # Základní identifikace
-  number: 'FV/2024/001',
+  number: "FV/2024/001",
   issued_on: Date.new(2024, 1, 15),
   due_on: Date.new(2024, 2, 15),
   tax_point_on: Date.new(2024, 1, 15),
 
   # Finanční údaje
-  currency: 'PLN',
+  currency: "PLN",
   total: 1230.00,
 
   # Platební údaje
-  means_of_payment: 'bank_transfer', # => forma_platnosci: '6'
-  payment_symbol: '2024001',
+  means_of_payment: "bank_transfer", # => forma_platnosci: '6'
+  payment_symbol: "2024001",
 
   # Poznámky
-  note: 'Děkujeme za vaši objednávku',
-  foot_note: 'Faktura vystavena elektronicky.',
-  issued_by: 'Jan Novák',
+  note: "Děkujeme za vaši objednávku",
+  foot_note: "Faktura vystavena elektronicky.",
+  issued_by: "Jan Novák",
 
   # Seller data
   seller: {
-    name: 'Moje Firma s.r.o.',
-    company_number: '1234567890',
-    tax_number: 'PL1234567890',
-    street: 'Marszałkowska 1',
-    city: 'Warszawa',
-    postcode: '00-001',
-    country_code: 'PL',
-    email: 'faktura@mojefirma.pl',
-    phone: '+48 123 456 789',
-    bank_account_number: 'PL61109010140000071219812874',
-    swift: 'WBKPPLPP'
+    name: "Moje Firma s.r.o.",
+    company_number: "1234567890",
+    tax_number: "PL1234567890",
+    street: "Marszałkowska 1",
+    city: "Warszawa",
+    postcode: "00-001",
+    country_code: "PL",
+    email: "faktura@mojefirma.pl",
+    phone: "+48 123 456 789",
+    bank_account_number: "PL61109010140000071219812874",
+    swift: "WBKPPLPP"
   },
 
   # Buyer data
   buyer: {
-    name: 'Zákazník Sp. z o.o.',
-    company_number: '9876543210',
-    tax_number: 'PL9876543210',
-    street: 'Floriańska 5',
-    city: 'Kraków',
-    postcode: '30-001',
-    country_code: 'PL',
-    email: 'zakaznik@firma.pl',
-    phone: '+48 987 654 321'
+    name: "Zákazník Sp. z o.o.",
+    company_number: "9876543210",
+    tax_number: "PL9876543210",
+    street: "Floriańska 5",
+    city: "Kraków",
+    postcode: "30-001",
+    country_code: "PL",
+    email: "zakaznik@firma.pl",
+    phone: "+48 987 654 321"
   },
 
   # Invoice lines
   lines: [
     {
-      description: 'Konzultační služby',
-      unit_type: 'ks',
+      description: "Konzultační služby",
+      unit_type: "ks",
       quantity: 1,
       price: 1000.00,
       vat_rate: 23.0
@@ -78,8 +78,8 @@ prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
     kod_kraju: invoice_data[:seller][:country_code],
     miejscowosc: invoice_data[:seller][:city],
     kod_pocztowy: invoice_data[:seller][:postcode],
-    ulica: invoice_data[:seller][:street].split(' ')[0..-2].join(' '),
-    nr_domu: invoice_data[:seller][:street].split(' ').last
+    ulica: invoice_data[:seller][:street].split[0..-2].join(" "),
+    nr_domu: invoice_data[:seller][:street].split.last
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:seller][:email],
@@ -98,8 +98,8 @@ kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
     kod_kraju: invoice_data[:buyer][:country_code],
     miejscowosc: invoice_data[:buyer][:city],
     kod_pocztowy: invoice_data[:buyer][:postcode],
-    ulica: invoice_data[:buyer][:street].split(' ')[0..-2].join(' '),
-    nr_domu: invoice_data[:buyer][:street].split(' ').last
+    ulica: invoice_data[:buyer][:street].split[0..-2].join(" "),
+    nr_domu: invoice_data[:buyer][:street].split.last
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:buyer][:email],
@@ -126,21 +126,21 @@ polozky = invoice_data[:lines].map.with_index do |line, idx|
 end
 
 # 4. Výpočet součtů DPH
-vat_23_base = polozky.sum { |p| p.p_9b }
-vat_23_amount = polozky.sum { |p| p.p_12 }
+vat_23_base = polozky.sum(&:p_9b)
+vat_23_amount = polozky.sum(&:p_12)
 
 # 5. Platební údaje
 platnosc = KSEF::InvoiceSchema::DTOs::Platnosc.new(
   termin_platnosci: KSEF::InvoiceSchema::DTOs::TerminPlatnosci.new(
     termin: invoice_data[:due_on],
-    forma_platnosci: '6', # bank_transfer = 6
+    forma_platnosci: "6", # bank_transfer = 6
     suma_platnosci: invoice_data[:total]
   ),
   rachunek_bankowy: KSEF::InvoiceSchema::DTOs::RachunekBankowy.new(
     nr_rb: invoice_data[:seller][:bank_account_number],
     swift: invoice_data[:seller][:swift]
   ),
-  forma_platnosci: '6'
+  forma_platnosci: "6"
 )
 
 # 6. Hlavní část faktury (Fa)
@@ -148,14 +148,14 @@ fa = KSEF::InvoiceSchema::Fa.new(
   kod_waluty: KSEF::InvoiceSchema::ValueObjects::KodWaluty.new(invoice_data[:currency]),
   p_1: invoice_data[:issued_on],        # issued_on
   p_1m: invoice_data[:seller][:city],   # místo vystavení
-  p_2: invoice_data[:number],            # number
-  p_6: invoice_data[:tax_point_on],     # tax_point_on (DUZP)
+  p_2: invoice_data[:number], # number
+  p_6: invoice_data[:tax_point_on], # tax_point_on (DUZP)
   p_15: invoice_data[:total],            # total
   fa_wiersz: polozky,
   p_13_1: vat_23_base,                   # základ daně 23%
   p_13_2: vat_23_amount,                 # DPH 23%
   adnotacje: KSEF::InvoiceSchema::DTOs::Adnotacje.new(
-    p_16: invoice_data[:note]             # poznámka
+    p_16: invoice_data[:note] # poznámka
   ),
   platnosc: platnosc
 )
@@ -170,7 +170,7 @@ stopka = KSEF::InvoiceSchema::DTOs::Stopka.new(
 
 # 8. Hlavička
 naglowek = KSEF::InvoiceSchema::Naglowek.new(
-  system_info: 'FakturaOnline Ruby Integration v1.0'
+  system_info: "FakturaOnline Ruby Integration v1.0"
 )
 
 # 9. Kompletní faktura

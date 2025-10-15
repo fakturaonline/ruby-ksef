@@ -17,12 +17,12 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If string exceeds maximum length
           def call(value, attribute: nil)
-            if value.to_s.length > @max
-              raise ArgumentError, format_message(
-                "String length #{value.to_s.length} exceeds maximum of #{@max}.",
-                attribute
-              )
-            end
+            return unless value.to_s.length > @max
+
+            raise ArgumentError, format_message(
+              "String length #{value.to_s.length} exceeds maximum of #{@max}.",
+              attribute
+            )
           end
         end
       end

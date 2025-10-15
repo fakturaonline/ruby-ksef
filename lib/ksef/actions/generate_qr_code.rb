@@ -31,7 +31,7 @@ module KSEF
           "https://ksef.mf.gov.pl/web/invoice/#{@ksef_number}"
         else
           # Offline invoice QR code
-          "NIP:#{@nip}|DATA:#{@invoice_date.strftime('%Y-%m-%d')}"
+          "NIP:#{@nip}|DATA:#{@invoice_date.strftime("%Y-%m-%d")}"
         end
       end
     end

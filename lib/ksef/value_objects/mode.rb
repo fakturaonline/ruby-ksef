@@ -64,7 +64,7 @@ module KSEF
         valid_modes = %i[test demo production]
         return if valid_modes.include?(@value)
 
-        raise ValidationError, "Invalid mode: #{@value}. Must be one of: #{valid_modes.join(', ')}"
+        raise ValidationError, "Invalid mode: #{@value}. Must be one of: #{valid_modes.join(", ")}"
       end
     end
   end

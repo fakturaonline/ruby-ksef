@@ -17,12 +17,12 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If string is below minimum length
           def call(value, attribute: nil)
-            if value.to_s.length < @min
-              raise ArgumentError, format_message(
-                "String length #{value.to_s.length} is below minimum of #{@min}.",
-                attribute
-              )
-            end
+            return unless value.to_s.length < @min
+
+            raise ArgumentError, format_message(
+              "String length #{value.to_s.length} is below minimum of #{@min}.",
+              attribute
+            )
           end
         end
       end

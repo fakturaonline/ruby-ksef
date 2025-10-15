@@ -22,19 +22,19 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          dane = doc.add_element('DaneIdentyfikacyjne')
+          dane = doc.add_element("DaneIdentyfikacyjne")
 
           if @nip
-            add_element_if_present(dane, 'NIP', @nip)
+            add_element_if_present(dane, "NIP", @nip)
           elsif @pesel
-            add_element_if_present(dane, 'PESEL', @pesel)
+            add_element_if_present(dane, "PESEL", @pesel)
           elsif @id_inny
-            inny = dane.add_element('BrakID')
-            add_element_if_present(inny, 'Typ', @id_inny[:typ])
-            add_element_if_present(inny, 'Numer', @id_inny[:numer])
+            inny = dane.add_element("BrakID")
+            add_element_if_present(inny, "Typ", @id_inny[:typ])
+            add_element_if_present(inny, "Numer", @id_inny[:numer])
           end
 
-          add_element_if_present(dane, 'Nazwa', @nazwa)
+          add_element_if_present(dane, "Nazwa", @nazwa)
 
           doc
         end

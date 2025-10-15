@@ -14,8 +14,7 @@ module KSEF
         cipher.key = @encryption_key.key
         cipher.iv = @encryption_key.iv
 
-        decrypted = cipher.update(encrypted_document) + cipher.final
-        decrypted
+        cipher.update(encrypted_document) + cipher.final
       end
     end
   end

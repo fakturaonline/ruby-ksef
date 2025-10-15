@@ -19,12 +19,12 @@ module KSEF
           def call(value, attribute: nil)
             numeric_value = value.is_a?(Numeric) ? value : value.to_f
 
-            if numeric_value > @max
-              raise ArgumentError, format_message(
-                "Value #{numeric_value} exceeds maximum of #{@max}.",
-                attribute
-              )
-            end
+            return unless numeric_value > @max
+
+            raise ArgumentError, format_message(
+              "Value #{numeric_value} exceeds maximum of #{@max}.",
+              attribute
+            )
           end
         end
       end

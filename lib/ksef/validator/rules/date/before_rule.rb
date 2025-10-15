@@ -19,12 +19,12 @@ module KSEF
           def call(value, attribute: nil)
             value_date = parse_date(value)
 
-            unless value_date < @before_date
-              raise ArgumentError, format_message(
-                "Date must be before #{@before_date}.",
-                attribute
-              )
-            end
+            return if value_date < @before_date
+
+            raise ArgumentError, format_message(
+              "Date must be before #{@before_date}.",
+              attribute
+            )
           end
 
           private

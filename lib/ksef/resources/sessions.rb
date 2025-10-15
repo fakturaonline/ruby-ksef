@@ -49,7 +49,8 @@ module KSEF
       # @param invoice_reference_number [String] Invoice reference number
       # @return [Hash] UPO document
       def upo_by_invoice_reference(session_reference_number, invoice_reference_number)
-        Requests::Sessions::UpoByInvoiceReferenceHandler.new(@http_client).call(session_reference_number, invoice_reference_number)
+        Requests::Sessions::UpoByInvoiceReferenceHandler.new(@http_client).call(session_reference_number,
+                                                                                invoice_reference_number)
       end
 
       # Download UPO by UPO reference number

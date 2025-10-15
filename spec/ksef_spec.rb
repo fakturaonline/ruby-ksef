@@ -2,7 +2,7 @@
 
 RSpec.describe KSEF do
   it "has a version number" do
-    expect(KSEF::VERSION).not_to be nil
+    expect(KSEF::VERSION).not_to be_nil
   end
 
   describe ".build" do

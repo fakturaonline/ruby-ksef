@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe KSEF::Requests::Sessions::SendOnlineHandler do
-  let(:http_client) { stub_http_client(response_body: send_online_response_fixture) }
   subject { described_class.new(http_client) }
 
+  let(:http_client) { stub_http_client(response_body: send_online_response_fixture) }
   let(:params) do
     {
       invoice_hash: Digest::SHA256.base64digest(invoice_xml_fixture),

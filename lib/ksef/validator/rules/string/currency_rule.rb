@@ -23,12 +23,12 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If currency code is invalid
           def call(value, attribute: nil)
-            unless VALID_CURRENCIES.include?(value.to_s.upcase)
-              raise ArgumentError, format_message(
-                "Invalid currency code. Must be a valid ISO 4217 code.",
-                attribute
-              )
-            end
+            return if VALID_CURRENCIES.include?(value.to_s.upcase)
+
+            raise ArgumentError, format_message(
+              "Invalid currency code. Must be a valid ISO 4217 code.",
+              attribute
+            )
           end
         end
       end

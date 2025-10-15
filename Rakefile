@@ -15,7 +15,7 @@ task :console do
   require_relative "lib/ksef"
 
   # Manually load all files for IRB (Zeitwerk doesn't work well in REPL)
-  Dir[File.join(__dir__, 'lib', 'ksef', '**', '*.rb')].sort.each do |file|
+  Dir[File.join(__dir__, "lib", "ksef", "**", "*.rb")].each do |file|
     require file
   end
 

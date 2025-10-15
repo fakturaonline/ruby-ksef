@@ -34,13 +34,13 @@ module KSEF
 
       def to_rexml
         doc = REXML::Document.new
-        doc << REXML::XMLDecl.new('1.0', 'UTF-8')
+        doc << REXML::XMLDecl.new("1.0", "UTF-8")
 
         # Root element Faktura s namespaces
-        faktura = doc.add_element('Faktura')
+        faktura = doc.add_element("Faktura")
         faktura.add_namespace(@naglowek.wariant_formularza.target_namespace)
-        faktura.add_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-        faktura.add_namespace('etd', 'http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/')
+        faktura.add_namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+        faktura.add_namespace("etd", "http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/")
 
         # Naglowek
         naglowek_element = @naglowek.to_rexml.root

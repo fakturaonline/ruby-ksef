@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe KSEF::Requests::Invoices::QueryHandler do
-  let(:http_client) { stub_http_client(response_body: invoice_query_response_fixture) }
   subject { described_class.new(http_client) }
 
+  let(:http_client) { stub_http_client(response_body: invoice_query_response_fixture) }
   let(:params) do
     {
       from_date: "2025-01-01",

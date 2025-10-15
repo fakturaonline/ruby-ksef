@@ -13,8 +13,8 @@ module KSEF
         pem_lines = base64_der.scan(/.{1,64}/)
 
         "-----BEGIN #{name}-----\n" +
-        pem_lines.join("\n") + "\n" +
-        "-----END #{name}-----\n"
+          pem_lines.join("\n") + "\n" \
+                                 "-----END #{name}-----\n"
       end
     end
   end

@@ -64,7 +64,7 @@ module KSEF
           sign_xml(builder.to_xml, private_key, certificate)
         end
 
-        def sign_xml(xml, private_key, certificate)
+        def sign_xml(xml, _private_key, _certificate)
           # TODO: Implement proper XMLDSig signature
           # This requires xmldsig gem or manual implementation
           # For now, return unsigned XML as placeholder

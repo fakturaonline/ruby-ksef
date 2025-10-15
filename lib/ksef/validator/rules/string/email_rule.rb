@@ -14,12 +14,12 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If email is invalid
           def call(value, attribute: nil)
-            unless value.to_s.match?(EMAIL_REGEX)
-              raise ArgumentError, format_message(
-                "Invalid email format.",
-                attribute
-              )
-            end
+            return if value.to_s.match?(EMAIL_REGEX)
+
+            raise ArgumentError, format_message(
+              "Invalid email format.",
+              attribute
+            )
           end
         end
       end

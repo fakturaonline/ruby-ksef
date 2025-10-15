@@ -19,12 +19,12 @@ module KSEF
           def call(value, attribute: nil)
             numeric_value = value.is_a?(Numeric) ? value : value.to_f
 
-            if numeric_value < @min
-              raise ArgumentError, format_message(
-                "Value #{numeric_value} is below minimum of #{@min}.",
-                attribute
-              )
-            end
+            return unless numeric_value < @min
+
+            raise ArgumentError, format_message(
+              "Value #{numeric_value} is below minimum of #{@min}.",
+              attribute
+            )
           end
         end
       end

@@ -19,7 +19,7 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If number is invalid
           def call(value, attribute: nil)
-            value_str = value.to_s.gsub(/[,\s]/, '')
+            value_str = value.to_s.gsub(/[,\s]/, "")
 
             unless value_str.match?(/^-?\d+(\.\d+)?$/)
               raise ArgumentError, format_message(
@@ -28,9 +28,9 @@ module KSEF
               )
             end
 
-            parts = value_str.split('.')
-            integer_part = parts[0].gsub('-', '')
-            decimal_part = parts[1] || ''
+            parts = value_str.split(".")
+            integer_part = parts[0].gsub("-", "")
+            decimal_part = parts[1] || ""
 
             total_digits = integer_part.length + decimal_part.length
 
@@ -41,12 +41,12 @@ module KSEF
               )
             end
 
-            if decimal_part.length > @max_decimals
-              raise ArgumentError, format_message(
-                "Number has too many decimal places. Maximum is #{@max_decimals}.",
-                attribute
-              )
-            end
+            return unless decimal_part.length > @max_decimals
+
+            raise ArgumentError, format_message(
+              "Number has too many decimal places. Maximum is #{@max_decimals}.",
+              attribute
+            )
           end
         end
       end

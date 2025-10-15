@@ -24,12 +24,12 @@ module KSEF
               )
             end
 
-            if value.size < @min
-              raise ArgumentError, format_message(
-                "Array size #{value.size} is below minimum of #{@min}.",
-                attribute
-              )
-            end
+            return unless value.size < @min
+
+            raise ArgumentError, format_message(
+              "Array size #{value.size} is below minimum of #{@min}.",
+              attribute
+            )
           end
         end
       end

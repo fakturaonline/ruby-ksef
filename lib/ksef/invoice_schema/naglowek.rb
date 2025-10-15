@@ -23,25 +23,25 @@ module KSEF
 
       def to_rexml
         doc = REXML::Document.new
-        naglowek = doc.add_element('Naglowek')
+        naglowek = doc.add_element("Naglowek")
 
         # KodFormularza
-        kod_formularza = naglowek.add_element('KodFormularza')
-        kod_formularza.add_attribute('kodSystemowy', @wariant_formularza.to_s)
-        kod_formularza.add_attribute('wersjaSchemy', @wariant_formularza.schema_version)
-        kod_formularza.text = 'FA'
+        kod_formularza = naglowek.add_element("KodFormularza")
+        kod_formularza.add_attribute("kodSystemowy", @wariant_formularza.to_s)
+        kod_formularza.add_attribute("wersjaSchemy", @wariant_formularza.schema_version)
+        kod_formularza.text = "FA"
 
         # WariantFormularza
-        wariant = naglowek.add_element('WariantFormularza')
+        wariant = naglowek.add_element("WariantFormularza")
         wariant.text = @wariant_formularza.wariant_formularza.to_s
 
         # DataWytworzeniaFa
-        data = naglowek.add_element('DataWytworzeniaFa')
-        data.text = @data_wytworzenia_fa.utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+        data = naglowek.add_element("DataWytworzeniaFa")
+        data.text = @data_wytworzenia_fa.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # SystemInfo (optional)
         if @system_info
-          system = naglowek.add_element('SystemInfo')
+          system = naglowek.add_element("SystemInfo")
           system.text = @system_info
         end
 

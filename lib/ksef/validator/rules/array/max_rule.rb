@@ -24,12 +24,12 @@ module KSEF
               )
             end
 
-            if value.size > @max
-              raise ArgumentError, format_message(
-                "Array size #{value.size} exceeds maximum of #{@max}.",
-                attribute
-              )
-            end
+            return unless value.size > @max
+
+            raise ArgumentError, format_message(
+              "Array size #{value.size} exceeds maximum of #{@max}.",
+              attribute
+            )
           end
         end
       end

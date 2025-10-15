@@ -20,7 +20,7 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          platnosc = doc.add_element('Platnosc')
+          platnosc = doc.add_element("Platnosc")
 
           # Termíny platby
           if @termin_platnosci && !@termin_platnosci.empty?
@@ -30,7 +30,7 @@ module KSEF
           end
 
           # Forma platby
-          add_element_if_present(platnosc, 'FormaPlatnosci', @forma_platnosci)
+          add_element_if_present(platnosc, "FormaPlatnosci", @forma_platnosci)
 
           # Bankovní účty
           if @rachunek_bankowy && !@rachunek_bankowy.empty?

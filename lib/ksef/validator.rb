@@ -9,7 +9,7 @@ module KSEF
     # @return [void]
     # @raise [ArgumentError] If validation fails
     def self.validate(values, rules)
-      values_array = values.is_a?(Hash) ? values : Array(values)
+      values.is_a?(Hash) ? values : Array(values)
 
       if values.is_a?(Hash)
         # Hash of attribute => value

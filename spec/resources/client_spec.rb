@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe KSEF::Resources::Client do
+  subject { described_class.new(http_client, config) }
+
   let(:config) { test_config }
   let(:http_client) { instance_double(KSEF::HttpClient::Client, config: config) }
-  subject { described_class.new(http_client, config) }
 
   describe "resource accessors" do
     it "returns auth resource" do

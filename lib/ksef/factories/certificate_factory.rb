@@ -18,9 +18,9 @@ module KSEF
 
         # Get raw certificate (base64 without headers)
         raw = certificate.to_pem
-                        .gsub("-----BEGIN CERTIFICATE-----\n", '')
-                        .gsub("\n-----END CERTIFICATE-----\n", '')
-                        .gsub("\n", '')
+                         .gsub("-----BEGIN CERTIFICATE-----\n", "")
+                         .gsub("\n-----END CERTIFICATE-----\n", "")
+                         .gsub("\n", "")
 
         # Parse certificate info
         info = {
@@ -55,9 +55,9 @@ module KSEF
 
         # Get raw certificate (base64 without headers)
         raw = certificate.to_pem
-                        .gsub("-----BEGIN CERTIFICATE-----\n", '')
-                        .gsub("\n-----END CERTIFICATE-----\n", '')
-                        .gsub("\n", '')
+                         .gsub("-----BEGIN CERTIFICATE-----\n", "")
+                         .gsub("\n-----END CERTIFICATE-----\n", "")
+                         .gsub("\n", "")
 
         # Parse certificate info
         info = {

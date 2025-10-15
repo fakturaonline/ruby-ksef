@@ -39,7 +39,7 @@ module KSEF
 
       def valid_nip?
         # Test NIPs
-        test_nips = ["1111111111", "1234567890", "2222222222"]
+        test_nips = %w[1111111111 1234567890 2222222222]
         return true if test_nips.include?(@value)
 
         digits = @value.chars.map(&:to_i)

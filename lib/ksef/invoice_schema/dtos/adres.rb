@@ -46,18 +46,18 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          adres = doc.add_element('Adres')
+          adres = doc.add_element("Adres")
 
-          add_element_if_present(adres, 'KodKraju', @kod_kraju)
-          add_element_if_present(adres, 'Wojewodztwo', @wojewodztwo)
-          add_element_if_present(adres, 'Powiat', @powiat)
-          add_element_if_present(adres, 'Gmina', @gmina)
-          add_element_if_present(adres, 'Ulica', @ulica)
-          add_element_if_present(adres, 'NrDomu', @nr_domu)
-          add_element_if_present(adres, 'NrLokalu', @nr_lokalu)
-          add_element_if_present(adres, 'Miejscowosc', @miejscowosc)
-          add_element_if_present(adres, 'KodPocztowy', @kod_pocztowy)
-          add_element_if_present(adres, 'Poczta', @poczta)
+          add_element_if_present(adres, "KodKraju", @kod_kraju)
+          add_element_if_present(adres, "Wojewodztwo", @wojewodztwo)
+          add_element_if_present(adres, "Powiat", @powiat)
+          add_element_if_present(adres, "Gmina", @gmina)
+          add_element_if_present(adres, "Ulica", @ulica)
+          add_element_if_present(adres, "NrDomu", @nr_domu)
+          add_element_if_present(adres, "NrLokalu", @nr_lokalu)
+          add_element_if_present(adres, "Miejscowosc", @miejscowosc)
+          add_element_if_present(adres, "KodPocztowy", @kod_pocztowy)
+          add_element_if_present(adres, "Poczta", @poczta)
 
           doc
         end

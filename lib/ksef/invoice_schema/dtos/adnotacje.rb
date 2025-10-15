@@ -39,16 +39,16 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          adnotacje = doc.add_element('Adnotacje')
+          adnotacje = doc.add_element("Adnotacje")
 
-          add_element_if_present(adnotacje, 'P_16', @p_16)
-          add_element_if_present(adnotacje, 'P_17', @p_17)
-          add_element_if_present(adnotacje, 'P_18', @p_18)
-          add_element_if_present(adnotacje, 'P_18A', @p_18a)
-          add_element_if_present(adnotacje, 'Zwolnienie', @zwolnienie)
-          add_element_if_present(adnotacje, 'NoweSrodkiTransportu', '1') if @nowesrodkitransportu
-          add_element_if_present(adnotacje, 'Marza', '1') if @marza
-          add_element_if_present(adnotacje, 'Samofakturowanie', '1') if @samofakturowanie
+          add_element_if_present(adnotacje, "P_16", @p_16)
+          add_element_if_present(adnotacje, "P_17", @p_17)
+          add_element_if_present(adnotacje, "P_18", @p_18)
+          add_element_if_present(adnotacje, "P_18A", @p_18a)
+          add_element_if_present(adnotacje, "Zwolnienie", @zwolnienie)
+          add_element_if_present(adnotacje, "NoweSrodkiTransportu", "1") if @nowesrodkitransportu
+          add_element_if_present(adnotacje, "Marza", "1") if @marza
+          add_element_if_present(adnotacje, "Samofakturowanie", "1") if @samofakturowanie
 
           doc
         end

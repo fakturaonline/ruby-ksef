@@ -9,7 +9,7 @@ module KSEF
       # @return [String] DER-encoded data
       def call(pem)
         # Remove PEM headers, footers and whitespace
-        der_string = pem.gsub(/-+BEGIN [^-]+-+|-+END [^-]+-+|\s+/, '')
+        der_string = pem.gsub(/-+BEGIN [^-]+-+|-+END [^-]+-+|\s+/, "")
         Base64.decode64(der_string)
       end
     end

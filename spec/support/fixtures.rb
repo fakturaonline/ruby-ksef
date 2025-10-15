@@ -37,7 +37,7 @@ module Fixtures
       },
       "refreshToken" => {
         "token" => "Bearer #{SecureRandom.hex(32)}",
-        "validUntil" => (Time.now + 86400).utc.iso8601
+        "validUntil" => (Time.now + 86_400).utc.iso8601
       }
     }
   end
@@ -70,9 +70,7 @@ module Fixtures
       "timestamp" => Time.now.utc.iso8601
     }
 
-    if code == 200
-      base["ksefNumber"] = "1111111111-20250115-#{SecureRandom.hex(6).upcase}-#{rand(10..99)}"
-    end
+    base["ksefNumber"] = "1111111111-20250115-#{SecureRandom.hex(6).upcase}-#{rand(10..99)}" if code == 200
 
     base
   end
@@ -84,7 +82,7 @@ module Fixtures
         {
           "ksefNumber" => "1111111111-20250115-#{SecureRandom.hex(6).upcase}-#{i + 1}",
           "invoiceNumber" => "FV/2025/#{1000 + i}",
-          "amount" => (100 + rand(900)).to_f,
+          "amount" => rand(100..999).to_f,
           "currency" => "PLN",
           "date" => (Date.today - rand(30)).iso8601
         }
@@ -128,7 +126,7 @@ module Fixtures
         <Naglowek>
           <KodFormularza kodSystemowy="FA (2)" wersjaSchemy="1-0E">FA</KodFormularza>
           <WariantFormularza>2</WariantFormularza>
-          <DataWytworzeniaFa>#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}</DataWytworzeniaFa>
+          <DataWytworzeniaFa>#{Time.now.strftime("%Y-%m-%dT%H:%M:%S")}</DataWytworzeniaFa>
           <SystemInfo>Test System</SystemInfo>
         </Naglowek>
         <Podmiot1>
@@ -138,8 +136,8 @@ module Fixtures
           </DaneIdentyfikacyjne>
         </Podmiot1>
         <Fa>
-          <P_1>#{Time.now.strftime('%Y-%m-%d')}</P_1>
-          <P_2>#{Time.now.strftime('%Y-%m-%d')}</P_2>
+          <P_1>#{Time.now.strftime("%Y-%m-%d")}</P_1>
+          <P_2>#{Time.now.strftime("%Y-%m-%d")}</P_2>
           <P_13_1>1000.00</P_13_1>
         </Fa>
       </Faktura>

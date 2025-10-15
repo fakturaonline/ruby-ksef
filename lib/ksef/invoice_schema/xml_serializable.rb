@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rexml/document'
+require "rexml/document"
 
 module KSEF
   module InvoiceSchema

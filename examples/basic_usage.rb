@@ -29,7 +29,7 @@ def example_existing_tokens
   saved_access_expires = Time.now + 3600
   saved_refresh_token = "your_refresh_token"
 
-  client = KSEF.build do
+  KSEF.build do
     mode :production
     access_token saved_access_token, expires_at: saved_access_expires
     refresh_token saved_refresh_token
@@ -69,7 +69,7 @@ def example_send_invoice(client)
   end
 
   puts "✅ Invoice processed!"
-  puts "KSEF Number: #{status['ksefNumber']}"
+  puts "KSEF Number: #{status["ksefNumber"]}"
 end
 
 # Example 4: Query invoices
@@ -82,9 +82,9 @@ def example_query_invoices(client)
     invoice_type: "sent"
   )
 
-  puts "Found #{results['invoices'].length} invoices:"
+  puts "Found #{results["invoices"].length} invoices:"
   results["invoices"].first(5).each do |invoice|
-    puts "  - #{invoice['ksefNumber']}: #{invoice['amount']} PLN"
+    puts "  - #{invoice["ksefNumber"]}: #{invoice["amount"]} PLN"
   end
 end
 
@@ -101,7 +101,7 @@ def example_download_invoice(client, ksef_number)
   invoice_xml = decryptor.call(encrypted)
 
   puts "✅ Invoice decrypted!"
-  puts invoice_xml[0..200] + "..."
+  puts "#{invoice_xml[0..200]}..."
 end
 
 # Example 6: Generate QR code
@@ -148,7 +148,7 @@ def example_error_handling
   puts "\n=== Error Handling Example ==="
 
   begin
-    nip = KSEF::ValueObjects::Nip.new("invalid")
+    KSEF::ValueObjects::Nip.new("invalid")
   rescue KSEF::ValidationError => e
     puts "❌ Validation Error: #{e.message}"
   end

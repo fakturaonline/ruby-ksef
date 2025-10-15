@@ -21,9 +21,7 @@ module KSEF
           return result if result
 
           elapsed = Time.now - start_time
-          if elapsed >= retry_until
-            raise Error, "Retry timeout after #{elapsed.round(2)}s (#{attempt} attempts)"
-          end
+          raise Error, "Retry timeout after #{elapsed.round(2)}s (#{attempt} attempts)" if elapsed >= retry_until
 
           sleep backoff
         end

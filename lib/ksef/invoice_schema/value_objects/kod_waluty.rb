@@ -20,9 +20,9 @@ module KSEF
 
         def validate!
           # Basic validation - could be extended with full currency list
-          unless @value.match?(/^[A-Z]{3}$/)
-            raise ArgumentError, "Invalid currency code: #{@value}"
-          end
+          return if @value.match?(/^[A-Z]{3}$/)
+
+          raise ArgumentError, "Invalid currency code: #{@value}"
         end
       end
     end

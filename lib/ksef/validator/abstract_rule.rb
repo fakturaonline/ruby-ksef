@@ -23,7 +23,7 @@ module KSEF
         return message unless attribute
 
         # Replace trailing period with attribute info
-        if message.end_with?('.')
+        if message.end_with?(".")
           message.sub(/\.$/, " for attribute #{attribute}.")
         else
           "#{message} for attribute #{attribute}"

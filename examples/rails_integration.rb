@@ -84,11 +84,11 @@ class Invoice < ApplicationRecord
   belongs_to :company
 
   enum :ksef_status, {
-    draft: 'draft',
-    sending: 'sending',
-    processing: 'processing',
-    accepted: 'accepted',
-    rejected: 'rejected'
+    draft: "draft",
+    sending: "sending",
+    processing: "processing",
+    accepted: "accepted",
+    rejected: "rejected"
   }
 
   def send_to_ksef!
@@ -166,7 +166,7 @@ class KsefCheckStatusJob < ApplicationJob
     when 400..599
       # Error
       invoice.update!(ksef_status: :rejected)
-      Rails.logger.error("KSEF rejected invoice: #{status['status']['description']}")
+      Rails.logger.error("KSEF rejected invoice: #{status["status"]["description"]}")
 
     else
       # Still processing, retry

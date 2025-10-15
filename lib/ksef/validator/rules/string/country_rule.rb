@@ -24,12 +24,12 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If country code is invalid
           def call(value, attribute: nil)
-            unless VALID_COUNTRIES.include?(value.to_s.upcase)
-              raise ArgumentError, format_message(
-                "Invalid country code. Must be a valid ISO 3166-1 alpha-2 code.",
-                attribute
-              )
-            end
+            return if VALID_COUNTRIES.include?(value.to_s.upcase)
+
+            raise ArgumentError, format_message(
+              "Invalid country code. Must be a valid ISO 3166-1 alpha-2 code.",
+              attribute
+            )
           end
         end
       end

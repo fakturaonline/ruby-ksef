@@ -19,10 +19,10 @@ module KSEF
           # @return [void]
           # @raise [ArgumentError] If value doesn't match pattern
           def call(value, attribute: nil)
-            unless value.to_s.match?(@pattern)
-              message = @custom_message || "Value does not match required pattern."
-              raise ArgumentError, format_message(message, attribute)
-            end
+            return if value.to_s.match?(@pattern)
+
+            message = @custom_message || "Value does not match required pattern."
+            raise ArgumentError, format_message(message, attribute)
           end
         end
       end

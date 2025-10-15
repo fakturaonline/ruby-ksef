@@ -32,12 +32,12 @@ module KSEF
 
             checksum = sum % 11
 
-            if checksum == 10 || digits[9] != checksum
-              raise ArgumentError, format_message(
-                "Invalid NIP number checksum.",
-                attribute
-              )
-            end
+            return unless checksum == 10 || digits[9] != checksum
+
+            raise ArgumentError, format_message(
+              "Invalid NIP number checksum.",
+              attribute
+            )
           end
         end
       end

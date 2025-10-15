@@ -22,11 +22,11 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          stopka = doc.add_element('Stopka')
+          stopka = doc.add_element("Stopka")
 
           @informacje.each do |info|
-            info_elem = stopka.add_element('Informacje')
-            info_elem.add_element('StInformacje').text = info.to_s
+            info_elem = stopka.add_element("Informacje")
+            info_elem.add_element("StInformacje").text = info.to_s
           end
 
           doc

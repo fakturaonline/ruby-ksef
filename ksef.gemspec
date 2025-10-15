@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").reject do |f|
@@ -46,12 +47,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "zeitwerk", "~> 2.6"
 
   # Development dependencies
+  spec.add_development_dependency "pry", "~> 0.14"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.12"
   spec.add_development_dependency "rubocop", "~> 1.56"
   spec.add_development_dependency "rubocop-rspec", "~> 2.24"
-  spec.add_development_dependency "webmock", "~> 3.19"
-  spec.add_development_dependency "vcr", "~> 6.2"
   spec.add_development_dependency "simplecov", "~> 0.22"
-  spec.add_development_dependency "pry", "~> 0.14"
+  spec.add_development_dependency "vcr", "~> 6.2"
+  spec.add_development_dependency "webmock", "~> 3.19"
 end

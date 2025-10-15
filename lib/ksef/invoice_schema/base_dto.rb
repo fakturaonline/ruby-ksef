@@ -18,7 +18,7 @@ module KSEF
       # @return [Hash] Hash representation
       def to_h
         instance_variables.each_with_object({}) do |var, hash|
-          key = var.to_s.delete('@').to_sym
+          key = var.to_s.delete("@").to_sym
           value = instance_variable_get(var)
           hash[key] = value.respond_to?(:to_h) ? value.to_h : value
         end

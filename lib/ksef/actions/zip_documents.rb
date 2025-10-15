@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'zip'
+require "zip"
 
 module KSEF
   module Actions
@@ -10,11 +10,11 @@ module KSEF
       # @param documents [Array<String>] Array of document strings
       # @return [String] ZIP archive as binary string
       def call(documents)
-        require 'tempfile'
+        require "tempfile"
 
-        Tempfile.create(['zip_', '.zip']) do |temp_file|
+        Tempfile.create(["zip_", ".zip"]) do |temp_file|
           Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
-            documents.each_with_index do |document, index|
+            documents.each_with_index do |document, _index|
               file_name = "xml_#{SecureRandom.hex(8)}.xml"
               zipfile.get_output_stream(file_name) { |f| f.write(document) }
             end

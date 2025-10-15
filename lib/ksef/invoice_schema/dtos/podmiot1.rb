@@ -33,14 +33,14 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          podmiot = doc.add_element('Podmiot1')
+          podmiot = doc.add_element("Podmiot1")
 
           add_child_element(podmiot, @dane_identyfikacyjne)
           add_child_element(podmiot, @adres)
           add_child_element(podmiot, @adres_koresp) if @adres_koresp
           add_child_element(podmiot, @dane_kontaktowe) if @dane_kontaktowe
-          add_element_if_present(podmiot, 'IDNabywcy', @id_vat)
-          add_element_if_present(podmiot, 'NumerWEWPUE', @numer_we_wp_ue)
+          add_element_if_present(podmiot, "IDNabywcy", @id_vat)
+          add_element_if_present(podmiot, "NumerWEWPUE", @numer_we_wp_ue)
 
           doc
         end

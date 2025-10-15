@@ -22,7 +22,7 @@ module KSEF
                         OpenSSL::PKey::RSA.new(key_size)
                       when :ec
                         # P-256 curve (secp256r1)
-                        key = OpenSSL::PKey::EC.new('prime256v1')
+                        key = OpenSSL::PKey::EC.new("prime256v1")
                         key.generate_key
                         key
                       else
@@ -36,7 +36,7 @@ module KSEF
         csr.public_key = private_key.public_key
 
         # Sign CSR with private key
-        csr.sign(private_key, OpenSSL::Digest::SHA256.new)
+        csr.sign(private_key, OpenSSL::Digest.new("SHA256"))
 
         {
           csr: csr,

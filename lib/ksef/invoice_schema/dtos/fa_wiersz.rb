@@ -7,7 +7,8 @@ module KSEF
       class FaWiersz < BaseDTO
         include XMLSerializable
 
-        attr_reader :nr_wiersza, :p_7, :p_8a, :p_8b, :p_9a, :p_9b, :p_11, :p_11a, :p_12, :cena_jednostkowa, :wartosc_pozycji_smr
+        attr_reader :nr_wiersza, :p_7, :p_8a, :p_8b, :p_9a, :p_9b, :p_11, :p_11a, :p_12, :cena_jednostkowa,
+                    :wartosc_pozycji_smr
 
         # @param nr_wiersza [Integer] Numer wiersza
         # @param p_7 [String] Nazwa towaru lub usługi
@@ -48,19 +49,22 @@ module KSEF
 
         def to_rexml
           doc = REXML::Document.new
-          wiersz = doc.add_element('FaWiersz')
+          wiersz = doc.add_element("FaWiersz")
 
-          add_element_if_present(wiersz, 'NrWiersza', @nr_wiersza)
-          add_element_if_present(wiersz, 'P_7', @p_7)
-          add_element_if_present(wiersz, 'P_8A', @p_8a)
-          add_element_if_present(wiersz, 'P_8B', format_decimal(@p_8b)) if @p_8b
-          add_element_if_present(wiersz, 'P_9A', format_decimal(@p_9a)) if @p_9a
-          add_element_if_present(wiersz, 'P_9B', format_decimal(@p_9b))
-          add_element_if_present(wiersz, 'P_11', @p_11)
-          add_element_if_present(wiersz, 'P_11A', @p_11a)
-          add_element_if_present(wiersz, 'P_12', format_decimal(@p_12))
-          add_element_if_present(wiersz, 'CenaJednostkowa', format_decimal(@cena_jednostkowa)) if @cena_jednostkowa
-          add_element_if_present(wiersz, 'WartoscPozycjiSMR', format_decimal(@wartosc_pozycji_smr)) if @wartosc_pozycji_smr
+          add_element_if_present(wiersz, "NrWiersza", @nr_wiersza)
+          add_element_if_present(wiersz, "P_7", @p_7)
+          add_element_if_present(wiersz, "P_8A", @p_8a)
+          add_element_if_present(wiersz, "P_8B", format_decimal(@p_8b)) if @p_8b
+          add_element_if_present(wiersz, "P_9A", format_decimal(@p_9a)) if @p_9a
+          add_element_if_present(wiersz, "P_9B", format_decimal(@p_9b))
+          add_element_if_present(wiersz, "P_11", @p_11)
+          add_element_if_present(wiersz, "P_11A", @p_11a)
+          add_element_if_present(wiersz, "P_12", format_decimal(@p_12))
+          add_element_if_present(wiersz, "CenaJednostkowa", format_decimal(@cena_jednostkowa)) if @cena_jednostkowa
+          if @wartosc_pozycji_smr
+            add_element_if_present(wiersz, "WartoscPozycjiSMR",
+                                   format_decimal(@wartosc_pozycji_smr))
+          end
 
           doc
         end
@@ -69,7 +73,8 @@ module KSEF
 
         def format_decimal(value)
           return nil if value.nil?
-          '%.2f' % value
+
+          "%.2f" % value
         end
       end
     end
