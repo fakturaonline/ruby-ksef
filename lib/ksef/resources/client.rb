@@ -28,7 +28,7 @@ module KSEF
       # @return [Invoices] Invoices resource
       def invoices
         refresh_token_if_expired!
-        @invoices ||= Invoices.new(@http_client)
+        @invoices ||= Invoices.new(@http_client, @config)
       end
 
       # Access certificate endpoints
@@ -49,6 +49,12 @@ module KSEF
       # @return [Security] Security resource
       def security
         @security ||= Security.new(@http_client)
+      end
+
+      # Access testdata endpoints
+      # @return [Testdata] Testdata resource
+      def testdata
+        @testdata ||= Testdata.new(@http_client)
       end
 
       # Get current access token

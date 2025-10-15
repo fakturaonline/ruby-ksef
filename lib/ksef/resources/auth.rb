@@ -38,6 +38,30 @@ module KSEF
       def revoke
         Requests::Auth::RevokeHandler.new(@http_client).call
       end
+
+      # List active sessions
+      # @param page_size [Integer, nil] Optional page size
+      # @param continuation_token [String, nil] Optional continuation token for pagination
+      # @return [Hash] List of active sessions
+      def sessions_list(page_size: nil, continuation_token: nil)
+        Requests::Auth::SessionsListHandler.new(@http_client).call(
+          page_size: page_size,
+          continuation_token: continuation_token
+        )
+      end
+
+      # Revoke a specific session by reference number
+      # @param reference_number [String] Session reference number
+      # @return [Hash] Revocation response
+      def sessions_revoke(reference_number)
+        Requests::Auth::SessionsRevokeHandler.new(@http_client).call(reference_number)
+      end
+
+      # Revoke the current session
+      # @return [Hash] Revocation response
+      def sessions_revoke_current
+        Requests::Auth::SessionsRevokeCurrentHandler.new(@http_client).call
+      end
     end
   end
 end
