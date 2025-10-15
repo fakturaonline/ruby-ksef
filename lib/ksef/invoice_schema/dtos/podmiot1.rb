@@ -44,6 +44,17 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          new(
+            dane_identyfikacyjne: object_at(element, "DaneIdentyfikacyjne", DaneIdentyfikacyjne),
+            adres: object_at(element, "Adres", Adres),
+            adres_koresp: object_at(element, "AdresKoresp", Adres),
+            dane_kontaktowe: object_at(element, "DaneKontaktowe", DaneKontaktowe),
+            id_vat: text_at(element, "IDNabywcy"),
+            numer_we_wp_ue: text_at(element, "NumerWEWPUE")
+          )
+        end
       end
     end
   end

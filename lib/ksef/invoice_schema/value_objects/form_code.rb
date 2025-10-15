@@ -10,8 +10,13 @@ module KSEF
 
         attr_reader :value
 
-        def initialize(value = FA2)
-          @value = value
+        def initialize(value = 2)
+          # Accept integer or string
+          @value = case value
+                   when 2, "2", FA2 then FA2
+                   when 3, "3", FA3 then FA3
+                   else value
+                   end
           validate!
         end
 
@@ -24,7 +29,7 @@ module KSEF
         end
 
         def wariant_formularza
-          @value.to_i
+          @value.match(/\((\d+)\)/)[1].to_i
         end
 
         def target_namespace

@@ -52,6 +52,19 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          new(
+            p_16: text_at(element, "P_16"),
+            p_17: text_at(element, "P_17"),
+            p_18: text_at(element, "P_18"),
+            p_18a: text_at(element, "P_18A"),
+            zwolnienie: text_at(element, "Zwolnienie"),
+            nowesrodkitransportu: !element.at_xpath("NoweSrodkiTransportu").nil?,
+            marza: !element.at_xpath("Marza").nil?,
+            samofakturowanie: !element.at_xpath("Samofakturowanie").nil?
+          )
+        end
       end
     end
   end

@@ -31,6 +31,11 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          informacje = element.xpath("Informacje/StInformacje").map(&:text)
+          new(informacje: informacje)
+        end
       end
     end
   end

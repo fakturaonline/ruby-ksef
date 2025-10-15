@@ -25,6 +25,13 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          new(
+            email: text_at(element, "Email"),
+            telefon: text_at(element, "Telefon")
+          )
+        end
       end
     end
   end

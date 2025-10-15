@@ -5,6 +5,7 @@ module KSEF
     # Base class for all invoice DTOs
     class BaseDTO
       include XMLSerializable
+      extend Parser
 
       # Initialize with hash or keyword arguments
       def initialize(**attributes)
@@ -22,6 +23,10 @@ module KSEF
           value = instance_variable_get(var)
           hash[key] = value.respond_to?(:to_h) ? value.to_h : value
         end
+      end
+
+      class << self
+        include Parser
       end
     end
   end

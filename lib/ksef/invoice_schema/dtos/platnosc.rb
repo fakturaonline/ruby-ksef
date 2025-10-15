@@ -41,6 +41,14 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          new(
+            termin_platnosci: array_at(element, "TerminPlatnosci", TerminPlatnosci),
+            rachunek_bankowy: array_at(element, "RachunekBankowy", RachunekBankowy),
+            forma_platnosci: text_at(element, "FormaPlatnosci")
+          )
+        end
       end
     end
   end

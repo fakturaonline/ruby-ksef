@@ -106,6 +106,27 @@ module KSEF
         doc
       end
 
+      def self.from_nokogiri(element)
+        new(
+          kod_waluty: ValueObjects::KodWaluty.new(text_at(element, "KodWaluty")),
+          p_1: date_at(element, "P_1"),
+          p_1m: text_at(element, "P_1M"),
+          p_2: text_at(element, "P_2"),
+          p_6: date_at(element, "P_6"),
+          p_13_1: decimal_at(element, "P_13_1"),
+          p_13_2: decimal_at(element, "P_13_2"),
+          p_13_3: decimal_at(element, "P_13_3"),
+          p_13_4: decimal_at(element, "P_13_4"),
+          p_13_5: decimal_at(element, "P_13_5"),
+          p_13_6: decimal_at(element, "P_13_6"),
+          p_15: decimal_at(element, "P_15"),
+          adnotacje: object_at(element, "Adnotacje", DTOs::Adnotacje) || DTOs::Adnotacje.new,
+          rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
+          fa_wiersz: array_at(element, "FaWiersz", DTOs::FaWiersz),
+          platnosc: object_at(element, "Platnosc", DTOs::Platnosc)
+        )
+      end
+
       private
 
       def format_decimal(value)

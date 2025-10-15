@@ -38,6 +38,26 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          nip = text_at(element, "NIP")
+          pesel = text_at(element, "PESEL")
+          id_inny = nil
+
+          if brak_id = element.at_xpath("BrakID")
+            id_inny = {
+              typ: text_at(brak_id, "Typ"),
+              numer: text_at(brak_id, "Numer")
+            }
+          end
+
+          new(
+            nip: nip,
+            pesel: pesel,
+            id_inny: id_inny,
+            nazwa: text_at(element, "Nazwa")
+          )
+        end
       end
     end
   end

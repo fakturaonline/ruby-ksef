@@ -43,6 +43,9 @@ Gem::Specification.new do |spec|
   # QR codes
   spec.add_dependency "rqrcode", "~> 2.0"
 
+  # CLI
+  spec.add_dependency "thor", "~> 1.3"
+
   # Utilities
   spec.add_dependency "zeitwerk", "~> 2.6"
 

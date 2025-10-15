@@ -69,6 +69,25 @@ module KSEF
           doc
         end
 
+        def self.from_nokogiri(element)
+          p_11_text = text_at(element, "P_11")
+          p_11 = p_11_text =~ /^\d+$/ ? p_11_text.to_i : p_11_text
+
+          new(
+            nr_wiersza: integer_at(element, "NrWiersza"),
+            p_7: text_at(element, "P_7"),
+            p_8a: text_at(element, "P_8A"),
+            p_8b: decimal_at(element, "P_8B"),
+            p_9a: decimal_at(element, "P_9A"),
+            p_9b: decimal_at(element, "P_9B"),
+            p_11: p_11,
+            p_11a: text_at(element, "P_11A"),
+            p_12: decimal_at(element, "P_12"),
+            cena_jednostkowa: decimal_at(element, "CenaJednostkowa"),
+            wartosc_pozycji_smr: decimal_at(element, "WartoscPozycjiSMR")
+          )
+        end
+
         private
 
         def format_decimal(value)

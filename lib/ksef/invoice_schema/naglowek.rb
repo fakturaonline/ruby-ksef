@@ -47,6 +47,19 @@ module KSEF
 
         doc
       end
+
+      def self.from_nokogiri(element)
+        kod_formularza = element.at_xpath("KodFormularza")
+        kod_systemowy = kod_formularza&.attribute("kodSystemowy")&.value
+        wariant_text = text_at(element, "WariantFormularza")
+        wariant = wariant_text ? wariant_text.to_i : 2
+
+        new(
+          wariant_formularza: ValueObjects::FormCode.new(wariant),
+          data_wytworzenia_fa: time_at(element, "DataWytworzeniaFa"),
+          system_info: text_at(element, "SystemInfo")
+        )
+      end
     end
   end
 end

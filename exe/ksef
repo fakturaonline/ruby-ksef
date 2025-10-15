@@ -1,0 +1,391 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/ksef"
+require "thor"
+
+module KSEF
+  # rubocop:disable Metrics/ClassLength
+  class CLI < Thor
+    class_option :mode, type: :string, default: "test", desc: "Environment mode (test, demo, production)"
+    class_option :verbose, type: :boolean, default: false, desc: "Verbose output"
+
+    desc "auth", "Authenticate with KSEF and get tokens"
+    option :cert, type: :string, required: true, desc: "Path to certificate (.p12)"
+    option :pass, type: :string, required: true, desc: "Certificate passphrase"
+    option :nip, type: :string, required: true, desc: "NIP number"
+    option :save, type: :string, desc: "Save tokens to file"
+    # rubocop:disable Metrics/AbcSize
+    def auth
+      setup_logger
+
+      say "Authenticating with KSEF...", :green
+
+      client = KSEF.build do
+        mode options[:mode].to_sym
+        certificate_path options[:cert], options[:pass]
+        identifier options[:nip]
+        random_encryption_key
+        logger @logger if @logger
+      end
+
+      say "✓ Authentication successful!", :green
+      say "Access Token: #{client.access_token.token[0..20]}..."
+      say "Expires at: #{client.access_token.expires_at}"
+
+      if options[:save]
+        save_config(client, options[:save])
+        say "✓ Tokens saved to #{options[:save]}", :green
+      end
+    rescue KSEF::Error => e
+      error "Authentication failed: #{e.message}"
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    desc "send INVOICE_XML", "Send invoice to KSEF"
+    option :config, type: :string, desc: "Load config from file"
+    option :wait, type: :boolean, default: true, desc: "Wait for processing"
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def send(invoice_xml_path)
+      setup_logger
+      client = load_client
+
+      error "Invoice file not found: #{invoice_xml_path}" unless File.exist?(invoice_xml_path)
+
+      invoice_xml = File.read(invoice_xml_path)
+      invoice_hash = Digest::SHA256.base64digest(invoice_xml)
+
+      say "Sending invoice...", :green
+
+      response = client.sessions.send_online(
+        invoice_hash: invoice_hash,
+        invoice_payload: Base64.strict_encode64(invoice_xml)
+      )
+
+      reference_number = response["referenceNumber"]
+      say "✓ Invoice sent! Reference: #{reference_number}", :green
+
+      if options[:wait]
+        say "Waiting for processing...", :yellow
+
+        status = KSEF::Support::Utility.retry(backoff: 10, retry_until: 120) do
+          result = client.sessions.status(reference_number)
+          result["status"]["code"] == 200 ? result : nil
+        end
+
+        if status
+          ksef_number = status["ksefNumber"]
+          say "✓ Invoice accepted! KSEF Number: #{ksef_number}", :green
+        end
+      end
+    rescue KSEF::Error => e
+      error "Send failed: #{e.message}"
+    end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+    desc "status REFERENCE", "Check status of invoice processing"
+    option :config, type: :string, desc: "Load config from file"
+    def status(reference_number)
+      setup_logger
+      client = load_client
+
+      say "Checking status...", :green
+
+      result = client.sessions.status(reference_number)
+
+      say "Status: #{result["status"]["code"]}"
+      say "Description: #{result["status"]["description"]}"
+
+      say "KSEF Number: #{result["ksefNumber"]}", :green if result["ksefNumber"]
+    rescue KSEF::Error => e
+      error "Status check failed: #{e.message}"
+    end
+
+    desc "query", "Query invoices"
+    option :config, type: :string, desc: "Load config from file"
+    option :from, type: :string, required: true, desc: "From date (YYYY-MM-DD)"
+    option :to, type: :string, required: true, desc: "To date (YYYY-MM-DD)"
+    option :type, type: :string, default: "sent", desc: "Invoice type (sent, received)"
+    option :limit, type: :numeric, default: 10, desc: "Result limit"
+    # rubocop:disable Metrics/AbcSize
+    def query
+      setup_logger
+      client = load_client
+
+      say "Querying invoices...", :green
+
+      results = client.invoices.query(
+        from_date: options[:from],
+        to_date: options[:to],
+        invoice_type: options[:type]
+      )
+
+      if results["invoices"]&.any?
+        say "\nFound #{results["invoices"].size} invoices:", :green
+        results["invoices"].first(options[:limit]).each do |invoice|
+          say "  #{invoice["ksefNumber"]} - #{invoice["amount"]} PLN"
+        end
+      else
+        say "No invoices found", :yellow
+      end
+    rescue KSEF::Error => e
+      error "Query failed: #{e.message}"
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    desc "download KSEF_NUMBER", "Download and decrypt invoice"
+    option :config, type: :string, desc: "Load config from file"
+    option :output, type: :string, desc: "Output file path"
+    # rubocop:disable Metrics/AbcSize
+    def download(ksef_number)
+      setup_logger
+      client = load_client
+
+      say "Downloading invoice #{ksef_number}...", :green
+
+      encrypted_invoice = client.invoices.download(ksef_number)
+
+      if client.encryption_key
+        decryptor = KSEF::Actions::DecryptDocument.new(client.encryption_key)
+        invoice_xml = decryptor.call(encrypted_invoice)
+      else
+        invoice_xml = encrypted_invoice
+      end
+
+      if options[:output]
+        File.write(options[:output], invoice_xml)
+        say "✓ Invoice saved to #{options[:output]}", :green
+      else
+        say invoice_xml
+      end
+    rescue KSEF::Error => e
+      error "Download failed: #{e.message}"
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    desc "parse INVOICE_XML", "Parse invoice XML to Ruby objects"
+    option :format, type: :string, default: "info", desc: "Output format (info, json, ruby)"
+    # rubocop:disable Metrics/AbcSize
+    def parse(invoice_xml_path)
+      setup_logger
+
+      error "Invoice file not found: #{invoice_xml_path}" unless File.exist?(invoice_xml_path)
+
+      xml = File.read(invoice_xml_path)
+
+      say "Parsing invoice...", :green
+
+      invoice = KSEF::InvoiceSchema::Faktura.from_xml(xml)
+
+      case options[:format]
+      when "json"
+        require "json"
+        say JSON.pretty_generate(invoice.to_h)
+      when "ruby"
+        require "pp"
+        pp invoice
+      else
+        display_invoice_info(invoice)
+      end
+    rescue StandardError => e
+      error "Parse failed: #{e.message}"
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    desc "generate", "Generate example invoice XML"
+    option :output, type: :string, desc: "Output file path"
+    def generate
+      say "Generating example invoice...", :green
+
+      invoice = create_example_invoice
+
+      xml = invoice.to_xml
+
+      if options[:output]
+        File.write(options[:output], xml)
+        say "✓ Invoice saved to #{options[:output]}", :green
+      else
+        say xml
+      end
+    end
+
+    desc "version", "Show version"
+    def version
+      say "KSEF Ruby Client v#{KSEF::VERSION}"
+    end
+
+    private
+
+    def setup_logger
+      return unless options[:verbose]
+
+      require "logger"
+      @logger = Logger.new($stdout)
+      @logger.level = Logger::DEBUG
+    end
+
+    def load_client
+      if options[:config] && File.exist?(options[:config])
+        load_config_file(options[:config])
+      elsif ENV["KSEF_ACCESS_TOKEN"]
+        load_from_env
+      else
+        error "No credentials found. Use --config or authenticate first."
+      end
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def load_config_file(path)
+      require "json"
+      config = JSON.parse(File.read(path))
+
+      KSEF.build do
+        mode config["mode"]&.to_sym || :test
+        access_token config["access_token"], expires_at: Time.parse(config["access_token_expires_at"])
+        refresh_token config["refresh_token"] if config["refresh_token"]
+        identifier config["nip"]
+
+        if config["encryption_key"]
+          encryption_key(
+            Base64.decode64(config["encryption_key"]),
+            Base64.decode64(config["encryption_iv"])
+          )
+        end
+
+        logger @logger if @logger
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/AbcSize
+    def load_from_env
+      KSEF.build do
+        mode ENV["KSEF_MODE"]&.to_sym || :test
+        access_token ENV.fetch("KSEF_ACCESS_TOKEN", nil)
+        refresh_token ENV["KSEF_REFRESH_TOKEN"] if ENV["KSEF_REFRESH_TOKEN"]
+        identifier ENV.fetch("KSEF_NIP", nil)
+
+        if ENV["KSEF_ENCRYPTION_KEY"]
+          encryption_key(
+            Base64.decode64(ENV["KSEF_ENCRYPTION_KEY"]),
+            Base64.decode64(ENV.fetch("KSEF_ENCRYPTION_IV", nil))
+          )
+        end
+
+        logger @logger if @logger
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/AbcSize
+    def save_config(client, path)
+      require "json"
+      config = {
+        mode: client.config.mode.value,
+        nip: client.config.identifier,
+        access_token: client.access_token.token,
+        access_token_expires_at: client.access_token.expires_at.iso8601,
+        refresh_token: client.refresh_token&.token,
+        encryption_key: Base64.strict_encode64(client.encryption_key.key),
+        encryption_iv: Base64.strict_encode64(client.encryption_key.iv)
+      }
+
+      File.write(path, JSON.pretty_generate(config))
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/AbcSize
+    def display_invoice_info(invoice)
+      say "\n=== Invoice Information ===", :green
+      say "Number: #{invoice.fa.p_2}"
+      say "Date: #{invoice.fa.p_1}"
+      say "Currency: #{invoice.fa.kod_waluty}"
+      say "Total: #{invoice.fa.p_15}"
+
+      say "\n--- Seller ---", :cyan
+      say "Name: #{invoice.podmiot1.dane_identyfikacyjne.nazwa}"
+      say "NIP: #{invoice.podmiot1.dane_identyfikacyjne.nip}"
+
+      say "\n--- Buyer ---", :cyan
+      say "Name: #{invoice.podmiot2.dane_identyfikacyjne.nazwa}"
+      say "NIP: #{invoice.podmiot2.dane_identyfikacyjne.nip}"
+
+      return unless invoice.fa.fa_wiersz.any?
+
+      say "\n--- Line Items ---", :cyan
+      invoice.fa.fa_wiersz.each do |line|
+        say "#{line.nr_wiersza}. #{line.p_7} - #{line.p_9b} (VAT: #{line.p_11}%)"
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/MethodLength, Naming/VariableNumber
+    def create_example_invoice
+      seller = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
+        dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
+          nip: "1234567890",
+          nazwa: "Example Company Ltd."
+        ),
+        adres: KSEF::InvoiceSchema::DTOs::Adres.new(
+          kod_kraju: "PL",
+          miejscowosc: "Warszawa",
+          kod_pocztowy: "00-001",
+          ulica: "Marszałkowska",
+          nr_domu: "1"
+        )
+      )
+
+      buyer = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
+        dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
+          nip: "9876543210",
+          nazwa: "Customer Sp. z o.o."
+        ),
+        adres: KSEF::InvoiceSchema::DTOs::Adres.new(
+          kod_kraju: "PL",
+          miejscowosc: "Kraków",
+          kod_pocztowy: "30-001",
+          ulica: "Floriańska",
+          nr_domu: "5"
+        )
+      )
+
+      lines = [
+        KSEF::InvoiceSchema::DTOs::FaWiersz.new(
+          nr_wiersza: 1,
+          p_7: "Consulting services",
+          p_8a: "pcs",
+          p_8b: 1,
+          p_9b: 1000.00,
+          p_11: 23,
+          p_12: 230.00
+        )
+      ]
+
+      KSEF::InvoiceSchema::Faktura.new(
+        naglowek: KSEF::InvoiceSchema::Naglowek.new(
+          system_info: "KSEF Ruby CLI"
+        ),
+        podmiot1: seller,
+        podmiot2: buyer,
+        fa: KSEF::InvoiceSchema::Fa.new(
+          kod_waluty: KSEF::InvoiceSchema::ValueObjects::KodWaluty.new("PLN"),
+          p_1: Date.today,
+          p_2: "FV/#{Date.today.year}/001",
+          p_15: 1230.00,
+          fa_wiersz: lines,
+          p_13_1: 1000.00,
+          p_13_2: 230.00
+        )
+      )
+    end
+    # rubocop:enable Metrics/MethodLength, Naming/VariableNumber
+
+    def error(message)
+      say "✗ #{message}", :red
+      exit 1
+    end
+  end
+end
+
+KSEF::CLI.start(ARGV)
+# rubocop:enable Metrics/ClassLength

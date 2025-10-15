@@ -37,6 +37,17 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          nr_rb = text_at(element, "NrRBIBAN") || text_at(element, "NrRB")
+
+          new(
+            nr_rb: nr_rb,
+            swift: text_at(element, "SWIFT"),
+            nazwa_banku: text_at(element, "NazwaBanku"),
+            opis_rachunku: text_at(element, "OpisRachunku")
+          )
+        end
       end
     end
   end

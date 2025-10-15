@@ -66,6 +66,25 @@ module KSEF
 
         doc
       end
+
+      def self.from_nokogiri(doc_or_element)
+        # Handle both Document and Element
+        element = doc_or_element.is_a?(Nokogiri::XML::Document) ? doc_or_element.root : doc_or_element
+
+        new(
+          naglowek: Naglowek.from_nokogiri(element.at_xpath("Naglowek")),
+          podmiot1: DTOs::Podmiot1.from_nokogiri(element.at_xpath("Podmiot1")),
+          podmiot2: DTOs::Podmiot2.from_nokogiri(element.at_xpath("Podmiot2")),
+          fa: Fa.from_nokogiri(element.at_xpath("Fa")),
+          stopka: object_at(element, "Stopka", DTOs::Stopka)
+        )
+      end
+
+      def self.from_xml(xml)
+        doc = Nokogiri::XML(xml)
+        doc.remove_namespaces!
+        from_nokogiri(doc)
+      end
     end
   end
 end

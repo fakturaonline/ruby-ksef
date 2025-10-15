@@ -29,6 +29,14 @@ module KSEF
           doc
         end
 
+        def self.from_nokogiri(element)
+          new(
+            termin: date_at(element, "Termin"),
+            forma_platnosci: text_at(element, "FormaPlatnosci"),
+            suma_platnosci: decimal_at(element, "SumaPlatnosci")
+          )
+        end
+
         private
 
         def format_decimal(value)

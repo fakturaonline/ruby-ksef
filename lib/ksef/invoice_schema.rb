@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require "nokogiri"
+
 require_relative "invoice_schema/xml_serializable"
+require_relative "invoice_schema/parser"
 require_relative "invoice_schema/base_dto"
 
 # Value Objects

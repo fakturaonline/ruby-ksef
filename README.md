@@ -512,15 +512,123 @@ The gem is available as open source under the terms of the [MIT License](LICENSE
 
 Created with ❤️ for the Ruby community
 
+## CLI Tool
+
+The gem includes a powerful CLI for interacting with KSEF:
+
+```bash
+# Install the gem first
+gem install ksef
+
+# Authenticate and save tokens
+ksef auth --cert cert.p12 --pass mypass --nip 1234567890 --save config.json
+
+# Send invoice
+ksef send invoice.xml --config config.json --wait
+
+# Check status
+ksef status REF-123 --config config.json
+
+# Query invoices
+ksef query --from 2025-01-01 --to 2025-01-31 --config config.json
+
+# Download invoice
+ksef download KSEF-123 --config config.json --output invoice.xml
+
+# Parse invoice XML
+ksef parse invoice.xml --format info
+
+# Generate example invoice
+ksef generate --output example.xml
+
+# Show version
+ksef version
+```
+
+### CLI Configuration
+
+You can use config file or environment variables:
+
+**Config file (--config config.json):**
+```json
+{
+  "mode": "test",
+  "nip": "1234567890",
+  "access_token": "...",
+  "access_token_expires_at": "2025-01-15T12:00:00Z",
+  "refresh_token": "...",
+  "encryption_key": "...",
+  "encryption_iv": "..."
+}
+```
+
+**Environment variables:**
+```bash
+export KSEF_MODE=test
+export KSEF_NIP=1234567890
+export KSEF_ACCESS_TOKEN=...
+export KSEF_REFRESH_TOKEN=...
+export KSEF_ENCRYPTION_KEY=...
+export KSEF_ENCRYPTION_IV=...
+
+ksef send invoice.xml
+```
+
+## Invoice XML Parser
+
+Parse existing KSeF XML invoices back to Ruby objects:
+
+```ruby
+# Parse XML string
+xml = File.read("invoice.xml")
+invoice = KSEF::InvoiceSchema::Faktura.from_xml(xml)
+
+# Access parsed data
+puts invoice.fa.p_2              # Invoice number
+puts invoice.fa.p_1              # Issue date
+puts invoice.fa.p_15             # Total amount
+puts invoice.podmiot1.dane_identyfikacyjne.nazwa  # Seller name
+
+# Iterate lines
+invoice.fa.fa_wiersz.each do |line|
+  puts "#{line.p_7}: #{line.p_9b} PLN"
+end
+
+# Convert back to XML
+new_xml = invoice.to_xml
+
+# Or to hash
+hash = invoice.to_h
+```
+
+### Parse and Modify
+
+```ruby
+# Load existing invoice
+invoice = KSEF::InvoiceSchema::Faktura.from_xml(File.read("invoice.xml"))
+
+# Create modified version with updated number
+modified = KSEF::InvoiceSchema::Faktura.new(
+  naglowek: invoice.naglowek,
+  podmiot1: invoice.podmiot1,
+  podmiot2: invoice.podmiot2,
+  fa: KSEF::InvoiceSchema::Fa.new(
+    **invoice.fa.to_h.merge(p_2: "FV/2025/999")
+  )
+)
+
+File.write("modified.xml", modified.to_xml)
+```
+
 ## Roadmap
 
+- [x] ~~Invoice XML builder/parser~~
+- [x] ~~Rails integration helpers~~
+- [x] ~~CLI tool~~
 - [ ] Full XMLDSig signature implementation
 - [ ] Full CSR generation
 - [ ] Async parallel requests with connection pooling
-- [ ] Invoice XML builder/parser
 - [ ] Complete test coverage
-- [ ] Rails integration helpers
-- [ ] CLI tool
 
 ## Support
 

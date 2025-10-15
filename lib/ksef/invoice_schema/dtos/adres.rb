@@ -61,6 +61,21 @@ module KSEF
 
           doc
         end
+
+        def self.from_nokogiri(element)
+          new(
+            kod_kraju: text_at(element, "KodKraju"),
+            miejscowosc: text_at(element, "Miejscowosc"),
+            kod_pocztowy: text_at(element, "KodPocztowy"),
+            ulica: text_at(element, "Ulica"),
+            nr_domu: text_at(element, "NrDomu"),
+            nr_lokalu: text_at(element, "NrLokalu"),
+            poczta: text_at(element, "Poczta"),
+            wojewodztwo: text_at(element, "Wojewodztwo"),
+            powiat: text_at(element, "Powiat"),
+            gmina: text_at(element, "Gmina")
+          )
+        end
       end
     end
   end
