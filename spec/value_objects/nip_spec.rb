@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe KSEF::ValueObjects::NIP do
+RSpec.describe KSEF::ValueObjects::Nip do
   describe "#initialize" do
     it "accepts valid NIP" do
       nip = described_class.new("1234567890")

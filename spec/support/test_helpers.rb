@@ -32,7 +32,7 @@ module TestHelpers
         token: "test_access_token",
         expires_at: Time.now + 3600
       ),
-      identifier: KSEF::ValueObjects::NIP.new("1111111111")
+      identifier: KSEF::ValueObjects::Nip.new("1111111111")
     }
 
     KSEF::Config.new(**defaults.merge(options))

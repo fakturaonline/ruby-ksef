@@ -12,7 +12,13 @@ task default: %i[spec rubocop]
 desc "Open an irb session preloaded with this library"
 task :console do
   require "irb"
-  require "ksef"
+  require_relative "lib/ksef"
+
+  # Manually load all files for IRB (Zeitwerk doesn't work well in REPL)
+  Dir[File.join(__dir__, 'lib', 'ksef', '**', '*.rb')].sort.each do |file|
+    require file
+  end
+
   ARGV.clear
   IRB.start
 end

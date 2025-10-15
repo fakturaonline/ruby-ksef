@@ -14,22 +14,13 @@ module KSEF
   class AuthenticationError < Error; end
   class NetworkError < Error; end
   class ApiError < Error; end
+end
 
-  # Define nested modules for Zeitwerk
-  module ValueObjects; end
-  module Resources; end
-  module Requests
-    module Auth; end
-    module Sessions; end
-    module Invoices; end
-    module Certificates; end
-    module Tokens; end
-    module Security; end
-  end
-  module HttpClient; end
-  module Actions; end
-  module Support; end
+loader = Zeitwerk::Loader.for_gem
+loader.push_dir File.expand_path("ksef", __dir__), namespace: KSEF
+loader.setup
 
+module KSEF
   # Main entry point
   def self.build(&block)
     builder = ClientBuilder.new
@@ -37,6 +28,3 @@ module KSEF
     builder.build
   end
 end
-
-loader = Zeitwerk::Loader.for_gem
-loader.setup

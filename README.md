@@ -109,6 +109,90 @@ ksef_number = status["ksefNumber"]
 puts "Invoice sent! KSEF Number: #{ksef_number}"
 ```
 
+### Download UPO (Official Receipt Confirmation)
+
+After sending an invoice, you can download the **UPO** (Urzędowe Poświadczenie Odbioru) - official receipt confirmation signed by KSeF:
+
+```ruby
+# Download UPO by KSEF number
+upo = client.sessions.upo_by_ksef_number(session_reference_number, ksef_number)
+
+# Download UPO by invoice reference number
+upo = client.sessions.upo_by_invoice_reference(session_reference_number, invoice_reference_number)
+
+# Download UPO by UPO reference number
+upo = client.sessions.upo(session_reference_number, upo_reference_number)
+
+# UPO contains signed XML document
+puts upo["upo"] # XML content
+```
+
+### Generate QR Code for Invoice
+
+```ruby
+# Generate QR code with UPO data
+qr_generator = KSEF::Actions::GenerateQRCode.new
+qr_code = qr_generator.call(
+  ksef_number: ksef_number,
+  timestamp: upo["timestamp"],
+  amount: invoice_total
+)
+
+# qr_code is a binary PNG image - save or embed in PDF
+File.write("invoice_qr.png", qr_code)
+```
+
+### Complete Invoice Workflow
+
+```ruby
+# 1. Send invoice
+response = client.sessions.send_online(
+  invoice_hash: calculate_hash(invoice_xml),
+  invoice_payload: Base64.strict_encode64(invoice_xml)
+)
+
+session_ref = response["referenceNumber"]
+
+# 2. Wait for processing
+status = KSEF::Support::Utility.retry(backoff: 5, retry_until: 60) do
+  result = client.sessions.status(session_ref)
+  result["status"]["code"] == 200 ? result : nil
+end
+
+ksef_number = status["ksefNumber"]
+
+# 3. Download UPO
+upo = client.sessions.upo_by_ksef_number(session_ref, ksef_number)
+
+# 4. Generate QR code
+qr_generator = KSEF::Actions::GenerateQRCode.new
+qr_code = qr_generator.call(
+  ksef_number: ksef_number,
+  timestamp: upo["timestamp"]
+)
+
+# 5. Close session
+client.sessions.close_online(session_ref)
+
+puts "✅ Invoice #{ksef_number} sent, UPO received, QR generated!"
+```
+
+### Query Session Invoices
+
+```ruby
+# List all invoices in session
+invoices = client.sessions.invoices(session_ref)
+
+# Get specific invoice details
+invoice = client.sessions.invoice(session_ref, invoice_ref)
+
+# List failed invoices
+failed = client.sessions.failed_invoices(session_ref)
+
+# List online session invoices
+online_invoices = client.sessions.online_invoices(session_ref)
+```
+
 ### Batch Invoice Sending
 
 ```ruby
