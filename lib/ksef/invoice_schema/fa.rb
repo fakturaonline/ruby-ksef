@@ -7,7 +7,7 @@ module KSEF
       include XMLSerializable
 
       attr_reader :kod_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
-                  :p_13_1, :p_13_2, :p_13_3, :p_13_4, :p_13_5, :p_13_6
+                  :p_13_1, :p_13_2, :p_13_3, :p_13_4, :p_13_5, :p_13_6, :p_1m, :p_6, :platnosc
 
       # @param kod_waluty [ValueObjects::KodWaluty] Kód měny
       # @param p_1 [Date, String] Datum vystavení
@@ -22,6 +22,9 @@ module KSEF
       # @param p_13_4 [Numeric, nil] Suma DPH dle sazby 8%
       # @param p_13_5 [Numeric, nil] Suma hodnot základu daně dle sazby 5%
       # @param p_13_6 [Numeric, nil] Suma DPH dle sazby 5%
+      # @param p_1m [String, nil] Místo vystavení
+      # @param p_6 [Date, String, nil] Datum zdanitelného plnění (DUZP)
+      # @param platnosc [DTOs::Platnosc, nil] Platební podmínky
       def initialize(
         kod_waluty:,
         p_1:,
@@ -35,11 +38,16 @@ module KSEF
         p_13_3: nil,
         p_13_4: nil,
         p_13_5: nil,
-        p_13_6: nil
+        p_13_6: nil,
+        p_1m: nil,
+        p_6: nil,
+        platnosc: nil
       )
         @kod_waluty = kod_waluty.is_a?(ValueObjects::KodWaluty) ? kod_waluty : ValueObjects::KodWaluty.new(kod_waluty)
         @p_1 = p_1.is_a?(String) ? Date.parse(p_1) : p_1
+        @p_1m = p_1m
         @p_2 = p_2
+        @p_6 = p_6.is_a?(String) ? Date.parse(p_6) : p_6 if p_6
         @p_15 = p_15
         @fa_wiersz = fa_wiersz
         @adnotacje = adnotacje
@@ -50,6 +58,7 @@ module KSEF
         @p_13_4 = p_13_4
         @p_13_5 = p_13_5
         @p_13_6 = p_13_6
+        @platnosc = platnosc
       end
 
       def to_rexml
@@ -62,8 +71,14 @@ module KSEF
         # P_1 - datum vystavení
         add_element_if_present(fa, 'P_1', @p_1.strftime('%Y-%m-%d'))
 
+        # P_1M - místo vystavení
+        add_element_if_present(fa, 'P_1M', @p_1m) if @p_1m
+
         # P_2 - číslo faktury
         add_element_if_present(fa, 'P_2', @p_2)
+
+        # P_6 - datum zdanitelného plnění (DUZP)
+        add_element_if_present(fa, 'P_6', @p_6.strftime('%Y-%m-%d')) if @p_6
 
         # P_13_* - sumy podle DPH sazeb
         add_element_if_present(fa, 'P_13_1', format_decimal(@p_13_1)) if @p_13_1
@@ -84,6 +99,9 @@ module KSEF
 
         # FaWiersz - položky
         add_child_elements(fa, @fa_wiersz)
+
+        # Platnosc - platební podmínky
+        add_child_element(fa, @platnosc) if @platnosc
 
         doc
       end

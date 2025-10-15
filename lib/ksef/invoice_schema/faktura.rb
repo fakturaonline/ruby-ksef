@@ -6,17 +6,19 @@ module KSEF
     class Faktura < BaseDTO
       include XMLSerializable
 
-      attr_reader :naglowek, :podmiot1, :podmiot2, :fa
+      attr_reader :naglowek, :podmiot1, :podmiot2, :fa, :stopka
 
       # @param naglowek [Naglowek] Hlavička faktury
       # @param podmiot1 [DTOs::Podmiot1] Prodejce
       # @param podmiot2 [DTOs::Podmiot2] Kupující
       # @param fa [Fa] Hlavní část faktury
-      def initialize(naglowek:, podmiot1:, podmiot2:, fa:)
+      # @param stopka [DTOs::Stopka, nil] Zápatí
+      def initialize(naglowek:, podmiot1:, podmiot2:, fa:, stopka: nil)
         @naglowek = naglowek
         @podmiot1 = podmiot1
         @podmiot2 = podmiot2
         @fa = fa
+        @stopka = stopka
       end
 
       # Vrátí kompletní XML faktury jako string
@@ -55,6 +57,12 @@ module KSEF
         # Fa
         fa_element = @fa.to_rexml.root
         faktura.add_element(fa_element)
+
+        # Stopka (optional)
+        if @stopka
+          stopka_element = @stopka.to_rexml.root
+          faktura.add_element(stopka_element)
+        end
 
         doc
       end

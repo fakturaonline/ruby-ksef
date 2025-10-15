@@ -1,21 +1,21 @@
 # KSeF Invoice Schema (FA/2 XML)
 
-Pragmatický přístup k vytváření FA(2) XML faktur pro KSeF API.
+Pragmatic approach to creating FA(2) XML invoices for KSeF API.
 
-## Přehled
+## Overview
 
-Ruby implementace XML invoice schema pro KSeF (Krajowy System e-Faktur). Zahrnuje základní komponenty pro vytvoření validní FA(2) faktury.
+Ruby implementation of XML invoice schema for KSeF (Krajowy System e-Faktur). Includes essential components for creating valid FA(2) invoices.
 
-## Rychlý start
+## Quick Start
 
 ```ruby
 require 'ksef'
 
-# 1. Vytvoř prodejce
-prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
+# 1. Create seller
+seller = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
   dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
     nip: '1234567890',
-    nazwa: 'Moje firma s.r.o.'
+    nazwa: 'My Company Ltd.'
   ),
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: 'PL',
@@ -26,11 +26,11 @@ prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
   )
 )
 
-# 2. Vytvoř kupujícího
-kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
+# 2. Create buyer
+buyer = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
     nip: '9876543210',
-    nazwa: 'Zákazník Sp. z o.o.'
+    nazwa: 'Customer Sp. z o.o.'
   ),
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: 'PL',
@@ -41,12 +41,12 @@ kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   )
 )
 
-# 3. Vytvoř položky faktury
-polozky = [
+# 3. Create invoice lines
+lines = [
   KSEF::InvoiceSchema::DTOs::FaWiersz.new(
     nr_wiersza: 1,
-    p_7: 'Konzultační služby',
-    p_8a: 'ks',
+    p_7: 'Consulting services',
+    p_8a: 'pcs',
     p_8b: 1,
     p_9b: 1000.00,
     p_11: 23,
@@ -54,71 +54,95 @@ polozky = [
   )
 ]
 
-# 4. Slož fakturu
-faktura = KSEF::InvoiceSchema::Faktura.new(
+# 4. Compose invoice
+invoice = KSEF::InvoiceSchema::Faktura.new(
   naglowek: KSEF::InvoiceSchema::Naglowek.new(
-    system_info: 'Můj systém v1.0'
+    system_info: 'My System v1.0'
   ),
-  podmiot1: prodejce,
-  podmiot2: kupujici,
+  podmiot1: seller,
+  podmiot2: buyer,
   fa: KSEF::InvoiceSchema::Fa.new(
     kod_waluty: KSEF::InvoiceSchema::ValueObjects::KodWaluty.new('PLN'),
     p_1: Date.today,
     p_2: 'FV/2024/001',
     p_15: 1230.00,
-    fa_wiersz: polozky,
+    fa_wiersz: lines,
     p_13_1: 1000.00,
     p_13_2: 230.00
   )
 )
 
-# 5. Vygeneruj XML
-xml = faktura.to_xml
+# 5. Generate XML
+xml = invoice.to_xml
 puts xml
 ```
 
-## Implementované komponenty
+## Implemented Components
 
-### ✅ Hotovo
+### ✅ Fully Implemented for FakturaOnline
 
-- **XMLSerializable** - modul pro XML serializaci
-- **BaseDTO** - základní třída pro všechny DTOs
+- **XMLSerializable** - module for XML serialization
+- **BaseDTO** - base class for all DTOs
 - **Value Objects**:
-  - `KodWaluty` - kód měny (ISO 4217)
-  - `FormCode` - typ formuláře (FA(2), FA(3))
-  - `RodzajFaktury` - typ faktury (VAT, KOREKTA, ZAL...)
+  - `KodWaluty` - currency code (ISO 4217)
+  - `FormCode` - form type (FA(2), FA(3))
+  - `RodzajFaktury` - invoice type (VAT, KOREKTA, ZAL...)
 
 - **DTOs**:
-  - `Adres` - adresa (kraj, město, ulice, PSČ...)
-  - `DaneIdentyfikacyjne` - identifikační údaje (NIP, název)
-  - `Podmiot1` - prodejce
-  - `Podmiot2` - kupující
-  - `FaWiersz` - položka faktury
-  - `Adnotacje` - poznámky
+  - `Adres` - address (country, city, street, zip code...)
+  - `DaneIdentyfikacyjne` - identification data (NIP, name)
+  - `DaneKontaktowe` - contact data (email, phone) ✨ **NEW**
+  - `Podmiot1` - seller (including contacts)
+  - `Podmiot2` - buyer (including contacts)
+  - `FaWiersz` - invoice line
+  - `Adnotacje` - annotations
+  - `RachunekBankowy` - bank account (IBAN, SWIFT) ✨ **NEW**
+  - `TerminPlatnosci` - payment deadline ✨ **NEW**
+  - `Platnosc` - payment conditions ✨ **NEW**
+  - `Stopka` - footer with annotations ✨ **NEW**
 
-- **Hlavní komponenty**:
-  - `Naglowek` - hlavička faktury
-  - `Fa` - tělo faktury
-  - `Faktura` - root element
+- **Main Components**:
+  - `Naglowek` - invoice header
+  - `Fa` - invoice body (with P_1M, P_6/DUZP, Platnosc) ✨ **EXTENDED**
+  - `Faktura` - root element (with Stopka) ✨ **EXTENDED**
 
-### 🔄 Můžeš doplnit později
+### 📋 Mapping FakturaOnline → KSeF
 
-Pokud budeš potřebovat pokročilejší funkce:
+| FakturaOnline field | KSeF XML field | DTO |
+|---------------------|----------------|-----|
+| `number` | `P_2` | Fa |
+| `issued_on` | `P_1` | Fa |
+| `due_on` | `TerminPlatnosci.Termin` | Platnosc |
+| `tax_point_on` | `P_6` | Fa |
+| `currency` | `KodWaluty` | Fa |
+| `total` | `P_15` | Fa |
+| `seller.name` | `Podmiot1.Nazwa` | Podmiot1 |
+| `seller.email` | `DaneKontaktowe.Email` | Podmiot1 |
+| `seller.phone` | `DaneKontaktowe.Telefon` | Podmiot1 |
+| `seller.bank_account` | `RachunekBankowy.NrRBIBAN` | Platnosc |
+| `buyer.name` | `Podmiot2.Nazwa` | Podmiot2 |
+| `note` | `Adnotacje.P_16` | Fa |
+| `foot_note` | `Stopka.Informacje` | Stopka |
+| `lines[].description` | `FaWiersz.P_7` | FaWiersz |
+| `lines[].quantity` | `FaWiersz.P_8B` | FaWiersz |
+| `lines[].vat_rate` | `FaWiersz.P_11` | FaWiersz |
 
-- `Podmiot3` - třetí subjekt
-- `PodmiotUpowazniony` - oprávněný subjekt
-- `P_*Group` - skupiny DPH polí pro různé sazby
-- `Platnosc` - podmínky platby
-- `Rozliczenie` - rozúčtování
-- `WarunkiTransakcji` - obchodní podmínky
-- `Stopka` - zápatí
-- `Zalacznik` - přílohy
-- `KorektaGroup` - opravné faktury
-- Pokročilejší validace
+### 🔄 You Can Add Later
 
-## Struktura XML
+If you need more advanced features:
 
-Vygenerované XML odpovídá FA(2) schema:
+- `Podmiot3` - third party
+- `PodmiotUpowazniony` - authorized entity
+- `P_*Group` - VAT field groups for different rates
+- `Rozliczenie` - settlement
+- `WarunkiTransakcji` - transaction conditions
+- `Zalacznik` - attachments
+- `KorektaGroup` - corrective invoices
+- Advanced validation
+
+## XML Structure
+
+Generated XML conforms to FA(2) schema:
 
 ```xml
 <?xml version='1.0' encoding='UTF-8'?>
@@ -146,7 +170,7 @@ Vygenerované XML odpovídá FA(2) schema:
 
 ### Faktura
 
-Root element faktury.
+Invoice root element.
 
 ```ruby
 KSEF::InvoiceSchema::Faktura.new(
@@ -157,25 +181,25 @@ KSEF::InvoiceSchema::Faktura.new(
 )
 ```
 
-**Metody:**
-- `#to_xml` - vrátí formátovaný XML string
-- `#to_rexml` - vrátí REXML::Document
+**Methods:**
+- `#to_xml` - returns formatted XML string
+- `#to_rexml` - returns REXML::Document
 
 ### Naglowek
 
-Hlavička faktury s metadaty.
+Invoice header with metadata.
 
 ```ruby
 KSEF::InvoiceSchema::Naglowek.new(
-  wariant_formularza: ValueObjects::FormCode.new, # FA(2) nebo FA(3)
+  wariant_formularza: ValueObjects::FormCode.new, # FA(2) or FA(3)
   data_wytworzenia_fa: Time.now,
-  system_info: 'Můj systém v1.0'  # optional
+  system_info: 'My System v1.0'  # optional
 )
 ```
 
 ### Podmiot1 / Podmiot2
 
-Prodejce / Kupující.
+Seller / Buyer.
 
 ```ruby
 KSEF::InvoiceSchema::DTOs::Podmiot1.new(
@@ -189,17 +213,17 @@ KSEF::InvoiceSchema::DTOs::Podmiot1.new(
 
 ### Fa
 
-Hlavní část faktury.
+Invoice body.
 
 ```ruby
 KSEF::InvoiceSchema::Fa.new(
   kod_waluty: ValueObjects::KodWaluty.new('PLN'),
-  p_1: Date.today,              # datum vystavení
-  p_2: 'FV/2024/001',           # číslo faktury
-  p_15: 1230.00,                # celková částka
-  fa_wiersz: [FaWiersz],        # položky
-  p_13_1: 1000.00,              # základ daně 23%
-  p_13_2: 230.00,               # DPH 23%
+  p_1: Date.today,              # issue date
+  p_2: 'FV/2024/001',           # invoice number
+  p_15: 1230.00,                # total amount
+  fa_wiersz: [FaWiersz],        # invoice lines
+  p_13_1: 1000.00,              # tax base 23%
+  p_13_2: 230.00,               # VAT 23%
   adnotacje: Adnotacje.new,
   rodzaj_faktury: ValueObjects::RodzajFaktury.new('VAT')
 )
@@ -207,62 +231,77 @@ KSEF::InvoiceSchema::Fa.new(
 
 ### FaWiersz
 
-Položka faktury.
+Invoice line item.
 
 ```ruby
 KSEF::InvoiceSchema::DTOs::FaWiersz.new(
   nr_wiersza: 1,
-  p_7: 'Název služby',
-  p_8a: 'ks',                   # jednotka (optional)
-  p_8b: 1,                      # množství (optional)
-  p_9a: 1000.00,                # jedn. cena netto (optional)
-  p_9b: 1000.00,                # hodnota netto
-  p_11: 23,                     # sazba DPH (% nebo 'zw', 'np', 'oo')
-  p_12: 230.00                  # výše DPH
+  p_7: 'Service name',
+  p_8a: 'pcs',                  # unit (optional)
+  p_8b: 1,                      # quantity (optional)
+  p_9a: 1000.00,                # unit price net (optional)
+  p_9b: 1000.00,                # net value
+  p_11: 23,                     # VAT rate (% or 'zw', 'np', 'oo')
+  p_12: 230.00                  # VAT amount
 )
 ```
 
-## Příklady
+## Examples
 
-Viz `examples/invoice_example.rb` pro kompletní příklad.
+**Basic example:**
+```bash
+ruby examples/invoice_example.rb
+```
 
-## Rozšíření
+**Complete FakturaOnline mapping:**
+```bash
+ruby examples/fakturaonline_mapping.rb
+```
 
-Pokud potřebuješ přidat další komponenty:
+This example demonstrates complete mapping of all important fields from FakturaOnline to KSeF FA(2) XML, including:
+- Contact information (email, phone)
+- Bank accounts (IBAN, SWIFT)
+- Payment deadline
+- DUZP (tax point date)
+- Footer with annotations
 
-1. Vytvoř nový DTO/ValueObject v příslušné složce
-2. Implementuj `XMLSerializable` modul
-3. Přidej `to_rexml` metodu
-4. Načti soubor v `lib/ksef/invoice_schema.rb`
+## Extension
+
+If you need to add more components:
+
+1. Create a new DTO/ValueObject in the appropriate folder
+2. Implement the `XMLSerializable` module
+3. Add the `to_rexml` method
+4. Require the file in `lib/ksef/invoice_schema.rb`
 
 ```ruby
-class MojeNoveDTO < BaseDTO
+class MyNewDTO < BaseDTO
   include XMLSerializable
 
-  def initialize(pole1:, pole2: nil)
-    @pole1 = pole1
-    @pole2 = pole2
+  def initialize(field1:, field2: nil)
+    @field1 = field1
+    @field2 = field2
   end
 
   def to_rexml
     doc = REXML::Document.new
-    element = doc.add_element('MojeNoveDTO')
+    element = doc.add_element('MyNewDTO')
 
-    add_element_if_present(element, 'Pole1', @pole1)
-    add_element_if_present(element, 'Pole2', @pole2)
+    add_element_if_present(element, 'Field1', @field1)
+    add_element_if_present(element, 'Field2', @field2)
 
     doc
   end
 end
 ```
 
-## Testování
+## Testing
 
 ```bash
-# Spusť příklad
+# Run example
 ruby examples/invoice_example.rb
 
-# Spusť testy (až je vytvoříš)
+# Run tests (once you create them)
 bundle exec rspec spec/invoice_schema
 ```
 
