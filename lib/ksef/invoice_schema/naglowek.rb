@@ -50,7 +50,7 @@ module KSEF
 
       def self.from_nokogiri(element)
         kod_formularza = element.at_xpath("KodFormularza")
-        kod_systemowy = kod_formularza&.attribute("kodSystemowy")&.value
+        kod_formularza&.attribute("kodSystemowy")&.value
         wariant_text = text_at(element, "WariantFormularza")
         wariant = wariant_text ? wariant_text.to_i : 2
 

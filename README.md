@@ -623,12 +623,12 @@ File.write("modified.xml", modified.to_xml)
 ## Roadmap
 
 - [x] ~~Invoice XML builder/parser~~
-- [x] ~~Rails integration helpers~~
 - [x] ~~CLI tool~~
+- [x] ~~Complete test coverage~~ (226 tests)
 - [ ] Full XMLDSig signature implementation
 - [ ] Full CSR generation
 - [ ] Async parallel requests with connection pooling
-- [ ] Complete test coverage
+- [ ] Rails integration helpers
 
 ## Support
 

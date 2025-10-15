@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# rubocop:disable Naming/VariableNumber
 require_relative "../lib/ksef"
 
 puts "=== KSEF XML Parser Demo ==="

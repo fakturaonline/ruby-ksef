@@ -15,7 +15,6 @@ module KSEF
     option :pass, type: :string, required: true, desc: "Certificate passphrase"
     option :nip, type: :string, required: true, desc: "NIP number"
     option :save, type: :string, desc: "Save tokens to file"
-    # rubocop:disable Metrics/AbcSize
     def auth
       setup_logger
 
@@ -40,12 +39,9 @@ module KSEF
     rescue KSEF::Error => e
       error "Authentication failed: #{e.message}"
     end
-    # rubocop:enable Metrics/AbcSize
-
     desc "send INVOICE_XML", "Send invoice to KSEF"
     option :config, type: :string, desc: "Load config from file"
     option :wait, type: :boolean, default: true, desc: "Wait for processing"
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def send(invoice_xml_path)
       setup_logger
       client = load_client
@@ -81,8 +77,6 @@ module KSEF
     rescue KSEF::Error => e
       error "Send failed: #{e.message}"
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
     desc "status REFERENCE", "Check status of invoice processing"
     option :config, type: :string, desc: "Load config from file"
     def status(reference_number)
@@ -107,7 +101,6 @@ module KSEF
     option :to, type: :string, required: true, desc: "To date (YYYY-MM-DD)"
     option :type, type: :string, default: "sent", desc: "Invoice type (sent, received)"
     option :limit, type: :numeric, default: 10, desc: "Result limit"
-    # rubocop:disable Metrics/AbcSize
     def query
       setup_logger
       client = load_client
@@ -131,12 +124,9 @@ module KSEF
     rescue KSEF::Error => e
       error "Query failed: #{e.message}"
     end
-    # rubocop:enable Metrics/AbcSize
-
     desc "download KSEF_NUMBER", "Download and decrypt invoice"
     option :config, type: :string, desc: "Load config from file"
     option :output, type: :string, desc: "Output file path"
-    # rubocop:disable Metrics/AbcSize
     def download(ksef_number)
       setup_logger
       client = load_client
@@ -161,11 +151,8 @@ module KSEF
     rescue KSEF::Error => e
       error "Download failed: #{e.message}"
     end
-    # rubocop:enable Metrics/AbcSize
-
     desc "parse INVOICE_XML", "Parse invoice XML to Ruby objects"
     option :format, type: :string, default: "info", desc: "Output format (info, json, ruby)"
-    # rubocop:disable Metrics/AbcSize
     def parse(invoice_xml_path)
       setup_logger
 
@@ -190,8 +177,6 @@ module KSEF
     rescue StandardError => e
       error "Parse failed: #{e.message}"
     end
-    # rubocop:enable Metrics/AbcSize
-
     desc "generate", "Generate example invoice XML"
     option :output, type: :string, desc: "Output file path"
     def generate
@@ -234,7 +219,6 @@ module KSEF
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
     def load_config_file(path)
       require "json"
       config = JSON.parse(File.read(path))
@@ -255,9 +239,7 @@ module KSEF
         logger @logger if @logger
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
-    # rubocop:disable Metrics/AbcSize
     def load_from_env
       KSEF.build do
         mode ENV["KSEF_MODE"]&.to_sym || :test
@@ -275,9 +257,7 @@ module KSEF
         logger @logger if @logger
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
-    # rubocop:disable Metrics/AbcSize
     def save_config(client, path)
       require "json"
       config = {
@@ -292,9 +272,7 @@ module KSEF
 
       File.write(path, JSON.pretty_generate(config))
     end
-    # rubocop:enable Metrics/AbcSize
 
-    # rubocop:disable Metrics/AbcSize
     def display_invoice_info(invoice)
       say "\n=== Invoice Information ===", :green
       say "Number: #{invoice.fa.p_2}"
@@ -317,9 +295,7 @@ module KSEF
         say "#{line.nr_wiersza}. #{line.p_7} - #{line.p_9b} (VAT: #{line.p_11}%)"
       end
     end
-    # rubocop:enable Metrics/AbcSize
 
-    # rubocop:disable Metrics/MethodLength, Naming/VariableNumber
     def create_example_invoice
       seller = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
         dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
@@ -378,7 +354,7 @@ module KSEF
         )
       )
     end
-    # rubocop:enable Metrics/MethodLength, Naming/VariableNumber
+    # rubocop:enable Naming/VariableNumber
 
     def error(message)
       say "✗ #{message}", :red

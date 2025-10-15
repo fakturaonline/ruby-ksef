@@ -34,12 +34,12 @@ RSpec.describe KSEF::InvoiceSchema::ValueObjects::FormCode do
   describe "#wariant_formularza" do
     it "returns numeric variant for FA(2)" do
       code = described_class.new(described_class::FA2)
-      expect(code.wariant_formularza).to eq(0)
+      expect(code.wariant_formularza).to eq(2)
     end
 
     it "returns numeric variant for FA(3)" do
       code = described_class.new(described_class::FA3)
-      expect(code.wariant_formularza).to eq(0)
+      expect(code.wariant_formularza).to eq(3)
     end
   end
 

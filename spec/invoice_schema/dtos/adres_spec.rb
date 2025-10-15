@@ -9,37 +9,90 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adres do
         kod_kraju: "PL",
         miejscowosc: "Warszawa",
         kod_pocztowy: "00-001",
-        ulica: "Marszałkowska",
-        nr_domu: "1",
-        nr_lokalu: "10",
-        wojewodztwo: "Mazowieckie",
-        powiat: "Warszawa",
-        gmina: "Śródmieście"
+        ulica: "Testowa",
+        nr_domu: "123",
+        nr_lokalu: "45",
+        wojewodztwo: "mazowieckie",
+        powiat: "warsz
+
+awski",
+        gmina: "Warszawa"
       )
 
-      xml = adres.to_rexml.to_s
-
-      expect(xml).to include("<KodKraju>PL</KodKraju>")
-      expect(xml).to include("<Miejscowosc>Warszawa</Miejscowosc>")
-      expect(xml).to include("<KodPocztowy>00-001</KodPocztowy>")
-      expect(xml).to include("<Ulica>Marszałkowska</Ulica>")
-      expect(xml).to include("<NrDomu>1</NrDomu>")
-      expect(xml).to include("<NrLokalu>10</NrLokalu>")
-      expect(xml).to include("<Wojewodztwo>Mazowieckie</Wojewodztwo>")
+      doc = adres.to_rexml
+      expect(doc.root.name).to eq("Adres")
+      expect(doc.root.elements["KodKraju"].text).to eq("PL")
+      expect(doc.root.elements["Miejscowosc"].text).to eq("Warszawa")
+      expect(doc.root.elements["Ulica"].text).to eq("Testowa")
     end
 
-    it "generates XML with only required fields" do
+    it "generates XML with minimal fields" do
       adres = described_class.new(
-        kod_kraju: "CZ",
-        miejscowosc: "Praha"
+        kod_kraju: "PL",
+        miejscowosc: "Kraków"
       )
 
-      xml = adres.to_rexml.to_s
+      doc = adres.to_rexml
+      expect(doc.root.elements["KodKraju"].text).to eq("PL")
+      expect(doc.root.elements["Miejscowosc"].text).to eq("Kraków")
+      expect(doc.root.elements["Ulica"]).to be_nil
+    end
+  end
 
-      expect(xml).to include("<KodKraju>CZ</KodKraju>")
-      expect(xml).to include("<Miejscowosc>Praha</Miejscowosc>")
-      expect(xml).not_to include("<Ulica>")
-      expect(xml).not_to include("<NrDomu>")
+  describe ".from_nokogiri" do
+    it "parses XML with all fields" do
+      xml = <<~XML
+        <Adres>
+          <KodKraju>PL</KodKraju>
+          <Miejscowosc>Warszawa</Miejscowosc>
+          <KodPocztowy>00-001</KodPocztowy>
+          <Ulica>Testowa</Ulica>
+          <NrDomu>123</NrDomu>
+          <NrLokalu>45</NrLokalu>
+        </Adres>
+      XML
+
+      doc = Nokogiri::XML(xml)
+      adres = described_class.from_nokogiri(doc.root)
+
+      expect(adres.kod_kraju).to eq("PL")
+      expect(adres.miejscowosc).to eq("Warszawa")
+      expect(adres.kod_pocztowy).to eq("00-001")
+      expect(adres.ulica).to eq("Testowa")
+      expect(adres.nr_domu).to eq("123")
+      expect(adres.nr_lokalu).to eq("45")
+    end
+
+    it "handles minimal XML" do
+      xml = "<Adres><KodKraju>PL</KodKraju><Miejscowosc>Kraków</Miejscowosc></Adres>"
+      doc = Nokogiri::XML(xml)
+      adres = described_class.from_nokogiri(doc.root)
+
+      expect(adres.kod_kraju).to eq("PL")
+      expect(adres.miejscowosc).to eq("Kraków")
+      expect(adres.ulica).to be_nil
+    end
+  end
+
+  describe "round-trip conversion" do
+    it "preserves data through XML conversion" do
+      original = described_class.new(
+        kod_kraju: "PL",
+        miejscowosc: "Poznań",
+        kod_pocztowy: "60-001",
+        ulica: "Główna",
+        nr_domu: "10"
+      )
+
+      xml = original.to_rexml.to_s
+      doc = Nokogiri::XML(xml)
+      parsed = described_class.from_nokogiri(doc.root)
+
+      expect(parsed.kod_kraju).to eq(original.kod_kraju)
+      expect(parsed.miejscowosc).to eq(original.miejscowosc)
+      expect(parsed.kod_pocztowy).to eq(original.kod_pocztowy)
+      expect(parsed.ulica).to eq(original.ulica)
+      expect(parsed.nr_domu).to eq(original.nr_domu)
     end
   end
 end

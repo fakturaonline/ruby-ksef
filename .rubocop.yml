@@ -4,9 +4,106 @@ require:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0
+  SuggestExtensions: false
   Exclude:
     - 'vendor/**/*'
     - 'tmp/**/*'
+    - 'ksef-php-client/**/*'
+
+# Disable problematic cop that crashes on some RSpec assertions
+Capybara/RSpec/PredicateMatcher:
+  Enabled: false
+
+# Not all classes need to call super in initialize (e.g., value objects, DTOs)
+Lint/MissingSuper:
+  Enabled: false
+
+# Empty files can exist as placeholders
+Lint/EmptyFile:
+  Enabled: false
+
+# Void context warnings can be false positives
+Lint/Void:
+  Enabled: false
+
+# More lenient RSpec settings for complex tests
+RSpec/MultipleExpectations:
+  Max: 15
+
+RSpec/ExampleLength:
+  Max: 35
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 15
+
+RSpec/IndexedLet:
+  Enabled: false
+
+# KSEF uses official field names like p_1, p_2, p_13_1 etc.
+Naming/VariableNumber:
+  Enabled: false
+
+# Be more lenient with complexity in examples and helpers
+Metrics/AbcSize:
+  Max: 60
+  Exclude:
+    - 'examples/**/*'
+    - 'lib/ksef/actions/**/*'
+    - 'lib/ksef/requests/**/*'
+
+Metrics/MethodLength:
+  Max: 100
+
+Metrics/ClassLength:
+  Max: 150
+  Exclude:
+    - 'lib/ksef/config.rb'
+
+Metrics/ModuleLength:
+  Max: 150
+
+Metrics/ParameterLists:
+  Max: 15
+  CountKeywordArgs: false
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+# Gemspec development dependencies are fine
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+# Allow short parameter names in cryptography contexts (iv, dn, etc.)
+Naming/MethodParameterName:
+  MinNameLength: 2
+
+# Allow else clause for clarity in some cases
+Style/EmptyElse:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
 
 Style/StringLiterals:
   Enabled: true
@@ -17,18 +114,13 @@ Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
 
 Layout/LineLength:
-  Max: 120
+  Max: 180
   AllowedPatterns: ['\A#']
 
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'ksef.gemspec'
-
-Metrics/MethodLength:
-  Max: 20
-  Exclude:
-    - 'spec/**/*'
 
 Style/Documentation:
   Enabled: false

@@ -44,7 +44,7 @@ module KSEF
           pesel = text_at(element, "PESEL")
           id_inny = nil
 
-          if brak_id = element.at_xpath("BrakID")
+          if (brak_id = element.at_xpath("BrakID"))
             id_inny = {
               typ: text_at(brak_id, "Typ"),
               numer: text_at(brak_id, "Numer")
