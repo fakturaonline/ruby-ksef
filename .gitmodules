@@ -1,0 +1,3 @@
+[submodule "sources/ksef-docs-official"]
+	path = sources/ksef-docs-official
+	url = https://github.com/CIRFMF/ksef-docs.git
