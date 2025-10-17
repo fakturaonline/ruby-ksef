@@ -17,8 +17,8 @@ module KSEF
 end
 
 loader = Zeitwerk::Loader.for_gem
+loader.inflector.inflect("ksef" => "KSEF", "nip" => "NIP")
 loader.push_dir File.expand_path("ksef", __dir__), namespace: KSEF
-loader.inflector.inflect("nip" => "NIP")
 loader.setup
 
 module KSEF
