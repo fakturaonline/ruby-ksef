@@ -10,7 +10,14 @@ module KSEF
         end
 
         def call(reference_number)
-          response = @http_client.get("auth/#{reference_number}")
+          response = @http_client.request(
+            method: :get,
+            path: "auth/#{reference_number}",
+            headers: {
+              "Accept" => "application/json",
+              "Content-Type" => "application/json"
+            }
+          )
           response.json
         end
       end

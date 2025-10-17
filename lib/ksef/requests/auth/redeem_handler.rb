@@ -10,7 +10,14 @@ module KSEF
         end
 
         def call
-          response = @http_client.post("auth/token/redeem")
+          response = @http_client.request(
+            method: :post,
+            path: "auth/token/redeem",
+            headers: {
+              "Accept" => "application/json",
+              "Content-Type" => "application/json"
+            }
+          )
           response.json
         end
       end

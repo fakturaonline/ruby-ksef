@@ -4,36 +4,47 @@ RSpec.describe KSEF::Requests::Sessions::SendOnlineHandler do
   subject { described_class.new(http_client) }
 
   let(:http_client) { stub_http_client(response_body: send_online_response_fixture) }
+  let(:reference_number) { "20250625-EE-319D7EE000-B67F415CDC-2C" }
+  let(:invoice_xml) { invoice_xml_fixture }
+  let(:encrypted_content) { "encrypted_invoice_content" }
   let(:params) do
     {
-      invoice_hash: Digest::SHA256.base64digest(invoice_xml_fixture),
-      invoice_payload: Base64.strict_encode64(invoice_xml_fixture)
+      invoice_hash: Base64.strict_encode64(Digest::SHA256.digest(invoice_xml)),
+      invoice_size: invoice_xml.bytesize,
+      encrypted_invoice_hash: Base64.strict_encode64(Digest::SHA256.digest(encrypted_content)),
+      encrypted_invoice_size: encrypted_content.bytesize,
+      encrypted_invoice_content: Base64.strict_encode64(encrypted_content),
+      offline_mode: false
     }
   end
 
   describe "#call" do
     it "returns send response with reference number" do
-      result = subject.call(params)
+      result = subject.call(reference_number, params)
 
       expect(result).to be_a(Hash)
       expect(result).to have_key("referenceNumber")
       expect(result).to have_key("timestamp")
-      expect(result["referenceNumber"]).to match(/\d{8}-SE-[A-Z0-9]+/)
+      expect(result["referenceNumber"]).to match(/\d{8}-[A-Z]+-[A-Z0-9-]+/)
     end
 
-    it "calls POST online/invoices/send endpoint" do
+    it "calls POST sessions/online/{referenceNumber}/invoices endpoint" do
       expect(http_client).to receive(:post).with(
-        "online/invoices/send",
+        "sessions/online/#{reference_number}/invoices",
         hash_including(body: anything)
       )
-      subject.call(params)
+      subject.call(reference_number, params)
     end
 
-    it "sends invoice hash and payload" do
+    it "sends correct request body" do
       expect(http_client).to receive(:post) do |_path, options|
         expect(options[:body]).to include(
           invoiceHash: params[:invoice_hash],
-          invoicePayload: params[:invoice_payload]
+          invoiceSize: params[:invoice_size],
+          encryptedInvoiceHash: params[:encrypted_invoice_hash],
+          encryptedInvoiceSize: params[:encrypted_invoice_size],
+          encryptedInvoiceContent: params[:encrypted_invoice_content],
+          offlineMode: false
         )
 
         # Return proper response
@@ -43,7 +54,7 @@ RSpec.describe KSEF::Requests::Sessions::SendOnlineHandler do
         )
       end
 
-      subject.call(params)
+      subject.call(reference_number, params)
     end
   end
 end

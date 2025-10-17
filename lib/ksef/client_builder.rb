@@ -152,8 +152,9 @@ module KSEF
                       end
 
       # Set temporary auth token
+      # Note: authenticationToken is a hash with "token" and "validUntil" keys
       temp_token = ValueObjects::AccessToken.new(
-        token: auth_response["authenticationToken"],
+        token: auth_response["authenticationToken"]["token"],
         expires_at: nil
       )
       @config = @config.with_access_token(temp_token)

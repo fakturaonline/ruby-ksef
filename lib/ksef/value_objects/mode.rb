@@ -4,9 +4,9 @@ module KSEF
   module ValueObjects
     # Operating mode for KSEF API
     class Mode
-      TEST_URL = "https://ksef-test.mf.gov.pl/api"
-      DEMO_URL = "https://ksef-demo.mf.gov.pl/api"
-      PRODUCTION_URL = "https://ksef.mf.gov.pl/api"
+      TEST_URL = "https://ksef-test.mf.gov.pl/api/v2"
+      DEMO_URL = "https://ksef-demo.mf.gov.pl/api/v2"
+      PRODUCTION_URL = "https://ksef.mf.gov.pl/api/v2"
 
       attr_reader :value
 

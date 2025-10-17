@@ -26,10 +26,18 @@ module KSEF
           )
 
           # Send authentication request
-          response = @http_client.post(
-            "auth/xades-signature",
+          # Note: Using verifyCertificateChain=false for self-signed test certificates
+          response = @http_client.request(
+            method: :post,
+            path: "auth/xades-signature",
             body: xml,
-            headers: { "Content-Type" => "application/xml" }
+            headers: {
+              "Content-Type" => "application/xml",
+              "Accept" => "application/json"
+            },
+            params: {
+              "verifyCertificateChain" => "false"
+            }
           )
 
           response.json
@@ -38,25 +46,16 @@ module KSEF
         private
 
         def build_xades_xml(challenge:, certificate:, private_key:)
-          # Create XML document
+          # Create XML document for KSeF API v2
           builder = Nokogiri::XML::Builder.new(encoding: "UTF-8") do |xml|
-            xml["tns"].AuthRequest(
-              "xmlns:tns" => "http://ksef.mf.gov.pl/schema/gtw/svc/online/auth/request/2021/10/01/0001",
-              "xmlns:ds" => "http://www.w3.org/2000/09/xmldsig#"
+            xml.AuthTokenRequest(
+              "xmlns" => "http://ksef.mf.gov.pl/auth/token/2.0"
             ) do
-              xml["tns"].Challenge challenge
-              xml["tns"].ContextIdentifierGroup do
-                xml["tns"].IdentifierGroup do
-                  xml["tns"].Nip @identifier.value
-                end
+              xml.Challenge challenge
+              xml.ContextIdentifier do
+                xml.Nip @identifier.value
               end
-              xml["tns"].SubjectIdentifierType "certificateSubject"
-
-              # Add signature placeholder
-              xml["ds"].Signature do
-                # TODO: Implement full XMLDSig signature
-                # For now, this is a placeholder
-              end
+              xml.SubjectIdentifierType "certificateSubject"
             end
           end
 
@@ -64,11 +63,9 @@ module KSEF
           sign_xml(builder.to_xml, private_key, certificate)
         end
 
-        def sign_xml(xml, _private_key, _certificate)
-          # TODO: Implement proper XMLDSig signature
-          # This requires xmldsig gem or manual implementation
-          # For now, return unsigned XML as placeholder
-          xml
+        def sign_xml(xml, private_key, certificate)
+          # Use SignDocumentV2 action for proper XAdES signature with Nokogiri
+          Actions::SignDocumentV2.new.call(xml, certificate: certificate, private_key: private_key)
         end
       end
     end

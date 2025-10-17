@@ -10,7 +10,7 @@ module KSEF
         end
 
         def call(params)
-          response = @http_client.post("invoices/query", body: params)
+          response = @http_client.post("invoices/query/metadata", body: params)
           response.json
         end
       end

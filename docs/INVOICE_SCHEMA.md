@@ -250,11 +250,13 @@ KSEF::InvoiceSchema::DTOs::FaWiersz.new(
 
 **Basic example:**
 ```bash
+cd ..  # from docs/ back to project root
 ruby examples/invoice_example.rb
 ```
 
 **Complete FakturaOnline mapping:**
 ```bash
+cd ..  # from docs/ back to project root
 ruby examples/fakturaonline_mapping.rb
 ```
 

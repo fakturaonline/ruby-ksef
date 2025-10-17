@@ -112,6 +112,14 @@ module KSEF
         return unless @config.logger
 
         @config.logger.debug("KSEF Request: #{method.upcase} #{path}")
+
+        # Log Authorization header status
+        if @config.access_token
+          @config.logger.debug("Authorization: Bearer #{@config.access_token.token[0..30]}...")
+        else
+          @config.logger.debug("Authorization: NONE")
+        end
+
         @config.logger.debug("Headers: #{headers}") if headers.any?
         @config.logger.debug("Params: #{params}") if params.any?
         @config.logger.debug("Body: #{body}") if body

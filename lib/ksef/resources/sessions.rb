@@ -9,10 +9,11 @@ module KSEF
       end
 
       # Send online invoice
+      # @param reference_number [String] Session reference number
       # @param params [Hash] Invoice parameters
       # @return [Hash] Send response
-      def send_online(params)
-        Requests::Sessions::SendOnlineHandler.new(@http_client).call(params)
+      def send_online(reference_number, params)
+        Requests::Sessions::SendOnlineHandler.new(@http_client).call(reference_number, params)
       end
 
       # Send batch invoices

@@ -10,7 +10,7 @@ module KSEF
         end
 
         def call(ksef_number)
-          response = @http_client.get("invoices/#{ksef_number}")
+          response = @http_client.get("invoices/ksef/#{ksef_number}")
           response.body
         end
       end
