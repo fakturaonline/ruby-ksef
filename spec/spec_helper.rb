@@ -1,5 +1,25 @@
 # frozen_string_literal: true
 
+if ENV["COVERAGE"]
+  require "simplecov"
+  SimpleCov.start do
+    add_filter "/spec/"
+    add_filter "/bin/"
+    add_filter "/exe/"
+    add_filter "/vendor/"
+
+    add_group "Actions", "lib/ksef/actions"
+    add_group "Resources", "lib/ksef/resources"
+    add_group "Requests", "lib/ksef/requests"
+    add_group "Factories", "lib/ksef/factories"
+    add_group "ValueObjects", "lib/ksef/value_objects"
+    add_group "InvoiceSchema", "lib/ksef/invoice_schema"
+    add_group "Validator", "lib/ksef/validator"
+    add_group "Support", "lib/ksef/support"
+    add_group "Core", "lib/ksef"
+  end
+end
+
 require "ksef"
 
 # Manually require test dependencies
