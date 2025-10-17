@@ -13,8 +13,14 @@ module TestHelpers
       success?: status >= 200 && status < 300
     )
 
-    allow(http_client).to receive_messages(get: response, post: response, put: response, delete: response,
-                                           config: KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test)))
+    allow(http_client).to receive_messages(
+      get: response,
+      post: response,
+      put: response,
+      delete: response,
+      request: response,
+      config: KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test))
+    )
 
     http_client
   end

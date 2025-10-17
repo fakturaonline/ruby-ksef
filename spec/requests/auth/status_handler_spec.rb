@@ -18,7 +18,14 @@ RSpec.describe KSEF::Requests::Auth::StatusHandler do
     end
 
     it "calls GET auth/{referenceNumber} endpoint" do
-      expect(http_client).to receive(:get).with("auth/#{reference_number}")
+      expect(http_client).to receive(:request).with(
+        method: :get,
+        path: "auth/#{reference_number}",
+        headers: {
+          "Accept" => "application/json",
+          "Content-Type" => "application/json"
+        }
+      ).and_return(double(json: auth_status_response_fixture))
       subject.call(reference_number)
     end
 

@@ -35,12 +35,12 @@ RSpec.describe KSEF::ValueObjects::Mode do
   describe "#default_url" do
     it "returns test URL for test mode" do
       mode = described_class.new(:test)
-      expect(mode.default_url).to eq "https://ksef-test.mf.gov.pl/api"
+      expect(mode.default_url).to eq "https://ksef-test.mf.gov.pl/api/v2"
     end
 
     it "returns production URL for production mode" do
       mode = described_class.new(:production)
-      expect(mode.default_url).to eq "https://ksef.mf.gov.pl/api"
+      expect(mode.default_url).to eq "https://ksef.mf.gov.pl/api/v2"
     end
   end
 end

@@ -35,7 +35,7 @@ RSpec.describe KSEF::Requests::Invoices::QueryHandler do
     end
 
     it "calls POST invoices/query endpoint" do
-      expect(http_client).to receive(:post).with("invoices/query", body: params)
+      expect(http_client).to receive(:post).with("invoices/query/metadata", body: params)
       subject.call(params)
     end
   end

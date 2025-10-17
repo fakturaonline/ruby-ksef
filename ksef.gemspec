@@ -46,6 +46,9 @@ Gem::Specification.new do |spec|
   # CLI
   spec.add_dependency "thor", "~> 1.3"
 
+  # ZIP compression
+  spec.add_dependency "rubyzip", "~> 2.3"
+
   # Utilities
   spec.add_dependency "zeitwerk", "~> 2.6"
 

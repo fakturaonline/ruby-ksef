@@ -21,7 +21,14 @@ RSpec.describe KSEF::Requests::Auth::RedeemHandler do
     end
 
     it "calls POST auth/token/redeem endpoint" do
-      expect(http_client).to receive(:post).with("auth/token/redeem")
+      expect(http_client).to receive(:request).with(
+        method: :post,
+        path: "auth/token/redeem",
+        headers: {
+          "Accept" => "application/json",
+          "Content-Type" => "application/json"
+        }
+      ).and_return(double(json: redeem_token_response_fixture))
       subject.call
     end
   end

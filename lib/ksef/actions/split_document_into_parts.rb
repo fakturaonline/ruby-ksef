@@ -10,6 +10,8 @@ module KSEF
       # @return [Array<String>] Array of document parts
       def call(document, part_size:)
         document_length = document.bytesize
+        return [] if document_length.zero?
+
         part_count = (document_length.to_f / part_size).ceil
         actual_part_size = (document_length.to_f / part_count).ceil
 

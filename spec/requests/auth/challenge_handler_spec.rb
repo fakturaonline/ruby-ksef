@@ -17,7 +17,15 @@ RSpec.describe KSEF::Requests::Auth::ChallengeHandler do
     end
 
     it "calls GET auth/challenge endpoint" do
-      expect(http_client).to receive(:get).with("auth/challenge")
+      expect(http_client).to receive(:request).with(
+        method: :post,
+        path: "auth/challenge",
+        body: {},
+        headers: {
+          "Accept" => "application/json",
+          "Content-Type" => "application/json"
+        }
+      ).and_return(double(json: challenge_response_fixture))
       subject.call
     end
   end

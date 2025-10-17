@@ -21,10 +21,8 @@ module KSEF
                       when :rsa
                         OpenSSL::PKey::RSA.new(key_size)
                       when :ec
-                        # P-256 curve (secp256r1)
-                        key = OpenSSL::PKey::EC.new("prime256v1")
-                        key.generate_key
-                        key
+                        # P-256 curve (secp256r1) - OpenSSL 3.0 compatible
+                        OpenSSL::PKey::EC.generate("prime256v1")
                       else
                         raise ArgumentError, "Unsupported key type: #{key_type}. Use :rsa or :ec"
                       end
@@ -32,8 +30,8 @@ module KSEF
         # Create CSR
         csr = OpenSSL::X509::Request.new
         csr.version = 0
-        csr.subject = OpenSSL::X509::Name.new(dn.map { |k, v| [k.to_s, v] })
-        csr.public_key = private_key.public_key
+        csr.subject = OpenSSL::X509::Name.new(dn.map { |k, v| [k.to_s, v.to_s] })
+        csr.public_key = private_key
 
         # Sign CSR with private key
         csr.sign(private_key, OpenSSL::Digest.new("SHA256"))
