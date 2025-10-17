@@ -99,14 +99,6 @@ module KSEF
       def failed_invoices(session_reference_number, params = {})
         Requests::Sessions::FailedInvoicesHandler.new(@http_client).call(session_reference_number, params)
       end
-
-      # List invoices in online session
-      # @param session_reference_number [String] Session reference number
-      # @param params [Hash] Query parameters
-      # @return [Hash] Invoices list
-      def online_invoices(session_reference_number, params = {})
-        Requests::Sessions::OnlineInvoicesHandler.new(@http_client).call(session_reference_number, params)
-      end
     end
   end
 end

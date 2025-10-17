@@ -25,7 +25,8 @@ puts
 
 # Client is now ready to use
 puts "Client ready! You can now:"
-puts "  - Send invoices: client.invoices.send_invoice(xml)"
-puts "  - Check status: client.invoices.status(reference)"
-puts "  - Get invoice: client.invoices.get_invoice(ksef_ref)"
+puts "  - Send invoices: client.sessions.send_online(ref, params)"
+puts "  - Check status: client.sessions.status(ref)"
+puts "  - Download invoice: client.invoices.download(ksef_number)"
+puts "  - Query invoices: client.invoices.query(params)"
 puts "  - Manage sessions: client.auth.sessions_list"

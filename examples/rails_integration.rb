@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
+# ============================================================================
+# REFERENCE EXAMPLE - Not meant to be executed standalone
+# ============================================================================
+#
 # Example Rails integration for KSEF client
 #
 # This example shows how to integrate KSEF client into a Rails application
 # with proper credential management and background job processing.
+#
+# NOTE: This is a reference/template file showing integration patterns.
+#       It requires a Rails application environment to run.
 
 # config/initializers/ksef.rb
 # ============================================
