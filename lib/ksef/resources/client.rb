@@ -57,6 +57,27 @@ module KSEF
         @testdata ||= Testdata.new(@http_client)
       end
 
+      # Access permissions endpoints
+      # @return [Permissions] Permissions resource
+      def permissions
+        refresh_token_if_expired!
+        @permissions ||= Permissions.new(@http_client)
+      end
+
+      # Access limits endpoints
+      # @return [Limits] Limits resource
+      def limits
+        refresh_token_if_expired!
+        @limits ||= Limits.new(@http_client)
+      end
+
+      # Access PEPPOL endpoints
+      # @return [Peppol] Peppol resource
+      def peppol
+        refresh_token_if_expired!
+        @peppol ||= Peppol.new(@http_client)
+      end
+
       # Get current access token
       def access_token
         @config.access_token

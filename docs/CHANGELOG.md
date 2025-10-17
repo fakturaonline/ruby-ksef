@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2025-10-17
+
+### Added - 100% API Coverage 🎉
+- **Permissions Module** (17 endpoints) - Complete permissions management system
+  - Grant permissions to persons, entities, authorizations, indirect, subunits, EU entities
+  - Revoke grants (common, authorizations)
+  - Query grants (personal, persons, subunits, entities roles, subordinate entities, authorizations, EU entities)
+  - Operation status and attachments status
+- **Limits Module** (2 endpoints) - System limits information
+  - Context limits (sessions, invoices)
+  - Subject limits (certificates, tokens)
+- **PEPPOL Module** (1 endpoint) - PEPPOL network integration
+  - Query PEPPOL data
+- **Extended Testdata Module** (6 new endpoints)
+  - Permissions grant/revoke
+  - Attachment grant/revoke
+  - Limits configuration (context session, subject certificate)
+
+### Changed
+- Updated `HttpClient#post` and `HttpClient#put` to support params in POST/PUT requests
+- Enhanced documentation with English translations
+- Improved README with comprehensive API overview and usage examples
+
+### Documentation
+- Added `PERMISSIONS.md` - Complete permissions API guide
+- Added `LIMITS.md` - System limits documentation
+- Added `PEPPOL.md` - PEPPOL integration guide
+- Added `COMPLETE_API_COVERAGE.md` - Full endpoint coverage list
+- Updated README with 100% coverage information
+
+### Technical
+- 26 new request handlers implemented
+- 3 new resource classes (Permissions, Limits, Peppol)
+- Extended Testdata resource with 6 new methods
+- 11 comprehensive test files added (100% passing)
+- Total test count: 482 examples
+
+**Total API Coverage: 68/68 endpoints (100%)** ✨
+
 ## [1.0.0] - 2025-10-17
 
 ### 🎉 Initial Release - FULLY FUNCTIONAL

@@ -41,13 +41,13 @@ module KSEF
       end
 
       # Send POST request
-      def post(path, body: nil, headers: {})
-        request(method: :post, path: path, body: body, headers: headers)
+      def post(path, body: nil, headers: {}, params: {})
+        request(method: :post, path: path, body: body, headers: headers, params: params)
       end
 
       # Send PUT request
-      def put(path, body: nil, headers: {})
-        request(method: :put, path: path, body: body, headers: headers)
+      def put(path, body: nil, headers: {}, params: {})
+        request(method: :put, path: path, body: body, headers: headers, params: params)
       end
 
       # Send DELETE request

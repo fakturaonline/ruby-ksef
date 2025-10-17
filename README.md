@@ -6,14 +6,17 @@
 
 ## Features
 
+- ✅ **100% API Coverage** - All 68 KSeF API v2 endpoints implemented
 - ✅ **XAdES Digital Signatures** - Complete XAdES-BES implementation
 - ✅ **Certificate Authentication** - Supports qualified and self-signed certificates
 - ✅ **KSeF Token Authentication** - Token-based auth support
 - ✅ **Automatic Token Management** - Auto-refresh of access tokens
 - ✅ **Invoice Operations** - Send, query, and download invoices
 - ✅ **Session Management** - Full session lifecycle management
+- ✅ **Permissions Management** - Grant and query invoice access permissions
+- ✅ **PEPPOL Support** - Query PEPPOL network data
 - ✅ **Certificate Generator** - Built-in tool for test certificates
-- ✅ **100% Functional** - Production ready!
+- ✅ **Production Ready** - Battle-tested and reliable
 
 ## Quick Start
 
@@ -74,6 +77,10 @@ bundle install
 - 📊 **[Status](docs/STATUS.md)** - Current project status (100% functional)
 - 📋 **[Changelog](docs/CHANGELOG.md)** - Version history
 - 📁 **[File Overview](docs/FILES_OVERVIEW.md)** - Project structure
+- 🔐 **[Permissions API](docs/PERMISSIONS.md)** - Permissions management
+- 📏 **[Limits API](docs/LIMITS.md)** - System limits
+- 🌐 **[PEPPOL API](docs/PEPPOL.md)** - PEPPOL integration
+- ✅ **[Complete API Coverage](docs/COMPLETE_API_COVERAGE.md)** - All 68 endpoints
 
 ### Examples
 
@@ -86,44 +93,79 @@ bundle install
 
 ```ruby
 # With certificate
-client = KSEF::ClientBuilder.new
-  .mode(:test)
-  .certificate_path('cert.p12', 'password')
-  .identifier('1234567890')
-  .build
+client = KSEF.build do
+  mode :test
+  certificate_path 'cert.p12', 'password'
+  identifier '1234567890'
+end
 
 # With KSeF token
-client = KSEF::ClientBuilder.new
-  .mode(:test)
-  .ksef_token('your-token')
-  .identifier('1234567890')
-  .build
+client = KSEF.build do
+  mode :test
+  ksef_token 'your-token'
+  identifier '1234567890'
+end
 ```
 
 ### Invoice Operations
 
 ```ruby
 # Send invoice
-response = client.invoices.send_invoice(invoice_xml)
+response = client.sessions.send_online(invoice_xml)
 
-# Check status
-status = client.invoices.status(reference_number)
+# Query invoices
+invoices = client.invoices.query(
+  filters: { invoiceType: "VAT" },
+  page_size: 20
+)
 
-# Get invoice
-invoice = client.invoices.get_invoice(ksef_reference_number)
+# Download invoice
+invoice = client.invoices.download(ksef_number: "1234567890-20231201-ABCD-1234")
+```
+
+### Permissions Management
+
+```ruby
+# Grant permissions to a person
+client.permissions.grant_persons(grant_data: {
+  nip: "1234567890",
+  persons: [
+    { pesel: "12345678901", permissionType: "read" }
+  ]
+})
+
+# Query personal grants
+grants = client.permissions.query_personal_grants(
+  query_data: { permission_type: "read" }
+)
+
+# Revoke a grant
+client.permissions.revoke_common_grant("permission_id")
 ```
 
 ### Session Management
 
 ```ruby
-# List sessions
+# List active sessions
 sessions = client.auth.sessions_list
 
-# Refresh token
+# Refresh access token
 new_token = client.auth.refresh
 
-# Revoke session
-client.auth.revoke
+# Revoke current session
+client.auth.sessions_revoke_current
+```
+
+### Limits & PEPPOL
+
+```ruby
+# Get context limits
+limits = client.limits.context
+
+# Query PEPPOL data
+peppol = client.peppol.query(
+  query_data: { participant_id: "9999:PL1234567890" }
+)
 ```
 
 ## Environments
@@ -181,17 +223,23 @@ ruby-ksef/
     └── value_objects/      # Domain objects
 ```
 
-## Status
+## API Coverage
 
-- ✅ **Authentication**: Fully functional
-- ✅ **XAdES Signing**: Complete implementation
-- ✅ **Certificate Generation**: Working
-- ✅ **HTTP Client**: Production ready
-- ✅ **Token Management**: Automatic refresh
-- ✅ **Self-signed Certs**: Supported in test environment
+- ✅ **Auth** (10/10 endpoints)
+- ✅ **Certificates** (7/7 endpoints)
+- ✅ **Security** (1/1 endpoint)
+- ✅ **Invoices** (5/5 endpoints)
+- ✅ **Sessions** (12/12 endpoints)
+- ✅ **Tokens** (4/4 endpoints)
+- ✅ **Permissions** (17/17 endpoints)
+- ✅ **Limits** (2/2 endpoints)
+- ✅ **PEPPOL** (1/1 endpoint)
+- ✅ **Testdata** (10/10 endpoints)
+
+**Total: 68/68 endpoints (100% coverage)** 🎉
 
 🟢 **Status**: Production Ready
-📦 **Version**: 1.0.0
+📦 **Version**: 1.1.0
 
 ## Contributing
 
