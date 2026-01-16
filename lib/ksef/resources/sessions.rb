@@ -8,6 +8,13 @@ module KSEF
         @http_client = http_client
       end
 
+      # Open online session
+      # @param params [Hash] Session parameters
+      # @return [Hash] Session reference number and validity
+      def open_online(params)
+        Requests::Sessions::OpenOnlineHandler.new(@http_client).call(params)
+      end
+
       # Send online invoice
       # @param reference_number [String] Session reference number
       # @param params [Hash] Invoice parameters

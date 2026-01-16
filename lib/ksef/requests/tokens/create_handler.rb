@@ -10,7 +10,9 @@ module KSEF
         end
 
         # Create a new authentication token
-        # @param permissions [Array<String>] Token permissions (InvoiceRead, InvoiceWrite, CredentialsRead, CredentialsManage, SubunitManage, EnforcementOperations)
+        # @param permissions [Array<String>] Token permissions
+        #   Valid permissions: InvoiceRead, InvoiceWrite, CredentialsRead, CredentialsManage,
+        #   SubunitManage, EnforcementOperations, VatUeManage (RC5+)
         # @param description [String] Token description
         # @return [Hash] Response with token reference number
         def call(permissions:, description:)

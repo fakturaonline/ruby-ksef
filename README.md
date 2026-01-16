@@ -4,9 +4,12 @@
 
 **Complete Ruby client for Krajowy System e-Faktur (KSeF)** - Poland's official e-invoicing system.
 
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
+
 ## Features
 
 - ✅ **100% API Coverage** - All 68 KSeF API v2 endpoints implemented
+- ✅ **RC5.4 Compatible** - Supports latest API features (PEF invoices, new context types, sorting)
 - ✅ **XAdES Digital Signatures** - Complete XAdES-BES implementation
 - ✅ **Certificate Authentication** - Supports qualified and self-signed certificates
 - ✅ **KSeF Token Authentication** - Token-based auth support

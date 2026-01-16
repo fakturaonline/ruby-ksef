@@ -25,8 +25,9 @@ module KSEF
         # @option filters [String] :form_type Optional form type
         # @option filters [Array<String>] :invoice_types Optional invoice types
         # @option filters [Boolean] :has_attachment Optional attachment flag
+        # @param include_metadata [Boolean] Include _metadata.json in export package (RC5.3, default from 2025-10-27)
         # @return [Hash] Export initialization response with reference number
-        def call(filters:)
+        def call(filters:, include_metadata: false)
           raise "Encrypted key is required" unless @config.encryption_key
 
           body = {
@@ -37,7 +38,11 @@ module KSEF
             }
           }
 
-          response = @http_client.post("invoices/exports", body: body)
+          # Add X-KSeF-Feature header for metadata inclusion (RC5.3)
+          headers = {}
+          headers["X-KSeF-Feature"] = "include-metadata" if include_metadata
+
+          response = @http_client.post("invoices/exports", body: body, headers: headers)
           response.json
         end
 

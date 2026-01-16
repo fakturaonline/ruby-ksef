@@ -8,9 +8,9 @@ module KSEF
         @http_client = http_client
       end
 
-      # Get KSEF public key certificates
-      # @return [Array<Hash>] Public key certificates
-      def public_keys
+      # Get public key certificates from KSeF
+      # @return [Hash] Public key certificates
+      def public_key_certificates
         Requests::Security::PublicKeyHandler.new(@http_client).call
       end
     end

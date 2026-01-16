@@ -5,10 +5,11 @@ module KSEF
     module Auth
       # Handler for KSEF token authentication
       class KsefTokenHandler
-        def initialize(http_client, ksef_token, identifier)
+        def initialize(http_client, ksef_token, identifier, context_type: "Nip")
           @http_client = http_client
           @ksef_token = ksef_token
           @identifier = identifier
+          @context_type = context_type
         end
 
         def call(challenge_response)
@@ -44,7 +45,7 @@ module KSEF
           body = {
             challenge:         challenge_response["challenge"],
             contextIdentifier: {
-              type:  "Nip",
+              type:  @context_type,
               value: @identifier.value
             },
             encryptedToken:    encrypted_token

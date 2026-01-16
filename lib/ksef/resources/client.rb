@@ -93,6 +93,15 @@ module KSEF
         @config.encryption_key
       end
 
+      # Send invoice online with automatic encryption and session management
+      # This is a high-level convenience method that handles all the complexity
+      # @param invoice_xml [String] Invoice XML content
+      # @return [Hash] Response with referenceNumber, sessionReferenceNumber, and xmlContent
+      def send_invoice_online(invoice_xml)
+        refresh_token_if_expired!
+        Actions::SendInvoiceOnline.new(self).call(invoice_xml)
+      end
+
       private
 
       # Automatically refresh access token if expired

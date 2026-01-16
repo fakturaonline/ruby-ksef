@@ -5,10 +5,11 @@ module KSEF
     module Auth
       # Handler for XAdES signature authentication (certificate-based)
       class XadesSignatureHandler
-        def initialize(http_client, certificate_path, identifier)
+        def initialize(http_client, certificate_path, identifier, context_type: "Nip")
           @http_client = http_client
           @certificate_path = certificate_path
           @identifier = identifier
+          @context_type = context_type
         end
 
         def call(challenge_response)
@@ -53,7 +54,17 @@ module KSEF
             ) do
               xml.Challenge challenge
               xml.ContextIdentifier do
-                xml.Nip @identifier.value
+                # Support multiple context types (Nip, InternalId, PeppolId)
+                case @context_type
+                when "Nip"
+                  xml.Nip @identifier.value
+                when "InternalId"
+                  xml.InternalId @identifier.value
+                when "PeppolId"
+                  xml.PeppolId @identifier.value
+                else
+                  xml.Nip @identifier.value # Default to Nip for backward compatibility
+                end
               end
               xml.SubjectIdentifierType "certificateSubject"
             end

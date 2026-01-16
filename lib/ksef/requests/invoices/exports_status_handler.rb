@@ -9,11 +9,12 @@ module KSEF
           @http_client = http_client
         end
 
-        # Get status of an invoice export by operation reference number
-        # @param operation_reference_number [String] Export operation reference number
+        # Get status of an invoice export by reference number
+        # Note: operationReferenceNumber was renamed to referenceNumber in RC5.3
+        # @param reference_number [String] Export reference number
         # @return [Hash] Export status information
-        def call(operation_reference_number)
-          response = @http_client.get("invoices/exports/#{operation_reference_number}")
+        def call(reference_number)
+          response = @http_client.get("invoices/exports/#{reference_number}")
           response.json
         end
       end

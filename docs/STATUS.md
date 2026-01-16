@@ -1,8 +1,9 @@
 # Ruby KSeF Client - Status 🎉
 
 **Status**: ✅ **FULLY FUNCTIONAL** (100%)
-**Poslední aktualizace**: 17. října 2025
-**Version**: 1.0.0
+**Poslední aktualizace**: 16. ledna 2026
+**Version**: 1.2.0 (RC5.4 compatible)
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
 
 ## 🎯 Cíl projektu
 

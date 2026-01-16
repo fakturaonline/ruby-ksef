@@ -24,14 +24,24 @@ module KSEF
         private
 
         def prepare_body(params)
-          {
-            invoiceHash: params[:invoice_hash],
-            invoiceSize: params[:invoice_size],
-            encryptedInvoiceHash: params[:encrypted_invoice_hash],
-            encryptedInvoiceSize: params[:encrypted_invoice_size],
-            encryptedInvoiceContent: params[:encrypted_invoice_content],
-            offlineMode: params[:offline_mode] || false
-          }.compact
+          # Support both simple mode (invoice_payload) and encryption mode
+          if params[:invoice_payload]
+            # Simple mode - hash, size, and base64 encoded content
+            {
+              invoiceHash:    params[:invoice_hash],
+              invoiceSize:    params[:invoice_size],
+              invoicePayload: params[:invoice_payload]
+            }
+          else
+            # Encryption mode - all fields required
+            {
+              invoiceHash:             params[:invoice_hash],
+              invoiceSize:             params[:invoice_size],
+              encryptedInvoiceHash:    params[:encrypted_invoice_hash],
+              encryptedInvoiceSize:    params[:encrypted_invoice_size],
+              encryptedInvoiceContent: params[:encrypted_invoice_content]
+            }
+          end
         end
       end
     end

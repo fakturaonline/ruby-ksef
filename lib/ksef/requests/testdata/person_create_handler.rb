@@ -14,14 +14,16 @@ module KSEF
         # @param pesel [String] PESEL number
         # @param description [String] Description
         # @param is_bailiff [Boolean] Is bailiff flag (default: false)
+        # @param is_deceased [Boolean] Is deceased flag (default: false) - RC5.4+
         # @param created_date [String, nil] Optional created date (ISO 8601 format)
         # @return [Hash] Creation response
-        def call(nip:, pesel:, description:, is_bailiff: false, created_date: nil)
+        def call(nip:, pesel:, description:, is_bailiff: false, is_deceased: false, created_date: nil)
           body = {
             nip: nip,
             pesel: pesel,
             description: description,
-            isBailiff: is_bailiff
+            isBailiff: is_bailiff,
+            isDeceased: is_deceased
           }
           body[:createdDate] = created_date if created_date
 

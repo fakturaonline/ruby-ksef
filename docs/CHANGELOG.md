@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-01-16
+
+### Added - KSeF API 2.0 RC5.4 Support
+- **PEF Invoice Forms** - Added support for new invoice form codes:
+  - `PEF (3)` - PEPPOL Electronic Format invoice
+  - `PEF_KOR (3)` - PEPPOL Electronic Format correction invoice
+- **Query Metadata Sorting** - Added `sort_order` parameter to `invoices/query/metadata` endpoint
+- **Export Metadata Header** - Added `include_metadata` option to exports for `_metadata.json` inclusion (RC5.3+)
+- **Context Identifier Types** - Extended support for multiple authentication context types:
+  - `Nip` - Tax identification number (existing)
+  - `InternalId` - Internal identifier (new)
+  - `PeppolId` - PEPPOL participant ID (new)
+- **Test Person Deceased Flag** - Added `is_deceased` parameter for creating deceased test persons (RC5.4)
+- **MB Size Limits** - Added support for new MB-based size limits (RC5.3+):
+  - `maxInvoiceSizeInMB`
+  - `maxInvoiceWithAttachmentSizeInMB`
+  - Note: MiB limits deprecated (will be removed 2025-10-27)
+
+### Changed
+- **Reference Number Standardization** - Updated `exports_status` to use `reference_number` instead of deprecated `operation_reference_number` (RC5.3)
+  - Added backward-compatible alias `exports_status_by_operation`
+- **Token Permissions** - Added `VatUeManage` to available token permissions (RC5+)
+- **Context Authentication** - Enhanced authentication handlers to support multiple context types
+
+### Documentation
+- Updated to KSeF API 2.0 RC5.4 (October 15, 2025)
+- Added comprehensive inline documentation for all new parameters
+- Noted deprecated fields with removal dates
+
 ## [Unreleased] - 2026-01-12
 
 ### Fixed

@@ -8,7 +8,7 @@ module KSEF
 
       attr_reader :wariant_formularza, :data_wytworzenia_fa, :system_info
 
-      # @param wariant_formularza [ValueObjects::FormCode] Wariant formularza (default: FA(2))
+      # @param wariant_formularza [ValueObjects::FormCode] Wariant formularza (default: FA(3) for KSeF 2.0)
       # @param data_wytworzenia_fa [Time, String] Data wytworzenia faktury (default: now)
       # @param system_info [String, nil] Nazwa systemu teleinformatycznego
       def initialize(

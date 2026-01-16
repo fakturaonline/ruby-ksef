@@ -75,7 +75,8 @@ module KSEF
 
       def build_connection
         Faraday.new(url: @config.api_url) do |f|
-          f.request :url_encoded
+          # Don't use :url_encoded - we need JSON for KSeF API
+          # Don't use middlewares - manual serialization/deserialization
           f.adapter Faraday.default_adapter
           f.options.timeout = 60
           f.options.open_timeout = 30
@@ -122,7 +123,7 @@ module KSEF
 
         @config.logger.debug("Headers: #{headers}") if headers.any?
         @config.logger.debug("Params: #{params}") if params.any?
-        @config.logger.debug("Body: #{body}") if body
+        @config.logger.debug("Body: #{body.inspect}") if body
       end
 
       def log_response(response)

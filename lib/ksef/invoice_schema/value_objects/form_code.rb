@@ -7,14 +7,18 @@ module KSEF
       class FormCode
         FA2 = "FA(2)"
         FA3 = "FA(3)"
+        PEF = "PEF (3)"
+        PEF_KOR = "PEF_KOR (3)"
 
         attr_reader :value
 
-        def initialize(value = 2)
+        def initialize(value = 3)  # Default FA(3) for KSeF 2.0 API
           # Accept integer or string
           @value = case value
                    when 2, "2", FA2 then FA2
                    when 3, "3", FA3 then FA3
+                   when "PEF", PEF then PEF
+                   when "PEF_KOR", PEF_KOR then PEF_KOR
                    else value
                    end
           validate!
@@ -29,7 +33,8 @@ module KSEF
         end
 
         def wariant_formularza
-          @value.match(/\((\d+)\)/)[1].to_i
+          match = @value.match(/\((\d+)\)/)
+          match ? match[1].to_i : 3
         end
 
         def target_namespace
@@ -39,9 +44,9 @@ module KSEF
         private
 
         def validate!
-          return if [FA2, FA3].include?(@value)
+          return if [FA2, FA3, PEF, PEF_KOR].include?(@value)
 
-          raise ArgumentError, "Invalid form code: #{@value}"
+          raise ArgumentError, "Invalid form code: #{@value}. Valid codes: FA(2), FA(3), PEF (3), PEF_KOR (3)"
         end
       end
     end

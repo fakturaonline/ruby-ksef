@@ -7,7 +7,7 @@ This directory contains source materials and documentation for the KSeF (Krajowy
 ### Official Documentation
 - `ksef-docs-official/` - Cloned from [CIRFMF/ksef-docs](https://github.com/CIRFMF/ksef-docs)
   - Official Polish government KSeF 2.0 integration guide
-  - Version: RC5.3 (October 13, 2025)
+  - Version: RC5.4 (October 15, 2025)
   - Includes:
     - API specification (`open-api.json`)
     - Authentication guides (`auth/`, `uwierzytelnianie.md`)

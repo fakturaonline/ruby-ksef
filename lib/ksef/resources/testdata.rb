@@ -13,14 +13,16 @@ module KSEF
       # @param pesel [String] PESEL number
       # @param description [String] Description
       # @param is_bailiff [Boolean] Is bailiff flag (default: false)
+      # @param is_deceased [Boolean] Is deceased flag (default: false) - RC5.4+
       # @param created_date [String, nil] Optional created date (ISO 8601 format)
       # @return [Hash] Creation response
-      def person_create(nip:, pesel:, description:, is_bailiff: false, created_date: nil)
+      def person_create(nip:, pesel:, description:, is_bailiff: false, is_deceased: false, created_date: nil)
         Requests::Testdata::PersonCreateHandler.new(@http_client).call(
           nip: nip,
           pesel: pesel,
           description: description,
           is_bailiff: is_bailiff,
+          is_deceased: is_deceased,
           created_date: created_date
         )
       end

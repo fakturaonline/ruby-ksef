@@ -26,11 +26,13 @@ module KSEF
         # @option filters [Boolean] :has_attachment Optional attachment flag
         # @param page_size [Integer, nil] Optional page size
         # @param page_offset [Integer, nil] Optional page offset
+        # @param sort_order [String, nil] Optional sort order (asc, desc) - RC5.4
         # @return [Hash] Query results with invoice metadata
-        def call(filters:, page_size: nil, page_offset: nil)
+        def call(filters:, page_size: nil, page_offset: nil, sort_order: nil)
           params = {}
           params[:pageSize] = page_size if page_size
           params[:pageOffset] = page_offset if page_offset
+          params[:sortOrder] = sort_order if sort_order
 
           body = prepare_filters(filters)
 
