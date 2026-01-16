@@ -2,7 +2,7 @@
 
 require_relative "../lib/ksef"
 
-# Příklad mappingu z FakturaOnline do KSeF FA(2) XML
+# Příklad mappingu z FakturaOnline do KSeF FA(3) XML (KSeF 2.0)
 # Kompletní demo všech důležitých polí
 
 # Simulace dat z FakturaOnline
@@ -66,7 +66,7 @@ invoice_data = {
   ]
 }
 
-# === MAPPING DO KSEF FA(2) ===
+# === MAPPING DO KSEF FA(3) ===
 
 # 1. Prodejce (Seller -> Podmiot1)
 prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
@@ -74,18 +74,17 @@ prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
     nip: invoice_data[:seller][:company_number],
     nazwa: invoice_data[:seller][:name]
   ),
+  # FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: invoice_data[:seller][:country_code],
-    miejscowosc: invoice_data[:seller][:city],
-    kod_pocztowy: invoice_data[:seller][:postcode],
-    ulica: invoice_data[:seller][:street].split[0..-2].join(" "),
-    nr_domu: invoice_data[:seller][:street].split.last
+    adres_l1: invoice_data[:seller][:street],                           # První řádek: ulice + číslo
+    adres_l2: "#{invoice_data[:seller][:postcode]} #{invoice_data[:seller][:city]}"  # Druhý řádek: PSČ + město
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:seller][:email],
     telefon: invoice_data[:seller][:phone]
-  ),
-  id_vat: invoice_data[:seller][:tax_number]
+  )
+  # Note: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
 )
 
 # 2. Kupující (Buyer -> Podmiot2)
@@ -94,19 +93,20 @@ kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
     nip: invoice_data[:buyer][:company_number],
     nazwa: invoice_data[:buyer][:name]
   ),
+  # FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: invoice_data[:buyer][:country_code],
-    miejscowosc: invoice_data[:buyer][:city],
-    kod_pocztowy: invoice_data[:buyer][:postcode],
-    ulica: invoice_data[:buyer][:street].split[0..-2].join(" "),
-    nr_domu: invoice_data[:buyer][:street].split.last
+    adres_l1: invoice_data[:buyer][:street],                            # První řádek: ulice + číslo
+    adres_l2: "#{invoice_data[:buyer][:postcode]} #{invoice_data[:buyer][:city]}"   # Druhý řádek: PSČ + město
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:buyer][:email],
     telefon: invoice_data[:buyer][:phone]
   ),
-  id_vat: invoice_data[:buyer][:tax_number]
+  jst: 2,  # FA(3): Není jednotka podřízená JST (1=ano, 2=ne)
+  gv: 2    # FA(3): Není člen skupiny VAT (1=ano, 2=ne)
 )
+# Note: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
 
 # 3. Položky faktury (lines -> FaWiersz)
 polozky = invoice_data[:lines].map.with_index do |line, idx|
@@ -152,18 +152,18 @@ fa = KSEF::InvoiceSchema::Fa.new(
   p_6: invoice_data[:tax_point_on], # tax_point_on (DUZP)
   p_15: invoice_data[:total],            # total
   fa_wiersz: polozky,
-  p_13_1: vat_23_base,                   # základ daně 23%
-  p_13_2: vat_23_amount,                 # DPH 23%
-  adnotacje: KSEF::InvoiceSchema::DTOs::Adnotacje.new(
-    p_16: invoice_data[:note] # poznámka
-  ),
+  p_13_1: vat_23_base,                   # FA(3): základ daně 23%
+  p_14_1: vat_23_amount,                 # FA(3): DPH 23%
+  # FA(3): Adnotacje má pevnou strukturu (P_16, P_17, P_18, atd.) - všechny mají defaulty
+  adnotacje: KSEF::InvoiceSchema::DTOs::Adnotacje.new,
   platnosc: platnosc
 )
 
-# 7. Zápatí
+# 7. Zápatí (zde umístíme poznámky)
 stopka = KSEF::InvoiceSchema::DTOs::Stopka.new(
   informacje: [
-    invoice_data[:foot_note],
+    invoice_data[:note],         # Poznámka z faktury
+    invoice_data[:foot_note],    # Poznámka v zápatí
     "Vystavil: #{invoice_data[:issued_by]}"
   ]
 )
@@ -186,7 +186,7 @@ faktura = KSEF::InvoiceSchema::Faktura.new(
 xml = faktura.to_xml
 
 puts "=" * 80
-puts "FAKTURAONLINE → KSEF FA(2) MAPPING"
+puts "FAKTURAONLINE → KSEF FA(3) MAPPING (KSeF 2.0)"
 puts "=" * 80
 puts xml
 puts "=" * 80

@@ -15,10 +15,8 @@ seller = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
   ),
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: "PL",
-    miejscowosc: "Warszawa",
-    kod_pocztowy: "00-001",
-    ulica: "Marszałkowska",
-    nr_domu: "1"
+    adres_l1: "Marszałkowska 1",
+    adres_l2: "00-001 Warszawa"
   )
 )
 
@@ -29,11 +27,11 @@ buyer = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   ),
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: "PL",
-    miejscowosc: "Kraków",
-    kod_pocztowy: "30-001",
-    ulica: "Floriańska",
-    nr_domu: "5"
-  )
+    adres_l1: "Floriańska 5",
+    adres_l2: "30-001 Kraków"
+  ),
+  jst: 2,  # FA(3): Není jednotka podřízená JST
+  gv: 2    # FA(3): Není člen skupiny VAT
 )
 
 lines = [
@@ -69,8 +67,8 @@ invoice = KSEF::InvoiceSchema::Faktura.new(
     p_2: "FV/2025/001",
     p_15: 7380.00,
     fa_wiersz: lines,
-    p_13_1: 6000.00,
-    p_13_2: 1380.00
+    p_13_1: 6000.00,  # FA(3): Základ daně 23%
+    p_14_1: 1380.00   # FA(3): DPH 23%
   )
 )
 

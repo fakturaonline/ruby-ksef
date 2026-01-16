@@ -122,14 +122,8 @@ class KsefSendInvoiceJob < ApplicationJob
 
     invoice.update!(ksef_status: :sending)
 
-    # Calculate hash
-    invoice_hash = Digest::SHA256.base64digest(invoice.xml_content)
-
-    # Send invoice
-    response = client.sessions.send_online(
-      invoice_hash: invoice_hash,
-      invoice_payload: Base64.strict_encode64(invoice.xml_content)
-    )
+    # Send invoice using high-level API (handles encryption and session management automatically)
+    response = client.send_invoice_online(invoice.xml_content)
 
     reference_number = response["referenceNumber"]
     invoice.update!(

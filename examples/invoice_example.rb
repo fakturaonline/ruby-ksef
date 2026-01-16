@@ -2,7 +2,7 @@
 
 require_relative "../lib/ksef"
 
-# Příklad vytvoření základní FA(2) faktury
+# Příklad vytvoření základní FA(3) faktury (KSeF 2.0)
 
 # 1. Vytvoření prodejce (Podmiot1)
 prodejce_dane = KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
@@ -10,13 +10,11 @@ prodejce_dane = KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
   nazwa: "Firma s.r.o."
 )
 
+# FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
 prodejce_adres = KSEF::InvoiceSchema::DTOs::Adres.new(
   kod_kraju: "PL",
-  miejscowosc: "Warszawa",
-  kod_pocztowy: "00-001",
-  ulica: "Marszałkowska",
-  nr_domu: "1",
-  nr_lokalu: "10"
+  adres_l1: "Marszałkowska 1/10",      # První řádek: ulice + číslo
+  adres_l2: "00-001 Warszawa"           # Druhý řádek: PSČ + město
 )
 
 prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
@@ -30,17 +28,19 @@ kupujici_dane = KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
   nazwa: "Klient Sp. z o.o."
 )
 
+# FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
 kupujici_adres = KSEF::InvoiceSchema::DTOs::Adres.new(
   kod_kraju: "PL",
-  miejscowosc: "Kraków",
-  kod_pocztowy: "30-001",
-  ulica: "Floriańska",
-  nr_domu: "5"
+  adres_l1: "Floriańska 5",              # První řádek: ulice + číslo
+  adres_l2: "30-001 Kraków"              # Druhý řádek: PSČ + město
 )
 
+# FA(3): Podmiot2 vyžaduje JST a GV (1=ano, 2=ne)
 kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   dane_identyfikacyjne: kupujici_dane,
-  adres: kupujici_adres
+  adres: kupujici_adres,
+  jst: 2,  # Není jednotka podřízená JST
+  gv: 2    # Není člen skupiny VAT
 )
 
 # 3. Vytvoření položek faktury
@@ -74,8 +74,8 @@ fa = KSEF::InvoiceSchema::Fa.new(
   p_2: "FV/2024/001",
   p_15: 7380.00,
   fa_wiersz: polozky,
-  p_13_1: 6000.00,  # Základ daně 23%
-  p_13_2: 1380.00   # DPH 23%
+  p_13_1: 6000.00,  # FA(3): Základ daně 23%
+  p_14_1: 1380.00   # FA(3): DPH 23%
 )
 
 # 5. Vytvoření hlavičky (Naglowek)
@@ -95,7 +95,7 @@ faktura = KSEF::InvoiceSchema::Faktura.new(
 xml = faktura.to_xml
 
 puts "=" * 80
-puts "VYGENEROVANÁ FA(2) FAKTURA"
+puts "VYGENEROVANÁ FA(3) FAKTURA (KSeF 2.0)"
 puts "=" * 80
 puts xml
 puts "=" * 80

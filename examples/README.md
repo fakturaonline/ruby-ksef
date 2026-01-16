@@ -30,15 +30,19 @@ ruby examples/simple_authentication.rb
 ruby examples/invoice_example.rb
 ```
 
-**Purpose:** Creates a basic FA(2) invoice and generates XML.
+**Purpose:** Creates a basic FA(3) invoice and generates XML.
 
 **Shows:**
 - Creating seller (Podmiot1) and buyer (Podmiot2)
 - Creating invoice lines (FaWiersz)
 - Building complete invoice (Faktura)
-- Generating valid KSeF XML
+- Generating valid KSeF XML in FA(3) format
 
-**Output:** Complete FA(2) XML invoice
+**Output:** Complete FA(3) XML invoice
+
+**Note:** This library uses FA(3) format (KSeF 2.0). Key differences from FA(2):
+- VAT groups: `p_13_X` (tax base) and `p_14_X` (tax amount) for each rate
+- Example: 23% VAT → `p_13_1: 1000.00, p_14_1: 230.00`
 
 ---
 
@@ -47,7 +51,7 @@ ruby examples/invoice_example.rb
 ruby examples/fakturaonline_mapping.rb
 ```
 
-**Purpose:** Comprehensive mapping from FakturaOnline data structure to KSeF FA(2) XML.
+**Purpose:** Comprehensive mapping from FakturaOnline data structure to KSeF FA(3) XML.
 
 **Shows:**
 - Complete field mapping
@@ -58,7 +62,7 @@ ruby examples/fakturaonline_mapping.rb
 - Footer with annotations
 - All DTOs in action
 
-**Output:** Complete FA(2) XML with all fields mapped
+**Output:** Complete FA(3) XML with all fields mapped
 
 ---
 
@@ -150,5 +154,6 @@ done
 
 ✅ **4/4 executable examples working (100%)**
 📘 **1/1 reference example documented**
+✅ **Updated to FA(3) format (KSeF 2.0)**
 
-Last updated: October 17, 2025
+Last updated: January 16, 2026
