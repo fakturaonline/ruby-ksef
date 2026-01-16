@@ -2,6 +2,20 @@
 
 This Ruby gem now implements **100% of all endpoints** from the KSeF API v2.
 
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**Gem Version**: 1.2.0 (RC5.4 compatible)
+
+## RC5.4 New Features
+
+✨ **Latest API features fully supported:**
+- **PEF Invoice Forms** - PEPPOL Electronic Format support (`PEF (3)`, `PEF_KOR (3)`)
+- **Advanced Sorting** - `sortOrder` parameter in metadata queries
+- **Export Metadata** - `_metadata.json` inclusion with `X-KSeF-Feature` header
+- **Multi-Context Auth** - Support for `Nip`, `InternalId`, and `PeppolId` contexts
+- **Enhanced Testing** - `isDeceased` flag for test persons
+- **Size Limits Update** - New MB-based limits (MiB deprecated)
+- **Extended Permissions** - `VatUeManage` token permission
+
 ## Implementation Summary
 
 ### ✅ Auth (10/10 endpoints)

@@ -85,7 +85,7 @@ puts xml
 - **BaseDTO** - base class for all DTOs
 - **Value Objects**:
   - `KodWaluty` - currency code (ISO 4217)
-  - `FormCode` - form type (FA(2), FA(3))
+  - `FormCode` - form type (FA(2), FA(3), PEF (3), PEF_KOR (3)) ✨ **RC5.4**
   - `RodzajFaktury` - invoice type (VAT, KOREKTA, ZAL...)
 
 - **DTOs**:
@@ -191,10 +191,22 @@ Invoice header with metadata.
 
 ```ruby
 KSEF::InvoiceSchema::Naglowek.new(
-  wariant_formularza: ValueObjects::FormCode.new, # FA(2) or FA(3)
+  wariant_formularza: ValueObjects::FormCode.new(3), # FA(2), FA(3), PEF, PEF_KOR
   data_wytworzenia_fa: Time.now,
   system_info: 'My System v1.0'  # optional
 )
+```
+
+**Supported Form Codes (RC5.4):**
+- `FA(2)` - Standard invoice form version 2
+- `FA(3)` - Standard invoice form version 3 (default)
+- `PEF (3)` - PEPPOL Electronic Format invoice (RC5.3+)
+- `PEF_KOR (3)` - PEPPOL Electronic Format correction invoice (RC5.3+)
+
+```ruby
+# Use PEF form for PEPPOL invoices
+FormCode.new("PEF")        # or FormCode.new(FormCode::PEF)
+FormCode.new("PEF_KOR")    # for corrections
 ```
 
 ### Podmiot1 / Podmiot2

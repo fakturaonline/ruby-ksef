@@ -2,6 +2,17 @@
 
 Get started with Ruby KSeF Client in 5 minutes!
 
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**Gem Version**: 1.2.0 (RC5.4 compatible)
+
+## What's New in RC5.4
+
+✨ **PEPPOL Support** - PEF invoice forms and PeppolId authentication  
+✨ **Multi-Context Auth** - Nip, InternalId, PeppolId contexts  
+✨ **Advanced Sorting** - sortOrder parameter in metadata queries  
+✨ **Export Metadata** - _metadata.json in export packages  
+✨ **Extended Permissions** - VatUeManage token permission
+
 ## Prerequisites
 
 - Ruby >= 3.0
@@ -271,11 +282,70 @@ Net::HTTP.get(URI('https://ksef-test.mf.gov.pl'))
 File.exist?('my_cert.p12')  # => true
 ```
 
+## RC5.4 Advanced Features
+
+### PEPPOL Invoices
+
+```ruby
+# Create PEF invoice
+invoice = KSEF::InvoiceSchema::Faktura.new(
+  naglowek: KSEF::InvoiceSchema::Naglowek.new(
+    wariant_formularza: KSEF::InvoiceSchema::ValueObjects::FormCode.new("PEF"),
+    system_info: 'PEPPOL Provider v1.0'
+  ),
+  # ... rest of invoice
+)
+
+# Authenticate as PEPPOL provider
+client = KSEF.build do
+  mode :test
+  certificate_path "/path/to/peppol_cert.p12", "password"
+  identifier "9915:123456789"  # PEPPOL ID
+  context_type "PeppolId"      # Use PEPPOL context
+end
+```
+
+### Advanced Metadata Queries
+
+```ruby
+# Query with sorting
+results = client.invoices.query_metadata(
+  filters: {
+    subject_type: "subject1",
+    date_range: { from: "2024-01-01", to: "2024-12-31" }
+  },
+  sort_order: "desc"  # RC5.4: Sort by date descending
+)
+```
+
+### Export with Metadata
+
+```ruby
+# Initialize export with metadata file
+response = client.invoices.exports_init(
+  filters: { subject_type: "subject1", date_range: { from: "2024-01-01" } },
+  include_metadata: true  # RC5.3: Include _metadata.json
+)
+```
+
+### Extended Token Permissions
+
+```ruby
+# Create token with VatUeManage permission
+client.tokens.create(
+  permissions: ['InvoiceRead', 'VatUeManage'],  # RC5+
+  description: 'Token for EU VAT management'
+)
+```
+
 ## Next Steps
 
 - 📘 [Complete README](README.md)
 - 📗 [Official KSeF docs](https://github.com/CIRFMF/ksef-docs)
 - 🔧 [API documentation](https://ksef-test.mf.gov.pl/docs/v2/index.html)
+- ✨ [PEPPOL Guide](PEPPOL.md)
+- 🔐 [Permissions Guide](PERMISSIONS.md)
+- 📊 [Limits Guide](LIMITS.md)
 
 ## Support
 

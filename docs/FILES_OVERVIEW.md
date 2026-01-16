@@ -110,10 +110,13 @@
 - **lib/ksef/value_objects/refresh_token.rb** - Refresh token
 - **lib/ksef/value_objects/ksef_token.rb** - KSeF token
 - **lib/ksef/value_objects/certificate_path.rb** - Certificate path with validation
+- **lib/ksef/value_objects/context_identifier.rb** - Context type (Nip/InternalId/PeppolId) ✨ **RC5.4**
 - **lib/ksef/value_objects/identifier.rb** - NIP/PESEL identifier
 - **lib/ksef/value_objects/mode.rb** - Environment mode (test/demo/production)
 - **lib/ksef/value_objects/nip.rb** - NIP value object
 - **lib/ksef/value_objects/pesel.rb** - PESEL value object
+- **lib/ksef/value_objects/encrypted_key.rb** - Encrypted key for exports
+- **lib/ksef/value_objects/encryption_key.rb** - Encryption key value object
 
 ### Core Classes
 - **lib/ksef/config.rb** - Immutable configuration ⭐

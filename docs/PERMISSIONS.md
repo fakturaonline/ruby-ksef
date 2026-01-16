@@ -67,3 +67,33 @@ status = client.permissions.operation_status("reference_number")
 ### Status & Attachments
 - `operation_status(reference_number)` - Check operation status
 - `attachments_status(filters:)` - Check attachments status
+
+## Permission Types
+
+Available permission types for KSeF tokens (RC5.4):
+
+| Permission | Description | Available Since |
+|------------|-------------|-----------------|
+| `InvoiceRead` | Read invoices | RC5 |
+| `InvoiceWrite` | Write/send invoices | RC5 |
+| `CredentialsRead` | Read credentials | RC5 |
+| `CredentialsManage` | Manage credentials | RC5 |
+| `SubunitManage` | Manage subunits | RC5 |
+| `EnforcementOperations` | Enforcement operations | RC5 |
+| `VatUeManage` | Manage EU VAT entities | RC5+ ✨ |
+
+### Usage Example
+
+```ruby
+# Create token with VatUeManage permission
+client.tokens.create(
+  permissions: ['InvoiceRead', 'VatUeManage'],
+  description: 'Token for EU VAT management'
+)
+```
+
+## Authorization Rules (RC5+)
+
+- **DELETE `/permissions/common/grants/{permissionId}`** requires one of: `CredentialsManage`, `VatUeManage`, or `SubunitManage`
+- **Introspection** permission added for session queries
+- **PefInvoiceWrite** permission required for PEPPOL invoice operations

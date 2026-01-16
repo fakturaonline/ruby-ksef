@@ -4,6 +4,9 @@
 
 KSEF Ruby Client is a complete Ruby implementation for **Krajowy System e-Faktur** (Polish e-invoicing system). The gem provides a type-safe Ruby wrapper over KSEF REST API v2 with automatic authentication, encryption, validation, and data mapping.
 
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**Gem Version**: 1.2.0 (RC5.4 compatible)
+
 Inspired by the PHP client architecture but adapted to Ruby idioms and conventions.
 
 ## Key Features
@@ -16,6 +19,29 @@ Inspired by the PHP client architecture but adapted to Ruby idioms and conventio
 - ✅ **Encryption** - AES-256-CBC for invoices
 - ✅ **Async batch processing** - parallel invoice sending support
 - ✅ **Comprehensive** - all KSEF API v2 endpoints covered
+- ✨ **RC5.4 compliant** - PEPPOL, multi-context auth, advanced sorting
+
+## What's New in RC5.4
+
+### PEPPOL Support
+- **PEF invoice forms**: `PEF (3)` and `PEF_KOR (3)` for PEPPOL Electronic Format
+- **PeppolId context**: New authentication context for PEPPOL service providers
+- **Auto-registration**: First auth with PEPPOL cert registers provider
+- **PEF permissions**: `PefInvoiceWrite` permission for PEPPOL operations
+
+### Multi-Context Authentication
+- **ContextIdentifier value object**: Unified handling of auth contexts
+- **Three context types**: 
+  - `Nip` - Polish tax ID (existing)
+  - `InternalId` - Internal system identifier (new)
+  - `PeppolId` - PEPPOL participant ID (new)
+
+### Enhanced API Features
+- **Metadata sorting**: `sortOrder` parameter in invoice queries
+- **Export metadata**: Optional `_metadata.json` in export packages
+- **Extended permissions**: `VatUeManage` for EU VAT entity management
+- **Standardized limits**: MB-based size limits (MiB deprecated)
+- **Test enhancements**: `isDeceased` flag for test persons
 
 ## Architecture Layers
 
@@ -37,6 +63,10 @@ Inspired by the PHP client architecture but adapted to Ruby idioms and conventio
        ├──► Invoices (query, download)
        ├──► Certificates (cert management)
        ├──► Tokens (token management)
+       ├──► Permissions (access delegation) ✨
+       ├──► Limits (system limits) ✨
+       ├──► Peppol (PEPPOL network) ✨
+       ├──► Testdata (test environment)
        └──► Security (public keys)
               │
               ▼

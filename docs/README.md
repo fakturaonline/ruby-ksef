@@ -4,6 +4,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**Gem Version**: 1.2.0 (RC5.4 compatible)
+
 ## 📋 Obsah
 
 - [O projektu](#o-projektu)
@@ -30,12 +33,22 @@ Ruby KSeF Client je plně funkční implementace klienta pro API v2 Krajowego Sy
 
 ## Funkce
 
+### ✨ Nové v RC5.4
+
+- **PEPPOL faktury**: Podpora PEF (3) a PEF_KOR (3) formulářů
+- **Multi-context autentizace**: Nip, InternalId, PeppolId typy
+- **Pokročilé řazení**: sortOrder parametr v dotazech metadat
+- **Export metadata**: _metadata.json v exportech
+- **Rozšířená oprávnění**: VatUeManage token permission
+- **MB limity**: Nové standardizované limity (MiB deprecated)
+
 ### 🔐 Autentizace
 
 - **XAdES Signature**: Autentizace pomocí kvalifikovaného elektronického podpisu
 - **KSeF Token**: Autentizace pomocí tokenů vydaných KSeF
 - **Automatická správa tokenů**: Access tokens, refresh tokens
 - **Session management**: Správa aktivních sessions
+- **Multi-context**: Podpora Nip, InternalId, PeppolId kontextů ✨
 
 ### 📄 Správa faktur
 
