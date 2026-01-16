@@ -4,6 +4,11 @@ module KSEF
   module InvoiceSchema
     module DTOs
       # DaneKontaktowe - kontaktní údaje
+      #
+      # ✅ FA(3) COMPATIBLE
+      # - Email (optional)
+      # - Telefon (optional)
+      # - Can be used up to 3 times in Podmiot1/Podmiot2
       class DaneKontaktowe < BaseDTO
         include XMLSerializable
 

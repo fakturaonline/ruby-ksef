@@ -51,15 +51,16 @@ module KSEF
           doc = REXML::Document.new
           wiersz = doc.add_element("FaWiersz")
 
-          add_element_if_present(wiersz, "NrWiersza", @nr_wiersza)
+          # FA(3): NrWierszaFa (not NrWiersza)
+          add_element_if_present(wiersz, "NrWierszaFa", @nr_wiersza)
           add_element_if_present(wiersz, "P_7", @p_7)
           add_element_if_present(wiersz, "P_8A", @p_8a)
           add_element_if_present(wiersz, "P_8B", format_decimal(@p_8b)) if @p_8b
           add_element_if_present(wiersz, "P_9A", format_decimal(@p_9a)) if @p_9a
           add_element_if_present(wiersz, "P_9B", format_decimal(@p_9b))
-          add_element_if_present(wiersz, "P_11", @p_11)
-          add_element_if_present(wiersz, "P_11A", @p_11a)
-          add_element_if_present(wiersz, "P_12", format_decimal(@p_12))
+          add_element_if_present(wiersz, "P_11", format_decimal(@p_11)) if @p_11  # FA(3): P_11 = hodnota netto
+          add_element_if_present(wiersz, "P_11A", @p_11a) if @p_11a
+          add_element_if_present(wiersz, "P_12", @p_12.to_s) if @p_12  # FA(3): P_12 = stawka jako STRING enum!
           add_element_if_present(wiersz, "CenaJednostkowa", format_decimal(@cena_jednostkowa)) if @cena_jednostkowa
           if @wartosc_pozycji_smr
             add_element_if_present(wiersz, "WartoscPozycjiSMR",

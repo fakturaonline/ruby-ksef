@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
 **Gem Version**: 1.2.0 (RC5.4 compatible)
 
 ## 📋 Obsah

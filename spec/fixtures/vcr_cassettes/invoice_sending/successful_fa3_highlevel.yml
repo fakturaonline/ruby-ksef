@@ -1,0 +1,526 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/auth/challenge
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:38 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151438Z-16f7f96b84fsvb85hC1WAW2ua4000000165g00000000s2pv
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=daFMQhd1P2PMQnkRVTfMCd5VamkAAAAA0qMjszNPfGSugKPmOgthhg==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=DITOC3j5il3l0qmlrQ6yoAAAAADMBdzBv9Qy0X6S9YbDveEy; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=EZSuwT/ZQ3qZC6zK75+V795VamkAAAAAQUIPAAAAAADPXSzSQKcF08oU0jhwkbud;
+        expires=Fri, 15 Jan 2027 22:33:18 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 57-20660024-20639069 pNYy RT(1768576478652 117) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"challenge":"20260116-CR-3456253000-294F7D52BC-1D","timestamp":"2026-01-16T15:14:38.8037614+00:00","timestampMs":1768576478803}'
+  recorded_at: Fri, 16 Jan 2026 15:14:38 GMT
+- request:
+    method: get
+    uri: https://ksef-test.mf.gov.pl/api/v2/security/public-key-certificates
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:39 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151439Z-16f7f96b84f4wb2shC1WAW90x40000000580000000000qep
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=0cwBCuY/M0xxRnkRVTfMCd9VamkAAAAANN/oM2BkWXLg+yeft+ylWg==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=Ksk2crvO/EeKgpZxrQ6yoAAAAAAZtOOES/Jj5pJdYZAMijJe; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=TOIJ7dA9TQerqhnBEQVgkt9VamkAAAAAQUIPAAAAAABSmh/9jvi3q6cAQm03Z+Gz;
+        expires=Fri, 15 Jan 2027 22:32:33 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 55-15713800-15691609 pNYy RT(1768576479083 151) q(0 0 0 -1) r(0 0) U12
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"certificate":"MIIGWDCCBECgAwIBAgIQGmXqNRg5ye1JMZDOQ7HNCTANBgkqhkiG9w0BAQsFADBOMQswCQYDVQQGEwJQTDEhMB8GA1UECgwYQXNzZWNvIERhdGEgU3lzdGVtcyBTLkEuMRwwGgYDVQQDDBNDZXJ0dW0gU01JTUUgUlNBIENBMB4XDTI1MDkyOTA2MDMxOVoXDTI3MDkyOTA2MDMxOFowgb4xGTAXBgNVBGETEFZBVFBMLTUyNjAyNTAyNzQxCzAJBgNVBAYTAlBMMRQwEgYDVQQIDAttYXpvd2llY2tpZTERMA8GA1UEBwwIV2Fyc3phd2ExHzAdBgNVBAoMFk1pbmlzdGVyc3R3byBGaW5hbnPDs3cxHzAdBgNVBAMMFk1pbmlzdGVyc3R3byBGaW5hbnPDs3cxKTAnBgkqhkiG9w0BCQEWGmtvbnN1bHRhY2plLmtzZWZAbWYuZ292LnBsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxsyeiYiWB2+KFxEpQGoNQa6W8Pc4kWGl8V+sBMdW3Fqh0lhKiqKfpH5RWLDmZ30EzkKJ5+IdaWYFoijhYxDBIBhINVQKlBZvEVd6CfPJUJypa94eRO5cc6IPNI35aMhfKP/Kc4A/OiT2J4nyCz6BV98xOXCAlyDPD73XM6O2ormL6gUb673zvjOIakf39tAPPVgWIDuX7GDZYGebN7LXoGvjPo5YDqC2KN51ofLbO+n74iei5OaGN94Ap52vI7uzK2g/hQslOd0Avl2U1kwRnnF0yzwbDzRrHqPCHUYxVp5nHdo+jHe1CNoa6gt0m6pn1StYcitSXKg2hTNjnes6TQIDAQABo4IBvzCCAbswDAYDVR0TAQH/BAIwADBBBgNVHR8EOjA4MDagNKAyhjBodHRwOi8vY3NtaW1lcnNhY2EuY3JsLmNlcnR1bS5wbC9jc21pbWVyc2FjYS5jcmwwgYMGCCsGAQUFBwEBBHcwdTAuBggrBgEFBQcwAYYiaHR0cDovL2NzbWltZXJzYWNhLm9jc3AtY2VydHVtLmNvbTBDBggrBgEFBQcwAoY3aHR0cDovL2NzbWltZXJzYWNhLnJlcG9zaXRvcnkuY2VydHVtLnBsL2NzbWltZXJzYWNhLmNlcjAfBgNVHSMEGDAWgBRm+8MPvvS/4JzJq03eRxm9wMqmaDAdBgNVHQ4EFgQUyDshAguoI0vLLGyA3aRgapjC4JEwTAYDVR0gBEUwQzAJBgdngQwBBQICMDYGCyqEaAGG9ncCZAMBMCcwJQYIKwYBBQUHAgEWGWh0dHBzOi8vd3d3LmNlcnR1bS5wbC9DUFMwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMCMA4GA1UdDwEB/wQEAwIE8DAlBgNVHREEHjAcgRprb25zdWx0YWNqZS5rc2VmQG1mLmdvdi5wbDANBgkqhkiG9w0BAQsFAAOCAgEAxX7ltOEd6+RbztKIgfmpfxsgmg3TXdmwQucy+tw6aqBNF7Xk22PhVcWVgHKLq6xkaCTCfHbfpl6iGWsWkM5re2FltEF8QuLJbI7n6sC/T/pG+aIj4TWgaiKO79dST4kda9GxMEuKxZDkC7OXg4optdxB8Kg3ctFPqzLdnH71lL8I+Wo+KIwGe2h0tDMo39+UQC2XOd5l//1abiuO8ZMal+NEbz8WBeS4saH3qPcYmB8+4hV16kU4csNcyrR6PBKO7vkUXI0Lqh0ioEyFJyhxmx3ZPN4VUQFyQZ8l+GmbRFWBCHIhB5dfWmGazE1gWQmVfpYsmuot7sSI2Uw1pBLPsniA9sBQfIB1tPGmdfTb/Cpkj1k/owYN6G+08dTqG7v8O7R+skSgcem4O9Ftr+8RDTmhLrPwpx9RXf881bmm47aw1BTPzzqDsFGmcNF2Hjb8OpJoJ3ZQQ98ep+yJUb0Ub9trfQNRVKfWltrTDl4Uc+vlWYegocIhJdZ5ZwpeJIZMUHIUXarsuC/hyHZb5nDZSp/mf8a1Qxw9SeYb5TG6AAacGfnVPK2YXA6mu4thhszUBxc6/WKEovN8LfYhZzppf9bgp1Gs7TJIzPUJbsAD2tZg2VssAsuJ17u10vTBEZnYwRZXsfMnMJJMC1wsrA5Xmp3C+oN84Z8l7viL5l1VxbU=","validFrom":"2025-09-29T06:03:19+00:00","validTo":"2027-09-29T06:03:18+00:00","usage":["KsefTokenEncryption"]},{"certificate":"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","validFrom":"2025-09-29T06:17:45+00:00","validTo":"2027-09-29T06:17:44+00:00","usage":["SymmetricKeyEncryption"]}]'
+  recorded_at: Fri, 16 Jan 2026 15:14:39 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/auth/ksef-token
+    body:
+      encoding: UTF-8
+      string: '{"challenge":"20260116-CR-3456253000-294F7D52BC-1D","contextIdentifier":{"type":"Nip","value":"7980332920"},"encryptedToken":"ZE2Fe4HU3CfHgqz+HmmYCRytCSilrH9wGkzv3lhK06y9raYq6rzEPxuOO02puv5pdJVvfqEVkIJAe9TLYlQEmtD3v0IqKHmnSOvwsYornQbP3Tk7hWeRq+knwFyPbZ9TBTOUtLCswuqEJBVZDGYNpWCbCAf8nOFbuT+Ysm1IVNKKT7wDvS39y9P+m+9cfefErOXsuL8V4BrSV4U+QKy7GF0/FKNP0J7IikwahZQb9bPsKiGcwHbMI2VcsjeSo/BZRge4QrBuV3Sks+3qGlAtpzS8pibFc9dwDBC6L+zGvIqNlM6WoeepAVzeo+t49X2Wytu3OV4ikefhiINFZg+d4A=="}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:39 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151439Z-16f7f96b84fh5zkvhC1WAWvby4000000044000000000qvhp
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=OtJWKnG4MBr5SXkRVTfMCd9VamkAAAAAUW9heT/6mmo11/AthfN1TA==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=f9qMXrBP2WPLLeCJrQ6yoAAAAABOeG8IC9Bjk/gBlsSyqQsT; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=R6iEjLrqQXebfBimruZ1T99VamkAAAAAQUIPAAAAAAAFqPLBf8PeIi8zSZwTrx7y;
+        expires=Fri, 15 Jan 2027 22:33:11 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 47-7376363-7358628 pNYy RT(1768576479548 116) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"referenceNumber":"20260116-AU-34565E9000-37105C9065-89","authenticationToken":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJBdXRoZW50aWNhdGlvblRva2VuIiwiYXJuIjoiMjAyNjAxMTYtQVUtMzQ1NjVFOTAwMC0zNzEwNUM5MDY1LTg5IiwiZXhwIjoxNzY4NTc5MTc5LCJpYXQiOjE3Njg1NzY0NzksImlzcyI6ImtzZWYtYXBpLXRlIiwiYXVkIjoia3NlZi1hcGktdGUifQ.zhq5KoYgeSOWwIsyO3ALeSFtZ2n34lZczyKVsIHTmyk","validUntil":"2026-01-16T15:59:39.7347053+00:00"}}'
+  recorded_at: Fri, 16 Jan 2026 15:14:39 GMT
+- request:
+    method: get
+    uri: https://ksef-test.mf.gov.pl/api/v2/auth/20260116-AU-34565E9000-37105C9065-89
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJBdXRoZW50aWNhdGlvblRva2VuIiwiYXJuIjoiMjAyNjAxMTYtQVUtMzQ1NjVFOTAwMC0zNzEwNUM5MDY1LTg5IiwiZXhwIjoxNzY4NTc5MTc5LCJpYXQiOjE3Njg1NzY0NzksImlzcyI6ImtzZWYtYXBpLXRlIiwiYXVkIjoia3NlZi1hcGktdGUifQ.zhq5KoYgeSOWwIsyO3ALeSFtZ2n34lZczyKVsIHTmyk
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:40 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151440Z-16f7f96b84f492cchC1WAWczws00000016fg00000000a0g4
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=43cURfeOBzKATXkRVTfMCeBVamkAAAAAvxuLITatSK8H4g3op9qudA==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=TvAuazzHFkEk6tcxrQ6yoAAAAADNHo9gW75uBOLhSJsHppv8; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=JNjkxtFCROq7Fq5CscdoauBVamkAAAAAQUIPAAAAAAAI0X5sqo+zoFzkPedaa60n;
+        expires=Fri, 15 Jan 2027 22:33:21 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 48-8013769-8004997 pNYy RT(1768576479993 162) q(0 0 0 -1) r(0 0) U16
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJzdGFydERhdGUiOiIyMDI2LTAxLTE2VDE1OjE0OjM5LjcxMzI1NzErMDA6MDAiLCJhdXRoZW50aWNhdGlvbk1ldGhvZCI6IlRva2VuIiwic3RhdHVzIjp7ImNvZGUiOjIwMCwiZGVzY3JpcHRpb24iOiJVd2llcnp5dGVsbmlhbmllIHpha2/FhGN6b25lIHN1a2Nlc2VtIn0sImlzVG9rZW5SZWRlZW1lZCI6ZmFsc2V9
+  recorded_at: Fri, 16 Jan 2026 15:14:40 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/auth/token/redeem
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJBdXRoZW50aWNhdGlvblRva2VuIiwiYXJuIjoiMjAyNjAxMTYtQVUtMzQ1NjVFOTAwMC0zNzEwNUM5MDY1LTg5IiwiZXhwIjoxNzY4NTc5MTc5LCJpYXQiOjE3Njg1NzY0NzksImlzcyI6ImtzZWYtYXBpLXRlIiwiYXVkIjoia3NlZi1hcGktdGUifQ.zhq5KoYgeSOWwIsyO3ALeSFtZ2n34lZczyKVsIHTmyk
+      Content-Length:
+      - '0'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:40 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151440Z-16f7f96b84f7lrk6hC1WAW9zxn0000001790000000006u0r
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=stUHAxijiTEdUXkRVTfMCeBVamkAAAAAXCB3ohdmOOct1fCm4Gceyw==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=3k1EdVkosjGHKfTarQ6yoAAAAADniY2vdSJ0tNCTXq7IztuQ; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=xkQIt8JwTgaPnBqUuKcuR+BVamkAAAAAQUIPAAAAAAA1xjioTs9sTPkacpf1lG46;
+        expires=Fri, 15 Jan 2027 22:33:21 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 48-8013876-8004997 pNYy RT(1768576480462 134) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"accessToken":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4","validUntil":"2026-01-16T15:29:39.7132571+00:00"},"refreshToken":{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJSZWZyZXNoVG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXJuIjoiMjAyNjAxMTYtQVUtMzQ1NjVFOTAwMC0zNzEwNUM5MDY1LTg5IiwiZXhwIjoxNzY5MTgxMjc5LCJpYXQiOjE3Njg1NzY0NzksImlzcyI6ImtzZWYtYXBpLXRlIiwiYXVkIjoia3NlZi1hcGktdGUifQ.UHgW9gufvEIC0umNaH59iYhL3-N36oprvf-MRUKwwCs","validUntil":"2026-01-23T15:14:39.7132571+00:00"}}'
+  recorded_at: Fri, 16 Jan 2026 15:14:40 GMT
+- request:
+    method: get
+    uri: https://ksef-test.mf.gov.pl/api/v2/security/public-key-certificates
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:41 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151441Z-16f7f96b84ft27n9hC1WAW4ys400000004f0000000008mfb
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=nFtRN9EW5FNcVHkRVTfMCeFVamkAAAAA5y/V+9FwhHKvykXDVjYJcA==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=R/BOdadz9XRv/uzHrQ6yoAAAAADEy3yoJqZWF0WYzEfypNMB; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=LQePYU16QRGpKw124E5b4OFVamkAAAAAQUIPAAAAAABKyRiuAMUcdun1kzuWD9ej;
+        expires=Fri, 15 Jan 2027 22:33:00 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 49-8873534-8867266 pNYy RT(1768576480958 120) q(0 0 0 -1) r(1 1) U16
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"certificate":"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","validFrom":"2025-09-29T06:03:19+00:00","validTo":"2027-09-29T06:03:18+00:00","usage":["KsefTokenEncryption"]},{"certificate":"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","validFrom":"2025-09-29T06:17:45+00:00","validTo":"2027-09-29T06:17:44+00:00","usage":["SymmetricKeyEncryption"]}]'
+  recorded_at: Fri, 16 Jan 2026 15:14:41 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/sessions/online
+    body:
+      encoding: UTF-8
+      string: '{"formCode":{"systemCode":"FA (3)","schemaVersion":"1-0E","value":"FA"},"encryption":{"encryptedSymmetricKey":"ELmFeHSMjq1G5rSD6jDl7Y7pZWteOGMbUVbFJupg6Rh867+3k8hpL1/HaAwjy/uXlaGbr9de19sEwLYC5lyPfgd78NxUWiGXBF2cHtvEAjFgsYL/5keqUURGbKrjg2ttG5WIQlNW0YSjf0a1aJHr7YtRgxyHD5Kf6i+Un+8SzZyWZ73I4TL+MvdjW7A2DS2NAbwl/Z8SutOWvwlWwl89wZf2U5HS1kDN+d6juwACuyKzUGfZpTbT++PWUmCSWRCOHoFbJOWd/1ZTCQ0GqEIjIxZA/n1NWHwTfbCq0GVTRuep3wddW2Z3ui0pLQ3NJJ7yH7b+229ygsIjxxgTLWOGMg==","initializationVector":"MN7SyxPK6SS8+yUgMkj6XA=="}}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:41 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151441Z-16f7f96b84fh5zkvhC1WAWvby400000004c0000000003bsz
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=JbRhPP5EGVYSWHkRVTfMCeFVamkAAAAAg6ky32m4obCBTlCD+au7UA==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=txF4SpQCNAJzx5wMrQ6yoAAAAABVY9oJ7oHzwum9MWKjNp+A; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=gTkQj9WtSzeqV/O6h7VgFOFVamkAAAAAQUIPAAAAAABebbU7hGTC5Rc6CmBD9E2O;
+        expires=Fri, 15 Jan 2027 22:32:33 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 55-15714558-15691609 pNYy RT(1768576481395 119) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"referenceNumber":"20260116-SO-3456D11000-8E6E92FC85-D9","validUntil":"2026-01-17T03:14:41.5539142+00:00"}'
+  recorded_at: Fri, 16 Jan 2026 15:14:41 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/sessions/online/20260116-SO-3456D11000-8E6E92FC85-D9/invoices
+    body:
+      encoding: UTF-8
+      string: '{"invoiceHash":"8Ax8wmNFeFFW7/ApMTSyGvCC/BRkf2kKxhewrLqi8xY=","invoiceSize":1971,"encryptedInvoiceHash":"TnNpIlYnYcTyxuYpkWxsaeAWkdo45v9RmZbtp6Kzn3w=","encryptedInvoiceSize":1984,"encryptedInvoiceContent":"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"}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 202
+      message: Accepted
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:42 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151442Z-16f7f96b84fsvb85hC1WAW2ua4000000165g00000000s2zr
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=ZqqXC0Tt7jZoW3kRVTfMCeJVamkAAAAA0O+wtSgSbtnC5r2Hk6U7DA==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=IamnKZagNW+LG3EHrQ6yoAAAAAAJgMS9XQIhblwMn5Uz83M1; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=d/ni8ngHQvKCSmtrvnGTNuJVamkAAAAAQUIPAAAAAACAbXyq4mRmDtkoDr+LS1L8;
+        expires=Fri, 15 Jan 2027 22:33:03 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 53-12861122-12844113 pNYN RT(1768576481858 139) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"referenceNumber":"20260116-EE-3456EFF000-C11D59EA16-DA"}'
+  recorded_at: Fri, 16 Jan 2026 15:14:42 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/sessions/online/20260116-SO-3456D11000-8E6E92FC85-D9/close
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4
+      Content-Length:
+      - '0'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:42 GMT
+      Connection:
+      - keep-alive
+      X-Azure-Ref:
+      - 20260116T151442Z-16f7f96b84ft27n9hC1WAW4ys400000004f0000000008mqs
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=m9xbfR7wCwFCX3kRVTfMCeJVamkAAAAAcPq61u2AZttkU6VmxHq6Og==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=qb+ZTPD2AWPMPt9zrQ6yoAAAAAChfW/06IPKSRRcbnGUNqYK; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=2CmT0PY+TciEN+sLCtLxv+JVamkAAAAAQUIPAAAAAACO3xgYWuEKjguvWvgCgBBG;
+        expires=Fri, 15 Jan 2027 22:33:00 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 49-8873862-8867266 pNNy RT(1768576482341 115) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Fri, 16 Jan 2026 15:14:42 GMT
+- request:
+    method: post
+    uri: https://ksef-test.mf.gov.pl/api/v2/invoices/query/metadata?pageSize=10
+    body:
+      encoding: UTF-8
+      string: "{}"
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept:
+      - application/json
+      Authorization:
+      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOiJDb250ZXh0VG9rZW4iLCJjaXQiOiJOaXAiLCJjaXYiOiI3OTgwMzMyOTIwIiwiYXVtIjoiVG9rZW4iLCJhcm4iOiIyMDI2MDExNi1BVS0zNDU2NUU5MDAwLTM3MTA1QzkwNjUtODkiLCJzdWQiOiJ7XCJzdWJqZWN0SWRlbnRpZmllclwiOntcInR5cGVcIjpcIk5pcFwiLFwidmFsdWVcIjpcIjc5ODAzMzI5MjBcIn0sXCJjb21tb25OYW1lXCI6XCJBbm9kIFN3ZW9uZVwiLFwiY291bnRyeU5hbWVcIjpcIlBMXCIsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJBbm9kIFN3ZW9uZSBJbmMuIE9cIixcIm9yZ2FuaXphdGlvbklkZW50aWZpZXJcIjpcIlZBVFBMLTc5ODAzMzI5MjBcIn0iLCJwZXIiOiJbXCJJbnZvaWNlV3JpdGVcIixcIkludm9pY2VSZWFkXCIsXCJDcmVkZW50aWFsc1JlYWRcIixcIkNyZWRlbnRpYWxzTWFuYWdlXCIsXCJTdWJ1bml0TWFuYWdlXCIsXCJFbmZvcmNlbWVudE9wZXJhdGlvbnNcIl0iLCJwZWMiOiJbXSIsInJvbCI6IltcIkVuZm9yY2VtZW50QXV0aG9yaXR5XCJdIiwicGVwIjoiW10iLCJpb3AiOiJbXSIsImV4cCI6MTc2ODU3NzM3OSwiaWF0IjoxNzY4NTc2NDc5LCJpc3MiOiJrc2VmLWFwaS10ZSIsImF1ZCI6ImtzZWYtYXBpLXRlIn0.QFnsVYnDBI27kCfiU_JIkvO9YIF452fHh0ajVuLiAq4
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Fri, 16 Jan 2026 15:14:44 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - no-cache,no-store
+      Expires:
+      - "-1"
+      Pragma:
+      - no-cache
+      X-Azure-Ref:
+      - 20260116T151444Z-16f7f96b84fh5zkvhC1WAWvby4000000044000000000qw3t
+      X-Cache:
+      - CONFIG_NOCACHE
+      Set-Cookie:
+      - incap_ses_706_3145183=LoNHQw03ZidZcXkRVTfMCeRVamkAAAAAw6aEnMwpx1/2hZM5OlUUHw==;
+        path=/; Domain=.mf.gov.pl; Secure; SameSite=None
+      - nlbi_3145183=aQ8rSVcEvFYW3BZErQ6yoAAAAAAJWHikae+pjITI4ryUobog; HttpOnly; path=/;
+        Domain=.mf.gov.pl; Secure; SameSite=None
+      - visid_incap_3145183=Ih91P4CDScKA4ArWIfcRiORVamkAAAAAQUIPAAAAAABtMklSdANsSd4mJbEBpmdV;
+        expires=Fri, 15 Jan 2027 22:33:11 GMT; HttpOnly; path=/; Domain=.mf.gov.pl;
+        Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000
+      X-Cdn:
+      - Imperva
+      X-Iinfo:
+      - 47-7377387-7358628 pNYy RT(1768576484808 119) q(0 0 0 -1) r(1 1) U6
+    body:
+      encoding: ASCII-8BIT
+      string: '{"exception":{"exceptionDetailList":[{"exceptionCode":21405,"exceptionDescription":"B\u0142\u0105d
+        walidacji danych wej\u015Bciowych.","details":["\u0027filters.subjectType\u0027
+        must not be empty.","\u0027filters.dateRange\u0027 must not be empty."]}],"serviceCode":"00-2fe53cda65588d1174c0dda42a171d99-e9908cd7cc5c3ce8-00","timestamp":"2026-01-16T15:14:44.9626589Z"}}'
+  recorded_at: Fri, 16 Jan 2026 15:14:45 GMT
+recorded_with: VCR 6.3.1

@@ -2,15 +2,15 @@
 
 Get started with Ruby KSeF Client in 5 minutes!
 
-**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
 **Gem Version**: 1.2.0 (RC5.4 compatible)
 
 ## What's New in RC5.4
 
-✨ **PEPPOL Support** - PEF invoice forms and PeppolId authentication  
-✨ **Multi-Context Auth** - Nip, InternalId, PeppolId contexts  
-✨ **Advanced Sorting** - sortOrder parameter in metadata queries  
-✨ **Export Metadata** - _metadata.json in export packages  
+✨ **PEPPOL Support** - PEF invoice forms and PeppolId authentication
+✨ **Multi-Context Auth** - Nip, InternalId, PeppolId contexts
+✨ **Advanced Sorting** - sortOrder parameter in metadata queries
+✨ **Export Metadata** - _metadata.json in export packages
 ✨ **Extended Permissions** - VatUeManage token permission
 
 ## Prerequisites

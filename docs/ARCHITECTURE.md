@@ -4,7 +4,7 @@
 
 KSEF Ruby Client is a complete Ruby implementation for **Krajowy System e-Faktur** (Polish e-invoicing system). The gem provides a type-safe Ruby wrapper over KSEF REST API v2 with automatic authentication, encryption, validation, and data mapping.
 
-**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
 **Gem Version**: 1.2.0 (RC5.4 compatible)
 
 Inspired by the PHP client architecture but adapted to Ruby idioms and conventions.
@@ -31,7 +31,7 @@ Inspired by the PHP client architecture but adapted to Ruby idioms and conventio
 
 ### Multi-Context Authentication
 - **ContextIdentifier value object**: Unified handling of auth contexts
-- **Three context types**: 
+- **Three context types**:
   - `Nip` - Polish tax ID (existing)
   - `InternalId` - Internal system identifier (new)
   - `PeppolId` - PEPPOL participant ID (new)

@@ -51,11 +51,46 @@ require "ksef/requests/sessions/status_handler"
 require "ksef/requests/invoices/query_handler"
 
 require "webmock/rspec"
+require "vcr"
 require "pry"
 require "securerandom"
 
 # Load support files
 Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
+
+# Configure VCR
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+  config.configure_rspec_metadata!
+  config.allow_http_connections_when_no_cassette = false
+  
+  # Filter sensitive data
+  config.filter_sensitive_data("<KSEF_TOKEN>") { |interaction|
+    if interaction.request.headers["Sessiontoken"]
+      interaction.request.headers["Sessiontoken"].first
+    end
+  }
+  
+  config.filter_sensitive_data("<KSEF_TOKEN>") do |interaction|
+    # Filter token from request body
+    if interaction.request.body.include?("ksefToken")
+      interaction.request.body.match(/"ksefToken":\s*"([^"]+)"/)[1] rescue nil
+    end
+  end
+  
+  config.filter_sensitive_data("<NIP>") do |interaction|
+    # Filter NIP from URLs
+    if interaction.request.uri.include?("7980332920")
+      "7980332920"
+    end
+  end
+  
+  config.default_cassette_options = {
+    record: :new_episodes,
+    match_requests_on: [:method, :uri, :body]
+  }
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

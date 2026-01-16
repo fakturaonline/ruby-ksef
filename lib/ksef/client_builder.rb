@@ -102,6 +102,9 @@ module KSEF
       self
     end
 
+    # Alias for identifier
+    alias nip identifier
+
     # Set logger
     # @param logger [Logger] Logger instance
     def logger(logger)

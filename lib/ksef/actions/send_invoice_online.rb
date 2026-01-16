@@ -53,10 +53,14 @@ module KSEF
           encrypted_invoice_content: encrypted_content_base64
         )
 
-        # 8. Return response with session info
+        # 8. Close session automatically (invoices become visible after closing)
+        @client.sessions.close_online(session_ref)
+
+        # 9. Return response with session info
         response.merge(
           'sessionReferenceNumber' => session_ref,
-          'xmlContent' => invoice_xml
+          'xmlContent'            => invoice_xml,
+          'sessionClosed'         => true
         )
       end
 

@@ -2,7 +2,7 @@
 
 This Ruby gem now implements **100% of all endpoints** from the KSeF API v2.
 
-**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)  
+**KSeF API Version**: 2.0 RC5.4 (October 15, 2025)
 **Gem Version**: 1.2.0 (RC5.4 compatible)
 
 ## RC5.4 New Features
