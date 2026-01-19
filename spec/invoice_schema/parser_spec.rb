@@ -6,21 +6,22 @@ RSpec.describe KSEF::InvoiceSchema::Parser do
   # Test via actual DTO that uses the parser
   describe "integration via Adres" do
     it "parses text fields correctly" do
-      xml = "<Adres><KodKraju>PL</KodKraju><Miejscowosc>Warszawa</Miejscowosc></Adres>"
+      xml = "<Adres><KodKraju>PL</KodKraju><AdresL1>Testowa 1</AdresL1><AdresL2>00-001 Warszawa</AdresL2></Adres>"
       doc = Nokogiri::XML(xml)
       adres = KSEF::InvoiceSchema::DTOs::Adres.from_nokogiri(doc.root)
 
       expect(adres.kod_kraju).to eq("PL")
-      expect(adres.miejscowosc).to eq("Warszawa")
+      expect(adres.adres_l1).to eq("Testowa 1")
+      expect(adres.adres_l2).to eq("00-001 Warszawa")
     end
 
     it "returns nil for missing optional fields" do
-      xml = "<Adres><KodKraju>PL</KodKraju><Miejscowosc>Test</Miejscowosc></Adres>"
+      xml = "<Adres><KodKraju>PL</KodKraju><AdresL1>Test</AdresL1></Adres>"
       doc = Nokogiri::XML(xml)
       adres = KSEF::InvoiceSchema::DTOs::Adres.from_nokogiri(doc.root)
 
-      expect(adres.ulica).to be_nil
-      expect(adres.nr_domu).to be_nil
+      expect(adres.adres_l2).to be_nil
+      expect(adres.gln).to be_nil
     end
   end
 
@@ -32,7 +33,16 @@ RSpec.describe KSEF::InvoiceSchema::Parser do
           <P_1>2025-01-15</P_1>
           <P_2>FV/001</P_2>
           <P_15>1000.00</P_15>
-          <Adnotacje/>
+          <Adnotacje>
+            <P_16>2</P_16>
+            <P_17>2</P_17>
+            <P_18>2</P_18>
+            <P_18A>2</P_18A>
+            <Zwolnienie><P_19N>1</P_19N></Zwolnienie>
+            <NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>
+            <P_23>2</P_23>
+            <PMarzy><P_PMarzyN>1</P_PMarzyN></PMarzy>
+          </Adnotacje>
           <RodzajFaktury>VAT</RodzajFaktury>
         </Fa>
       XML
@@ -52,7 +62,16 @@ RSpec.describe KSEF::InvoiceSchema::Parser do
           <P_13_1>1000.50</P_13_1>
           <P_13_2>230.12</P_13_2>
           <P_15>1230.62</P_15>
-          <Adnotacje/>
+          <Adnotacje>
+            <P_16>2</P_16>
+            <P_17>2</P_17>
+            <P_18>2</P_18>
+            <P_18A>2</P_18A>
+            <Zwolnienie><P_19N>1</P_19N></Zwolnienie>
+            <NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>
+            <P_23>2</P_23>
+            <PMarzy><P_PMarzyN>1</P_PMarzyN></PMarzy>
+          </Adnotacje>
           <RodzajFaktury>VAT</RodzajFaktury>
         </Fa>
       XML
@@ -114,22 +133,33 @@ RSpec.describe KSEF::InvoiceSchema::Parser do
           </Naglowek>
           <Podmiot1>
             <DaneIdentyfikacyjne><NIP>1234567890</NIP><Nazwa>Test</Nazwa></DaneIdentyfikacyjne>
-            <Adres><KodKraju>PL</KodKraju><Miejscowosc>W-wa</Miejscowosc></Adres>
+            <Adres><KodKraju>PL</KodKraju><AdresL1>W-wa</AdresL1></Adres>
           </Podmiot1>
           <Podmiot2>
             <DaneIdentyfikacyjne><NIP>9876543210</NIP><Nazwa>Buyer</Nazwa></DaneIdentyfikacyjne>
-            <Adres><KodKraju>PL</KodKraju><Miejscowosc>Krakow</Miejscowosc></Adres>
+            <Adres><KodKraju>PL</KodKraju><AdresL1>Krakow</AdresL1></Adres>
+            <JSTOznaczenie>2</JSTOznaczenie>
+            <GVOznaczenie>2</GVOznaczenie>
           </Podmiot2>
           <Fa>
             <KodWaluty>PLN</KodWaluty>
             <P_1>2025-01-15</P_1>
             <P_2>FV/001</P_2>
             <P_15>1000.00</P_15>
-            <Adnotacje/>
+            <Adnotacje>
+              <P_16>2</P_16>
+              <P_17>2</P_17>
+              <P_18>2</P_18>
+              <P_18A>2</P_18A>
+              <Zwolnienie><P_19N>1</P_19N></Zwolnienie>
+              <NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>
+              <P_23>2</P_23>
+              <PMarzy><P_PMarzyN>1</P_PMarzyN></PMarzy>
+            </Adnotacje>
             <RodzajFaktury>VAT</RodzajFaktury>
-            <FaWiersz><NrWiersza>1</NrWiersza><P_7>A</P_7><P_9B>100.00</P_9B><P_11>23</P_11><P_12>23.00</P_12></FaWiersz>
-            <FaWiersz><NrWiersza>2</NrWiersza><P_7>B</P_7><P_9B>200.00</P_9B><P_11>23</P_11><P_12>46.00</P_12></FaWiersz>
-            <FaWiersz><NrWiersza>3</NrWiersza><P_7>C</P_7><P_9B>300.00</P_9B><P_11>23</P_11><P_12>69.00</P_12></FaWiersz>
+            <FaWiersz><NrWierszaFa>1</NrWierszaFa><P_7>A</P_7><P_9B>100.00</P_9B><P_11>23.00</P_11><P_12>23</P_12></FaWiersz>
+            <FaWiersz><NrWierszaFa>2</NrWierszaFa><P_7>B</P_7><P_9B>200.00</P_9B><P_11>46.00</P_11><P_12>23</P_12></FaWiersz>
+            <FaWiersz><NrWierszaFa>3</NrWierszaFa><P_7>C</P_7><P_9B>300.00</P_9B><P_11>69.00</P_11><P_12>23</P_12></FaWiersz>
           </Fa>
         </Faktura>
       XML

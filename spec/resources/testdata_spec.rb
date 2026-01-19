@@ -15,6 +15,7 @@ RSpec.describe KSEF::Resources::Testdata do
         pesel: "12345678901",
         description: "Test person",
         is_bailiff: false,
+        is_deceased: false,
         created_date: nil
       ).and_return({ status: "created" })
 
@@ -36,6 +37,7 @@ RSpec.describe KSEF::Resources::Testdata do
         pesel: "12345678901",
         description: "Test bailiff",
         is_bailiff: true,
+        is_deceased: false,
         created_date: "2024-01-01T00:00:00Z"
       ).and_return({ status: "created" })
 
@@ -53,6 +55,7 @@ RSpec.describe KSEF::Resources::Testdata do
         pesel: "12345678901",
         description: "Test bailiff",
         is_bailiff: true,
+        is_deceased: false,
         created_date: "2024-01-01T00:00:00Z"
       )
     end

@@ -71,19 +71,21 @@ module KSEF
         end
 
         def self.from_nokogiri(element)
-          p_11_text = text_at(element, "P_11")
-          p_11 = p_11_text =~ /^\d+$/ ? p_11_text.to_i : p_11_text
+          # FA(3): P_11 = netto amount, P_12 = stawka VAT (string enum)
+          p_11_value = decimal_at(element, "P_11")
+          p_12_text = text_at(element, "P_12")
+          p_12 = p_12_text&.match?(/^\d+$/) ? p_12_text.to_i : p_12_text
 
           new(
-            nr_wiersza: integer_at(element, "NrWiersza"),
+            nr_wiersza: integer_at(element, "NrWierszaFa") || integer_at(element, "NrWiersza"), # BC with old format
             p_7: text_at(element, "P_7"),
             p_8a: text_at(element, "P_8A"),
             p_8b: decimal_at(element, "P_8B"),
             p_9a: decimal_at(element, "P_9A"),
             p_9b: decimal_at(element, "P_9B"),
-            p_11: p_11,
+            p_11: p_11_value,
             p_11a: text_at(element, "P_11A"),
-            p_12: decimal_at(element, "P_12"),
+            p_12: p_12,
             cena_jednostkowa: decimal_at(element, "CenaJednostkowa"),
             wartosc_pozycji_smr: decimal_at(element, "WartoscPozycjiSMR")
           )

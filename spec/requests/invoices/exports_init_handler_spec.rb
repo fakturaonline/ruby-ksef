@@ -26,7 +26,8 @@ RSpec.describe KSEF::Requests::Invoices::ExportsInitHandler do
         body: {
           filters: { subjectType: "subject2", dateRange: { from: "2024-01-01", to: "2024-12-31" } },
           encryption: { encryptedSymmetricKey: "encrypted_key", initializationVector: "initialization_vector" }
-        }
+        },
+        headers: {}
       ).and_return(double(json: {}))
       subject.call(filters: { subject_type: "subject2", date_range: { from: "2024-01-01", to: "2024-12-31" } })
     end

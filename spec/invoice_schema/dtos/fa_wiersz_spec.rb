@@ -18,9 +18,9 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::FaWiersz do
 
       doc = wiersz.to_rexml
       expect(doc.root.name).to eq("FaWiersz")
-      expect(doc.root.elements["NrWiersza"].text).to eq("1")
+      expect(doc.root.elements["NrWierszaFa"].text).to eq("1")
       expect(doc.root.elements["P_7"].text).to eq("Test Product")
-      expect(doc.root.elements["P_11"].text).to eq("23")
+      expect(doc.root.elements["P_11"].text).to eq("23.00")
     end
 
     it "formats decimal values correctly" do
@@ -42,14 +42,14 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::FaWiersz do
     it "parses XML with all fields" do
       xml = <<~XML
         <FaWiersz>
-          <NrWiersza>1</NrWiersza>
+          <NrWierszaFa>1</NrWierszaFa>
           <P_7>Test Product</P_7>
           <P_8A>szt</P_8A>
           <P_8B>10.00</P_8B>
           <P_9A>100.00</P_9A>
           <P_9B>1000.00</P_9B>
-          <P_11>23</P_11>
-          <P_12>230.00</P_12>
+          <P_11>230.00</P_11>
+          <P_12>23</P_12>
         </FaWiersz>
       XML
 
@@ -61,25 +61,25 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::FaWiersz do
       expect(wiersz.p_8a).to eq("szt")
       expect(wiersz.p_8b).to eq(BigDecimal("10.00"))
       expect(wiersz.p_9b).to eq(BigDecimal("1000.00"))
-      expect(wiersz.p_11).to eq(23)
-      expect(wiersz.p_12).to eq(BigDecimal("230.00"))
+      expect(wiersz.p_11).to eq(BigDecimal("230.00"))  # FA(3): P_11 = netto amount
+      expect(wiersz.p_12).to eq(23)  # FA(3): P_12 = stawka VAT
     end
 
     it "handles string VAT rate" do
       xml = <<~XML
         <FaWiersz>
-          <NrWiersza>1</NrWiersza>
+          <NrWierszaFa>1</NrWierszaFa>
           <P_7>Exempt Service</P_7>
           <P_9B>1000.00</P_9B>
-          <P_11>zw</P_11>
-          <P_12>0.00</P_12>
+          <P_11>23.00</P_11>
+          <P_12>zw</P_12>
         </FaWiersz>
       XML
 
       doc = Nokogiri::XML(xml)
       wiersz = described_class.from_nokogiri(doc.root)
 
-      expect(wiersz.p_11).to eq("zw")
+      expect(wiersz.p_12).to eq("zw")  # FA(3): P_12 = stawka as string enum
     end
   end
 

@@ -6,17 +6,17 @@ RSpec.describe KSEF::InvoiceSchema::ValueObjects::FormCode do
   describe "#initialize" do
     it "accepts FA(2)" do
       code = described_class.new(described_class::FA2)
-      expect(code.value).to eq("FA(2)")
+      expect(code.value).to eq("FA (2)")
     end
 
     it "accepts FA(3)" do
       code = described_class.new(described_class::FA3)
-      expect(code.value).to eq("FA(3)")
+      expect(code.value).to eq("FA (3)")
     end
 
-    it "defaults to FA(2)" do
+    it "defaults to FA(3)" do
       code = described_class.new
-      expect(code.value).to eq("FA(2)")
+      expect(code.value).to eq("FA (3)")
     end
 
     it "raises error for invalid code" do

@@ -6,26 +6,29 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adnotacje do
   describe "#to_rexml" do
     it "generates XML with all fields" do
       adnotacje = described_class.new(
-        p_16: "Adnotacja 16",
-        p_17: "Adnotacja 17",
-        p_18: "Adnotacja 18",
-        p_18a: "Adnotacja 18A",
-        zwolnienie: "Art. 43",
-        nowesrodkitransportu: true,
-        marza: true,
-        samofakturowanie: true
+        p_16: 1,        # Metoda kasowa=ano
+        p_17: 1,        # Samofakturowanie=ano
+        p_18: 1,        # Odwrotné obciążení=ano
+        p_18a: 1,       # Split payment=ano
+        p_19n: 1,       # Není zwolnienie
+        p_22n: 1,       # Nejsou nová vozidla
+        p_23: 1,        # Procedura uproszczona=ano
+        p_pmarzy_n: 1   # Není marže
       )
 
       xml = adnotacje.to_rexml.to_s
 
-      expect(xml).to include("<P_16>Adnotacja 16</P_16>")
-      expect(xml).to include("<P_17>Adnotacja 17</P_17>")
-      expect(xml).to include("<P_18>Adnotacja 18</P_18>")
-      expect(xml).to include("<P_18A>Adnotacja 18A</P_18A>")
-      expect(xml).to include("<Zwolnienie>Art. 43</Zwolnienie>")
-      expect(xml).to include("<NoweSrodkiTransportu>1</NoweSrodkiTransportu>")
-      expect(xml).to include("<Marza>1</Marza>")
-      expect(xml).to include("<Samofakturowanie>1</Samofakturowanie>")
+      expect(xml).to include("<P_16>1</P_16>")
+      expect(xml).to include("<P_17>1</P_17>")
+      expect(xml).to include("<P_18>1</P_18>")
+      expect(xml).to include("<P_18A>1</P_18A>")
+      expect(xml).to include("<Zwolnienie>")
+      expect(xml).to include("<P_19N>1</P_19N>")
+      expect(xml).to include("<NoweSrodkiTransportu>")
+      expect(xml).to include("<P_22N>1</P_22N>")
+      expect(xml).to include("<P_23>1</P_23>")
+      expect(xml).to include("<PMarzy>")
+      expect(xml).to include("<P_PMarzyN>1</P_PMarzyN>")
     end
 
     it "generates empty XML when no fields set" do
@@ -34,20 +37,21 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adnotacje do
       xml = adnotacje.to_rexml.to_s
 
       expect(xml).to include("<Adnotacje")
-      expect(xml).not_to include("<P_16>")
-      expect(xml).not_to include("<Marza>")
+      # FA(3) VŽDY obsahuje všechny elementy
+      expect(xml).to include("<P_16>2</P_16>")
+      expect(xml).to include("<P_17>2</P_17>")
     end
 
     it "does not include false boolean fields" do
       adnotacje = described_class.new(
-        marza: false,
-        samofakturowanie: false
+        p_16: 2,   # Ne
+        p_17: 2    # Ne
       )
 
       xml = adnotacje.to_rexml.to_s
 
-      expect(xml).not_to include("<Marza>")
-      expect(xml).not_to include("<Samofakturowanie>")
+      expect(xml).to include("<P_16>2</P_16>")
+      expect(xml).to include("<P_17>2</P_17>")
     end
   end
 end

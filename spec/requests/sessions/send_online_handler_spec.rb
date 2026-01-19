@@ -28,8 +28,7 @@ RSpec.describe KSEF::Requests::Sessions::SendOnlineHandler do
           invoiceSize: 2048,
           encryptedInvoiceHash: "enchash456",
           encryptedInvoiceSize: 2500,
-          encryptedInvoiceContent: "content456",
-          offlineMode: false
+          encryptedInvoiceContent: "content456"
         },
         headers: { "Content-Type" => "application/json" }
       ).and_return(double(json: {}))

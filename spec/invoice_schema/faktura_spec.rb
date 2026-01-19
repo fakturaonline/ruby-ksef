@@ -19,10 +19,8 @@ RSpec.describe KSEF::InvoiceSchema::Faktura do
   let(:adres_prodejce) do
     KSEF::InvoiceSchema::DTOs::Adres.new(
       kod_kraju: "PL",
-      miejscowosc: "Warszawa",
-      kod_pocztowy: "00-001",
-      ulica: "Testowa",
-      nr_domu: "1"
+      adres_l1: "Testowa 1",
+      adres_l2: "00-001 Warszawa"
     )
   end
 
@@ -43,17 +41,17 @@ RSpec.describe KSEF::InvoiceSchema::Faktura do
   let(:adres_kupujici) do
     KSEF::InvoiceSchema::DTOs::Adres.new(
       kod_kraju: "PL",
-      miejscowosc: "Kraków",
-      kod_pocztowy: "30-001",
-      ulica: "Klienta",
-      nr_domu: "5"
+      adres_l1: "Klienta 5",
+      adres_l2: "30-001 Kraków"
     )
   end
 
   let(:podmiot2) do
     KSEF::InvoiceSchema::DTOs::Podmiot2.new(
       dane_identyfikacyjne: dane_kupujici,
-      adres: adres_kupujici
+      adres: adres_kupujici,
+      jst: 2,  # není jednotka podřízená JST
+      gv: 2    # není člen skupiny VAT
     )
   end
 

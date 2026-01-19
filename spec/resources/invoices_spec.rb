@@ -52,12 +52,12 @@ RSpec.describe KSEF::Resources::Invoices do
       filters = { date_from: "2024-01-01", date_to: "2024-01-31" }
       handler = instance_double(KSEF::Requests::Invoices::ExportsInitHandler)
       allow(KSEF::Requests::Invoices::ExportsInitHandler).to receive(:new).with(http_client, config).and_return(handler)
-      allow(handler).to receive(:call).with(filters: filters).and_return({ reference_number: "REF123" })
+      allow(handler).to receive(:call).with(filters: filters, include_metadata: false).and_return({ reference_number: "REF123" })
 
       result = invoices.exports_init(filters: filters)
 
       expect(result).to eq({ reference_number: "REF123" })
-      expect(handler).to have_received(:call).with(filters: filters)
+      expect(handler).to have_received(:call).with(filters: filters, include_metadata: false)
     end
   end
 
@@ -82,7 +82,8 @@ RSpec.describe KSEF::Resources::Invoices do
       allow(handler).to receive(:call).with(
         filters: filters,
         page_size: nil,
-        page_offset: nil
+        page_offset: nil,
+        sort_order: nil
       ).and_return({ invoices: [] })
 
       result = invoices.query_metadata(filters: filters)
@@ -98,7 +99,8 @@ RSpec.describe KSEF::Resources::Invoices do
       allow(handler).to receive(:call).with(
         filters: filters,
         page_size: 50,
-        page_offset: 100
+        page_offset: 100,
+        sort_order: nil
       ).and_return({ invoices: [] })
 
       result = invoices.query_metadata(filters: filters, page_size: 50, page_offset: 100)
@@ -107,7 +109,8 @@ RSpec.describe KSEF::Resources::Invoices do
       expect(handler).to have_received(:call).with(
         filters: filters,
         page_size: 50,
-        page_offset: 100
+        page_offset: 100,
+        sort_order: nil
       )
     end
   end

@@ -36,7 +36,7 @@ RSpec.describe KSEF::InvoiceSchema::Naglowek do
 
       xml = naglowek.to_rexml.to_s
 
-      expect(xml).to include("kodSystemowy='FA(3)'")
+      expect(xml).to include("kodSystemowy='FA (3)'")
     end
 
     it "formats date correctly" do
