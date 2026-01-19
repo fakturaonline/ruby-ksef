@@ -31,7 +31,7 @@ let(:test_ksef_token) { "váš_platný_token" }
 ```
 
 Jak získat token:
-1. Přihlaste se na https://ksef-test.mf.gov.pl/
+1. Přihlaste se na https://ksef-test.mf.gov.pl/ (webové rozhraní)
 2. Jděte do **Ustawienia** → **Tokeny**
 3. Vytvořte nový token s potřebnými oprávněními
 4. Token má formát: `datum-typ-číslo|identifikátor|hash`
@@ -67,13 +67,13 @@ describe "sending a valid FA(3) invoice" do
   it "successfully sends an invoice using high-level API" do
     # 1. Vytvoří testovací fakturu
     invoice = create_test_invoice
-    
+
     # 2. Vygeneruje XML
     xml = invoice.to_xml
-    
+
     # 3. Odešle fakturu (vše ostatní je automatické!)
     response = client.send_invoice_online(xml)
-    
+
     # 4. Ověří response
     expect(response).to have_key("referenceNumber")
     expect(response).to have_key("sessionReferenceNumber")
@@ -121,7 +121,7 @@ Pro testy používáme:
 
 ## Poznámky
 
-- Testy používají **testovací prostředí** KSeF (`https://ksef-test.mf.gov.pl/api/v2`)
+- Testy používají **testovací prostředí** KSeF API (`https://api-test.ksef.mf.gov.pl/v2`)
 - Faktury odeslané v testu jsou skutečné testovací faktury v KSeF test DB
 - High-level API automaticky řeší všechnu složitost (šifrování, session management)
 - Pro production použití stačí změnit `mode :test` na `mode :production`

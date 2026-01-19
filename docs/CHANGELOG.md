@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-01-19
+
+### Changed - API URL Update & Official Documentation
+- **Updated API Base URLs** - Migrated to new API endpoints as per official KSeF documentation:
+  - Test environment: `https://api-test.ksef.mf.gov.pl/v2` (previously `https://ksef-test.mf.gov.pl/api/v2` - now deprecated)
+  - Demo environment: `https://api-demo.ksef.mf.gov.pl/v2` (previously `https://ksef-demo.mf.gov.pl/api/v2` - now deprecated)
+  - Production environment: `https://api.ksef.mf.gov.pl/v2` (previously `https://ksef.mf.gov.pl/api/v2` - now deprecated)
+- **Updated Official Documentation Submodule** - Updated `sources/ksef-docs-official` from 2.0.0-RC5.4 to 2.0.1
+  - Confirmed new API URLs in official documentation
+  - Added new PEPPOL schemas (PEF v2-1)
+  - New documentation for incremental invoice fetching (HWM pattern)
+  - API 2.0.1 changes: NIP checksum validation, new session fields, SHA-256 hash headers
+- **Updated Documentation** - All documentation files now reference the new API URLs
+- **Updated Tests** - Updated `mode_spec.rb` to verify correct URL generation
+- **Re-recorded VCR Cassettes** - All VCR cassettes re-recorded with new API URLs
+- **Note:** Web interface URLs (without `/api`) remain unchanged at original addresses
+
+### Migration Guide
+No code changes required for existing users. The gem automatically uses the new URLs based on the mode setting:
+```ruby
+# This automatically uses https://api-test.ksef.mf.gov.pl/v2
+client = KSEF.build do
+  mode :test
+  # ... rest of config
+end
+```
+
+### VCR Cassettes
+All VCR cassettes were deleted and re-recorded with new API URLs. For developers wanting to re-record:
+- See [VCR Recording Guide](VCR_RECORDING_GUIDE.md)
+- Cassettes now use `https://api-test.ksef.mf.gov.pl/v2`
+
+### Documentation
+- Added [API_URL_MIGRATION.md](API_URL_MIGRATION.md) - Complete migration guide
+- Added [VCR_RECORDING_GUIDE.md](VCR_RECORDING_GUIDE.md) - Guide for recording VCR cassettes
+- Added [MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md) - Quick summary
+- Added [SUBMODULE_UPDATE_2026-01-19.md](SUBMODULE_UPDATE_2026-01-19.md) - Submodule update details
+
 ## [Unreleased] - 2026-01-16
 
 ### Added - KSeF API 2.0 RC5.4 Support
@@ -149,7 +187,7 @@ All documentation moved to `docs/` directory
 
 ### Tested With
 - Ruby 3.x
-- KSeF Test Environment (https://ksef-test.mf.gov.pl/api/v2)
+- KSeF Test Environment (https://api-test.ksef.mf.gov.pl/v2)
 - Self-signed certificates
 - Random NIP numbers
 

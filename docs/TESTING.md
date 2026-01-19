@@ -51,7 +51,7 @@ end
 ```
 
 **Kde získat token:**
-1. Přihlaste se na https://ksef-test.mf.gov.pl/
+1. Přihlaste se na https://ksef-test.mf.gov.pl/ (webové rozhraní)
 2. Jděte do **Ustawienia** → **Tokeny**
 3. Vytvořte nový token s oprávněními pro odesílání faktur
 4. Token má formát: `datum-typ-číslo|identifikátor|hash`
@@ -75,8 +75,8 @@ Jednoduše spusťte testy znovu:
 bundle exec rspec spec/integration/invoice_sending_spec.rb
 ```
 
-✅ Funguje **bez** platného tokenu  
-✅ Funguje **offline** (bez internetu)  
+✅ Funguje **bez** platného tokenu
+✅ Funguje **offline** (bez internetu)
 ✅ **60x rychlejší** (0.06s místo 3.7s)
 
 ## Invoice Sending Test
@@ -88,17 +88,17 @@ it "successfully sends an invoice using high-level API" do
   # 1. Vytvoří FA(3) fakturu
   invoice = create_test_invoice
   xml = invoice.to_xml
-  
+
   # 2. Vytvoří client s autentizací
   client = KSEF.build do
     mode :test
     identifier nip
     ksef_token token
   end
-  
+
   # 3. Odešle fakturu (automatické šifrování!)
   response = client.send_invoice_online(xml)
-  
+
   # 4. Ověří response
   expect(response).to have_key("referenceNumber")
   expect(response).to have_key("sessionReferenceNumber")
@@ -107,14 +107,14 @@ end
 
 ### Co test ověřuje
 
-✅ **Autentizace** - pomocí KSeF tokenu  
-✅ **Získání šifrovacího certifikátu** - z KSeF API  
-✅ **Generování AES klíče** - náhodný 256-bit klíč  
-✅ **Šifrování AES klíče** - RSA-OAEP s SHA-256  
-✅ **Otevření online session** - se šifrováním  
-✅ **Šifrování faktury** - AES-256-CBC  
-✅ **Výpočet hash** - SHA-256 pro originál i šifrovaný obsah  
-✅ **Odeslání faktury** - do KSeF systému  
+✅ **Autentizace** - pomocí KSeF tokenu
+✅ **Získání šifrovacího certifikátu** - z KSeF API
+✅ **Generování AES klíče** - náhodný 256-bit klíč
+✅ **Šifrování AES klíče** - RSA-OAEP s SHA-256
+✅ **Otevření online session** - se šifrováním
+✅ **Šifrování faktury** - AES-256-CBC
+✅ **Výpočet hash** - SHA-256 pro originál i šifrovaný obsah
+✅ **Odeslání faktury** - do KSeF systému
 ✅ **Přijetí response** - s reference numbers
 
 ### Výsledek testu
@@ -140,14 +140,14 @@ VCR.configure do |config|
   config.filter_sensitive_data("<KSEF_TOKEN>") { |interaction|
     interaction.request.headers["Sessiontoken"]&.first
   }
-  
+
   # Filtruje tokeny v JSON body
   config.filter_sensitive_data("<KSEF_TOKEN>") do |interaction|
     if interaction.request.body.include?("ksefToken")
       interaction.request.body.match(/"ksefToken":\s*"([^"]+)"/)[1]
     end
   end
-  
+
   # Filtruje NIP v URL
   config.filter_sensitive_data("<NIP>") do |interaction|
     if interaction.request.uri.include?("7980332920")
@@ -162,13 +162,13 @@ end
 Pro integrační testy používáme:
 
 ```ruby
-vcr: { 
+vcr: {
   match_requests_on: [:method, :uri]  # Bez body!
 }
 ```
 
-**Proč ne body?**  
-Body obsahuje `encryptedToken` který zahrnuje timestamp z challenge.  
+**Proč ne body?**
+Body obsahuje `encryptedToken` který zahrnuje timestamp z challenge.
 Při každém běhu je jiný, takže VCR by nemohl najít matching cassette.
 
 ## Aktualizace cassettes

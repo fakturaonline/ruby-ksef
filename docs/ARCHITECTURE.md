@@ -603,7 +603,7 @@ end
 ```ruby
 RSpec.describe 'KSEF Integration' do
   before do
-    stub_request(:get, "https://ksef-test.mf.gov.pl/api/auth/challenge")
+    stub_request(:get, "https://api-test.ksef.mf.gov.pl/v2/auth/challenge")
       .to_return(
         status: 200,
         body: { challenge: 'abc123', timestamp: '2025-01-01T00:00:00Z' }.to_json

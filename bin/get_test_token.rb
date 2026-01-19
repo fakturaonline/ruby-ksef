@@ -23,7 +23,7 @@ if ARGV.length != 3
   puts "  ruby #{$PROGRAM_NAME} ~/ksef-test-cert.p12 mypassword 7980332920"
   puts
   puts "How to get a test certificate:"
-  puts "  1. Go to https://ksef-test.mf.gov.pl/"
+  puts "  1. Go to https://ksef-test.mf.gov.pl/ (web interface)"
   puts "  2. Register or login with test credentials"
   puts "  3. Go to Ustawienia → Certyfikaty"
   puts "  4. Generate new certificate and download .p12 file"
@@ -52,7 +52,7 @@ puts
 begin
   # Build client with certificate authentication
   puts "🔐 Authenticating with certificate..."
-  
+
   client = KSEF.build do
     mode :test
     certificate_path cert_path, cert_password
@@ -76,7 +76,7 @@ begin
 
   # Now create a KSeF token (long-lived token)
   puts "🔑 Creating KSeF token..."
-  
+
   # List available token scopes/permissions
   # For test purposes, we'll create a token with basic permissions
   token_response = client.tokens.create(

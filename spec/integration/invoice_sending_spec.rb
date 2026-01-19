@@ -12,7 +12,9 @@ RSpec.describe "Invoice Sending Integration" do
     # Valid test token - VCR records HTTP interactions on first run
     # After that, test uses recorded cassettes (works offline)
     # Token is automatically filtered in cassettes as <KSEF_TOKEN>
-    "20260116-EC-31856A9000-FFAB6697E0-B2|nip-7980332920|55ae8cd77c7e49ce91b3b41c912aad4aa674767371174ea8af60daddd67ea2ff"
+    #
+    # Latest recorded: 2026-01-19 with new API URLs (https://api-test.ksef.mf.gov.pl/v2)
+    "20260119-EC-358EFDB000-459EC03E91-53|nip-7980332920|4f0a7de61fa84925a9b5997cdf410549f04c0022b21141069b7d93e06b29b203"
   end
 
   describe "sending a valid FA(3) invoice" do

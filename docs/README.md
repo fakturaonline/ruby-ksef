@@ -343,7 +343,8 @@ client.auth.revoke
 
 - 📘 [KSeF Docs (GitHub)](https://github.com/CIRFMF/ksef-docs)
 - 📗 [API v2 OpenAPI](https://ksef-test.mf.gov.pl/docs/v2/index.html)
-- 📙 [Testovací prostředí](https://ksef-test.mf.gov.pl)
+- 📙 [Testovací prostředí - Webové rozhraní](https://ksef-test.mf.gov.pl)
+- 🔧 [API Test Server](https://api-test.ksef.mf.gov.pl/v2)
 
 ### Struktura projektu
 

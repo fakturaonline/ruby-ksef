@@ -198,13 +198,13 @@ client = KSEF::ClientBuilder.new
 
 ```ruby
 # Test (self-signed certs OK)
-.mode(:test)  # https://ksef-test.mf.gov.pl/api/v2
+.mode(:test)  # https://api-test.ksef.mf.gov.pl/v2
 
 # Demo (production-like)
-.mode(:demo)  # https://ksef-demo.mf.gov.pl/api/v2
+.mode(:demo)  # https://api-demo.ksef.mf.gov.pl/v2
 
 # Production (qualified certs required)
-.mode(:production)  # https://ksef.mf.gov.pl/api/v2
+.mode(:production)  # https://api.ksef.mf.gov.pl/v2
 ```
 
 ## Certificate Generator - All Options
