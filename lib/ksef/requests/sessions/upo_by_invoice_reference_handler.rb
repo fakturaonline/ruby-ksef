@@ -13,7 +13,8 @@ module KSEF
           response = @http_client.get(
             "sessions/#{session_reference_number}/invoices/#{invoice_reference_number}/upo"
           )
-          response.json
+          # UPO endpoint returns XML, not JSON
+          response.body
         end
       end
     end
