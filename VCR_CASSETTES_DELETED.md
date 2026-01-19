@@ -1,89 +1,89 @@
-# ⚠️ VCR Cassettes byly smazány
+# ⚠️ VCR Cassettes Were Deleted
 
-**Datum:** 19. ledna 2026, 16:56
-**Důvod:** Migrace na nové KSeF API URL
+**Date:** January 19, 2026, 4:56 PM  
+**Reason:** Migration to new KSeF API URLs
 
-## Co se stalo
+## What Happened
 
-V rámci aktualizace na nové KSeF API URL byly **všechny VCR cassettes smazány**.
+As part of the update to new KSeF API URLs, **all VCR cassettes were deleted**.
 
-### Proč?
+### Why?
 
-KSeF oficiálně přešel z deprecated URL:
+KSeF officially moved from deprecated URLs:
 - ❌ `https://ksef-test.mf.gov.pl/api/v2`
 
-Na nové URL:
+To new URLs:
 - ✅ `https://api-test.ksef.mf.gov.pl/v2`
 
-Staré cassettes obsahovaly deprecated URL, proto bylo lepší je smazat a nahrát znovu s novými URL.
+Old cassettes contained deprecated URLs, so it was better to delete them and re-record with new URLs.
 
-## Co je potřeba udělat?
+## What Needs to Be Done?
 
-### Pro běžné uživatele gemu:
-👉 **NIC!** Gem funguje normálně, cassettes jsou jen pro vývojáře/testy.
+### For Regular Gem Users:
+👉 **NOTHING!** The gem works normally, cassettes are only for developers/tests.
 
-### Pro vývojáře, kteří chtějí spouštět integrační testy:
+### For Developers Who Want to Run Integration Tests:
 
-**Potřebuješ nahrát nové cassettes s platným KSeF tokenem:**
+**You need to record new cassettes with a valid KSeF token:**
 
-#### Rychlý postup:
+#### Quick Steps:
 
 ```bash
-# 1. Získej token
+# 1. Get token
 ruby bin/get_test_token.rb cert.p12 password 1234567890
 
-# 2. Nastav v testu (spec/integration/invoice_sending_spec.rb)
-let(:test_ksef_token) { "VÁŠ_TOKEN_ZDE" }
+# 2. Set in test (spec/integration/invoice_sending_spec.rb)
+let(:test_ksef_token) { "YOUR_TOKEN_HERE" }
 
-# 3. Spusť test (nahraje cassettes automaticky)
+# 3. Run test (records cassettes automatically)
 bundle exec rspec spec/integration/invoice_sending_spec.rb
 
-# 4. Ověř
+# 4. Verify
 ls -la spec/fixtures/vcr_cassettes/invoice_sending/
-# Měl bys vidět: successful_fa3_highlevel.yml
+# You should see: successful_fa3_highlevel.yml
 ```
 
-#### Detailní návod:
+#### Detailed Guide:
 
-📘 **[docs/VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)** - Kompletní krok-za-krokem návod
+📘 **[docs/VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)** - Complete step-by-step guide
 
-## Dokumentace
+## Documentation
 
-Byly vytvořeny/aktualizovány následující dokumenty:
+The following documents were created/updated:
 
-- 📘 [VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md) - **NOVÝ** - Jak nahrát cassettes
-- 📗 [API_URL_MIGRATION.md](docs/API_URL_MIGRATION.md) - Aktualizováno s VCR info
-- 📙 [MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Aktualizován status
-- 🎬 [spec/fixtures/vcr_cassettes/README.md](spec/fixtures/vcr_cassettes/README.md) - **NOVÝ** - README v cassettes složce
+- 📘 [VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md) - **NEW** - How to record cassettes
+- 📗 [API_URL_MIGRATION.md](docs/API_URL_MIGRATION.md) - Updated with VCR info
+- 📙 [MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md) - Updated status
+- 🎬 [spec/fixtures/vcr_cassettes/README.md](spec/fixtures/vcr_cassettes/README.md) - **NEW** - README in cassettes folder
 
 ## FAQ
 
-### Q: Musím něco změnit ve svém kódu?
-**A:** Ne! Pokud jen používáš gem, nic měnit nemusíš.
+### Q: Do I need to change anything in my code?
+**A:** No! If you're just using the gem, you don't need to change anything.
 
-### Q: Nefungují mi testy
-**A:** Pokud spouštíš integrační testy (`spec/integration/`), potřebuješ nahrát nové cassettes (viz návod výše).
+### Q: My tests don't work
+**A:** If you're running integration tests (`spec/integration/`), you need to record new cassettes (see guide above).
 
-### Q: Unit testy fungují?
-**A:** Ano! Unit testy (`spec/` kromě `spec/integration/`) fungují normálně.
+### Q: Do unit tests work?
+**A:** Yes! Unit tests (`spec/` except `spec/integration/`) work normally.
 
-### Q: Kdy budou cassettes znovu nahrány?
-**A:** Až někdo s platným KSeF tokenem spustí integrační testy. Pak budou commitnuty do repozitáře.
+### Q: When will cassettes be recorded again?
+**A:** Once someone with a valid KSeF token runs the integration tests. Then they'll be committed to the repository.
 
-### Q: Mohu použít staré cassettes?
-**A:** Ne, obsahují deprecated URL. Lepší je nahrát nové.
+### Q: Can I use old cassettes?
+**A:** No, they contain deprecated URLs. It's better to record new ones.
 
 ## Status
 
-| Komponenta | Status |
-|------------|--------|
-| Kód aplikace | ✅ Aktualizován |
-| Dokumentace | ✅ Aktualizována |
-| Unit testy | ✅ Fungují |
-| VCR cassettes | ⏳ Potřeba nahrát |
-| Integrační testy | ⏳ Vyžadují cassettes |
+| Component | Status |
+|-----------|--------|
+| Application code | ✅ Updated |
+| Documentation | ✅ Updated |
+| Unit tests | ✅ Working |
+| VCR cassettes | ⏳ Need to record |
+| Integration tests | ⏳ Require cassettes |
 
 ---
 
-**Pro otázky nebo problémy, viz:**
+**For questions or issues, see:**  
 📘 [docs/VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)

@@ -1,53 +1,53 @@
 # VCR Cassettes
 
-## ⚠️ Cassettes byly smazány (19.1.2026)
+## ⚠️ Cassettes Were Deleted (Jan 19, 2026)
 
-Všechny VCR cassettes byly smazány kvůli migraci na nové KSeF API URL.
+All VCR cassettes were deleted due to migration to new KSeF API URLs.
 
-## 🎯 Co je potřeba udělat
+## 🎯 What Needs to Be Done
 
-### Rychlý návod:
+### Quick Guide:
 
-1. **Získej KSeF token:**
+1. **Get KSeF token:**
    ```bash
    ruby bin/get_test_token.rb cert.p12 password 1234567890
    ```
 
-2. **Nastav v testu:**
+2. **Set in test:**
    ```ruby
    # spec/integration/invoice_sending_spec.rb
-   let(:test_ksef_token) { "VÁŠ_TOKEN" }
+   let(:test_ksef_token) { "YOUR_TOKEN" }
    ```
 
-3. **Nahraj cassettes:**
+3. **Record cassettes:**
    ```bash
    bundle exec rspec spec/integration/invoice_sending_spec.rb
    ```
 
-### Detailní návod:
-📘 **[Kompletní VCR Recording Guide](../../../docs/VCR_RECORDING_GUIDE.md)**
+### Detailed Guide:
+📘 **[Complete VCR Recording Guide](../../../docs/VCR_RECORDING_GUIDE.md)**
 
-## 📦 Co budou cassettes obsahovat
+## 📦 What Cassettes Will Contain
 
-Po nahrání budou cassettes používat **nové API URL:**
+After recording, cassettes will use **new API URLs:**
 - ✅ `https://api-test.ksef.mf.gov.pl/v2`
 
-Místo deprecated:
+Instead of deprecated:
 - ❌ `https://ksef-test.mf.gov.pl/api/v2`
 
-## 🔒 Bezpečnost
+## 🔒 Security
 
-VCR automaticky filtruje citlivá data:
-- Tokeny → `<KSEF_TOKEN>`
+VCR automatically filters sensitive data:
+- Tokens → `<KSEF_TOKEN>`
 - NIP → `<NIP>`
 
-Před commitem vždy zkontroluj:
+Before committing, always check:
 ```bash
-grep -r "20260119-" .  # Nemělo by najít tokeny
+grep -r "20260119-" .  # Should not find tokens
 ```
 
 ---
 
-**Smazáno:** 19. ledna 2026, 16:56
-**Důvod:** Migrace na nové API URL
-**Status:** Připraveno k nahrání
+**Deleted:** January 19, 2026, 4:56 PM  
+**Reason:** Migration to new API URLs  
+**Status:** Ready to record

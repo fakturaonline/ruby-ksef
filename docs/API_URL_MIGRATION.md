@@ -1,27 +1,27 @@
-# Migrace API URL - Leden 2026
+# API URL Migration - January 2026
 
-## Přehled změn
+## Overview of Changes
 
-V lednu 2026 KSeF oficiálně přešel na nové API adresy. Staré adresy jsou označeny jako **deprecated**.
+In January 2026, KSeF officially moved to new API addresses. Old addresses are marked as **deprecated**.
 
-## Nové vs. Staré URL
+## New vs. Old URLs
 
-| Prostředí | Nová adresa (aktivní) | Stará adresa (deprecated) |
+| Environment | New Address (active) | Old Address (deprecated) |
 |-----------|----------------------|---------------------------|
 | **Test** | `https://api-test.ksef.mf.gov.pl/v2` | `https://ksef-test.mf.gov.pl/api/v2` |
 | **Demo** | `https://api-demo.ksef.mf.gov.pl/v2` | `https://ksef-demo.mf.gov.pl/api/v2` |
 | **Production** | `https://api.ksef.mf.gov.pl/v2` | `https://ksef.mf.gov.pl/api/v2` |
 
-### Webové rozhraní (beze změny)
+### Web Interface (unchanged)
 
-Webové rozhraní zůstává na původních adresách:
+Web interface remains at original addresses:
 - Test: `https://ksef-test.mf.gov.pl` (bez `/api`)
 - Demo: `https://ksef-demo.mf.gov.pl`
 - Production: `https://ksef.mf.gov.pl`
 
-## Co bylo aktualizováno
+## What Was Updated
 
-### 1. Kód aplikace
+### 1. Application Code
 ✅ `lib/ksef/value_objects/mode.rb` - Konstanty s URL (již měly správné hodnoty)
 
 ### 2. Dokumentace

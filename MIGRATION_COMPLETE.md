@@ -1,17 +1,17 @@
-# ✅ Migrace dokončena - 19. ledna 2026
+# ✅ Migration Complete - January 19, 2026
 
-## 🎉 Souhrn
+## 🎉 Summary
 
-Kompletní migrace Ruby KSeF gemu na nové API URL byla **úspěšně dokončena**.
+Complete migration of Ruby KSeF gem to new API URLs was **successfully completed**.
 
-## ✅ Co bylo provedeno
+## ✅ What Was Done
 
-### 1. API URL aktualizovány
+### 1. API URLs Updated
 - ✅ Test: `https://api-test.ksef.mf.gov.pl/v2`
 - ✅ Demo: `https://api-demo.ksef.mf.gov.pl/v2`
 - ✅ Production: `https://api.ksef.mf.gov.pl/v2`
 
-### 2. Dokumentace aktualizována (11 souborů)
+### 2. Documentation Updated (11 files)
 - ✅ README.md
 - ✅ docs/QUICK_START.md
 - ✅ docs/TESTING.md
@@ -21,113 +21,113 @@ Kompletní migrace Ruby KSeF gemu na nové API URL byla **úspěšně dokončena
 - ✅ spec/integration/README.md
 - ✅ bin/get_test_token.rb
 
-### 3. Nová dokumentace vytvořena (5 souborů)
-- ✅ docs/API_URL_MIGRATION.md - Kompletní migrační průvodce
-- ✅ docs/VCR_RECORDING_GUIDE.md - Návod pro VCR cassettes
-- ✅ docs/MIGRATION_SUMMARY.md - Stručný souhrn
-- ✅ docs/SUBMODULE_UPDATE_2026-01-19.md - Aktualizace submodulu
-- ✅ VCR_CASSETTES_DELETED.md - Info o cassettes
-- ✅ spec/fixtures/vcr_cassettes/README.md - README v cassettes složce
+### 3. New Documentation Created (5 files)
+- ✅ docs/API_URL_MIGRATION.md - Complete migration guide
+- ✅ docs/VCR_RECORDING_GUIDE.md - Guide for VCR cassettes
+- ✅ docs/MIGRATION_SUMMARY.md - Quick summary
+- ✅ docs/SUBMODULE_UPDATE_2026-01-19.md - Submodule update
+- ✅ VCR_CASSETTES_DELETED.md - Info about cassettes
+- ✅ spec/fixtures/vcr_cassettes/README.md - README in cassettes folder
 
-### 4. Testy aktualizovány
-- ✅ spec/value_objects/mode_spec.rb - Testy pro URL
-- ✅ spec/integration/invoice_sending_spec.rb - Aktualizován token
+### 4. Tests Updated
+- ✅ spec/value_objects/mode_spec.rb - Tests for URLs
+- ✅ spec/integration/invoice_sending_spec.rb - Updated token
 
 ### 5. VCR Cassettes
-- ✅ Smazány staré cassettes (10 souborů)
-- ✅ Nahrány nové s aktuálními URL (1 soubor)
-- ✅ Ověřeno: `https://api-test.ksef.mf.gov.pl/v2` ✅
+- ✅ Deleted old cassettes (10 files)
+- ✅ Recorded new ones with current URLs (1 file)
+- ✅ Verified: `https://api-test.ksef.mf.gov.pl/v2` ✅
 
-### 6. Oficiální dokumentace
-- ✅ Submodul aktualizován z 2.0.0-RC5.4 na 2.0.1
-- ✅ Potvrzeny nové API URL v oficiální dokumentaci
-- ✅ Přidány nové PEPPOL schémata
-- ✅ Nová dokumentace o inkrementálním stahování (HWM)
+### 6. Official Documentation
+- ✅ Submodule updated from 2.0.0-RC5.4 to 2.0.1
+- ✅ Confirmed new API URLs in official documentation
+- ✅ Added new PEPPOL schemas
+- ✅ New documentation on incremental fetching (HWM)
 
-## 🧪 Testování
+## 🧪 Testing
 
-### Unit testy
+### Unit Tests
 ```bash
 ✅ PASSED: 21 examples, 0 failures
 ```
 
-### Integrační testy
+### Integration Tests
 ```bash
 ✅ PASSED: 1 example, 0 failures
-✅ Faktura odeslána: 20260119-EE-36E37B1000-A680ADEDCD-87
-✅ Cassette nahrána s novými URL
+✅ Invoice sent: 20260119-EE-36E37B1000-A680ADEDCD-87
+✅ Cassette recorded with new URLs
 ```
 
-### Ověření URL
+### URL Verification
 ```bash
 $ head -5 spec/fixtures/vcr_cassettes/invoice_sending/successful_fa3_highlevel.yml
 uri: https://api-test.ksef.mf.gov.pl/v2/auth/challenge
-✅ SPRÁVNÉ URL!
+✅ CORRECT URL!
 ```
 
-## 📊 Statistika změn
+## 📊 Change Statistics
 
-| Typ změny | Počet |
-|-----------|-------|
-| Soubory upravené | 14 |
-| Nové soubory | 6 |
-| Smazané cassettes | 10 |
-| Nové cassettes | 1 |
-| Submodul aktualizován | 1 |
+| Change Type | Count |
+|-------------|-------|
+| Files modified | 14 |
+| New files | 6 |
+| Deleted cassettes | 10 |
+| New cassettes | 1 |
+| Submodule updated | 1 |
 
-### Git status
+### Git Status
 ```
-M  - Modified:  14 souborů
-A  - Added:      6 souborů
+M  - Modified:  14 files
+A  - Added:      6 files  
 D  - Deleted:   10 cassettes
- M - Submodule:  1 aktualizován
+ M - Submodule:  1 updated
 ```
 
-## 👥 Dopad na uživatele
+## 👥 Impact on Users
 
-### ✅ Žádné breaking changes
+### ✅ No Breaking Changes
 
-**Pro běžné uživatele:**
-- ❌ Není potřeba žádná akce
-- ✅ Gem automaticky používá správné URL
-- ✅ Kód funguje beze změn
+**For Regular Users:**
+- ❌ No action needed
+- ✅ Gem automatically uses correct URLs
+- ✅ Code works without changes
 
 ```ruby
-# Tento kód funguje stejně jako předtím
+# This code works the same as before
 client = KSEF.build do
   mode :test
   certificate_path 'cert.p12', 'password'
   identifier '1234567890'
 end
 
-# Automaticky používá: https://api-test.ksef.mf.gov.pl/v2
+# Automatically uses: https://api-test.ksef.mf.gov.pl/v2
 ```
 
-### ⚠️ Pro vývojáře (integrační testy)
+### ⚠️ For Developers (Integration Tests)
 
-Pokud chceš spouštět integrační testy:
-1. Získej KSeF token
-2. Nastav v `spec/integration/invoice_sending_spec.rb`
-3. Spusť testy - nahrajou se cassettes
+If you want to run integration tests:
+1. Get KSeF token
+2. Set in `spec/integration/invoice_sending_spec.rb`
+3. Run tests - cassettes will be recorded
 
-📘 [Detailní návod](docs/VCR_RECORDING_GUIDE.md)
+📘 [Detailed Guide](docs/VCR_RECORDING_GUIDE.md)
 
-## 📚 Dokumentace
+## 📚 Documentation
 
-### Hlavní dokumenty
-1. **[API_URL_MIGRATION.md](docs/API_URL_MIGRATION.md)** - Kompletní migrační průvodce
-2. **[VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)** - Návod pro cassettes
-3. **[SUBMODULE_UPDATE_2026-01-19.md](docs/SUBMODULE_UPDATE_2026-01-19.md)** - Aktualizace submodulu
-4. **[MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)** - Stručný souhrn
+### Main Documents
+1. **[API_URL_MIGRATION.md](docs/API_URL_MIGRATION.md)** - Complete migration guide
+2. **[VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)** - Guide for cassettes
+3. **[SUBMODULE_UPDATE_2026-01-19.md](docs/SUBMODULE_UPDATE_2026-01-19.md)** - Submodule update
+4. **[MIGRATION_SUMMARY.md](docs/MIGRATION_SUMMARY.md)** - Quick summary
 
-### Standardní dokumentace
-- [README.md](README.md) - Hlavní dokumentace
-- [QUICK_START.md](docs/QUICK_START.md) - Rychlý start
-- [CHANGELOG.md](docs/CHANGELOG.md) - Historie změn
+### Standard Documentation
+- [README.md](README.md) - Main documentation
+- [QUICK_START.md](docs/QUICK_START.md) - Quick start
+- [CHANGELOG.md](docs/CHANGELOG.md) - Change history
 
-## 🔍 Ověření
+## 🔍 Verification
 
-### Kód aplikace
+### Application Code
 ```ruby
 KSEF::ValueObjects::Mode.new(:test).default_url
 # => "https://api-test.ksef.mf.gov.pl/v2" ✅
@@ -139,56 +139,56 @@ $ grep "api-test.ksef.mf.gov.pl" spec/fixtures/vcr_cassettes/invoice_sending/*.y
 uri: https://api-test.ksef.mf.gov.pl/v2/auth/challenge ✅
 ```
 
-### Oficiální dokumentace
+### Official Documentation
 ```bash
 $ cat sources/ksef-docs-official/srodowiska.md | grep "api-test"
 https://api-test.ksef.mf.gov.pl/docs/v2 ✅
 ```
 
-## 📦 Verze
+## 📦 Versions
 
-| Komponenta | Předchozí | Nová |
-|------------|-----------|------|
-| API URL | deprecated | ✅ aktuální |
-| Submodul | 2.0.0-RC5.4 | ✅ 2.0.1 |
-| VCR Cassettes | staré URL | ✅ nové URL |
-| Dokumentace | - | ✅ kompletní |
+| Component | Previous | New |
+|-----------|----------|-----|
+| API URL | deprecated | ✅ current |
+| Submodule | 2.0.0-RC5.4 | ✅ 2.0.1 |
+| VCR Cassettes | old URLs | ✅ new URLs |
+| Documentation | - | ✅ complete |
 
 ## 🚀 Status
 
-| Komponenta | Status |
-|------------|--------|
-| Kód aplikace | ✅ Hotovo |
-| Unit testy | ✅ Fungují |
-| Integrační testy | ✅ Fungují |
-| VCR Cassettes | ✅ Nahrány |
-| Dokumentace | ✅ Kompletní |
-| Submodul | ✅ Aktualizován |
-| API kompatibilita | ✅ 100% |
+| Component | Status |
+|-----------|--------|
+| Application code | ✅ Done |
+| Unit tests | ✅ Working |
+| Integration tests | ✅ Working |
+| VCR Cassettes | ✅ Recorded |
+| Documentation | ✅ Complete |
+| Submodule | ✅ Updated |
+| API compatibility | ✅ 100% |
 
-## ✨ Výsledek
+## ✨ Result
 
 ### ✅ Production Ready
 
-Gem je **plně připraven k použití** s novými API URL:
-- ✅ Všechny testy prošly
-- ✅ Cassettes nahrány s novými URL
-- ✅ Oficiální dokumentace potvrzuje změny
-- ✅ Žádné breaking changes pro uživatele
-- ✅ Kompletní dokumentace vytvořena
+The gem is **fully ready for use** with new API URLs:
+- ✅ All tests passed
+- ✅ Cassettes recorded with new URLs
+- ✅ Official documentation confirms changes
+- ✅ No breaking changes for users
+- ✅ Complete documentation created
 
-## 📞 Podpora
+## 📞 Support
 
-Pro otázky nebo problémy viz:
+For questions or issues see:
 - 📘 [API URL Migration Guide](docs/API_URL_MIGRATION.md)
 - 📗 [VCR Recording Guide](docs/VCR_RECORDING_GUIDE.md)
 - 💬 GitHub Issues
 
 ---
 
-**Datum dokončení:** 19. ledna 2026, 17:00
-**Verze gemu:** 1.2.0+
-**API verze:** 2.0.1
-**Status:** ✅ **KOMPLETNÍ A TESTOVÁNO**
+**Completion Date:** January 19, 2026, 5:00 PM  
+**Gem Version:** 1.2.0+  
+**API Version:** 2.0.1  
+**Status:** ✅ **COMPLETE AND TESTED**
 
-**🎉 Migrace úspěšně dokončena!**
+**🎉 Migration successfully completed!**
