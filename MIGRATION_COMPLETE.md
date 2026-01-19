@@ -78,7 +78,7 @@ uri: https://api-test.ksef.mf.gov.pl/v2/auth/challenge
 ### Git Status
 ```
 M  - Modified:  14 files
-A  - Added:      6 files  
+A  - Added:      6 files
 D  - Deleted:   10 cassettes
  M - Submodule:  1 updated
 ```
@@ -186,9 +186,9 @@ For questions or issues see:
 
 ---
 
-**Completion Date:** January 19, 2026, 5:00 PM  
-**Gem Version:** 1.2.0+  
-**API Version:** 2.0.1  
+**Completion Date:** January 19, 2026, 5:00 PM
+**Gem Version:** 1.2.0+
+**API Version:** 2.0.1
 **Status:** ✅ **COMPLETE AND TESTED**
 
 **🎉 Migration successfully completed!**

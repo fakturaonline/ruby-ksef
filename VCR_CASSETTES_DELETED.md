@@ -1,6 +1,6 @@
 # ⚠️ VCR Cassettes Were Deleted
 
-**Date:** January 19, 2026, 4:56 PM  
+**Date:** January 19, 2026, 4:56 PM
 **Reason:** Migration to new KSeF API URLs
 
 ## What Happened
@@ -85,5 +85,5 @@ The following documents were created/updated:
 
 ---
 
-**For questions or issues, see:**  
+**For questions or issues, see:**
 📘 [docs/VCR_RECORDING_GUIDE.md](docs/VCR_RECORDING_GUIDE.md)

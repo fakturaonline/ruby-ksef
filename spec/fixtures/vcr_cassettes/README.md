@@ -48,6 +48,6 @@ grep -r "20260119-" .  # Should not find tokens
 
 ---
 
-**Deleted:** January 19, 2026, 4:56 PM  
-**Reason:** Migration to new API URLs  
+**Deleted:** January 19, 2026, 4:56 PM
+**Reason:** Migration to new API URLs
 **Status:** Ready to record
