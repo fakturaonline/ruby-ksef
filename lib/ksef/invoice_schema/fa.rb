@@ -6,7 +6,7 @@ module KSEF
     class Fa < BaseDTO
       include XMLSerializable
 
-      attr_reader :kod_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
+      attr_reader :kod_waluty, :kurs_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
                   :p_13_1, :p_14_1, :p_13_2, :p_14_2, :p_13_3, :p_14_3,
                   :p_13_4, :p_14_4, :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc,
                   :dane_fa_korygowanej
@@ -19,6 +19,7 @@ module KSEF
       # P_13_5 = základ osvobozené, P_14_5 = částka osvobozené
       #
       # @param kod_waluty [ValueObjects::KodWaluty] Kód měny
+      # @param kurs_waluty [Numeric, nil] Kurz měny (PLN za 1 jednotku cizí měny); povinné pokud KodWaluty != PLN
       # @param p_1 [Date, String] Datum vystavení
       # @param p_2 [String] Číslo faktury
       # @param p_15 [Numeric] Částka k zaplacení celkem
@@ -44,6 +45,7 @@ module KSEF
         p_1:,
         p_2:,
         p_15:,
+        kurs_waluty: nil,
         fa_wiersz: [],
         adnotacje: DTOs::Adnotacje.new,
         rodzaj_faktury: ValueObjects::RodzajFaktury.new,
@@ -63,6 +65,7 @@ module KSEF
         dane_fa_korygowanej: nil
       )
         @kod_waluty = kod_waluty.is_a?(ValueObjects::KodWaluty) ? kod_waluty : ValueObjects::KodWaluty.new(kod_waluty)
+        @kurs_waluty = kurs_waluty
         @p_1 = p_1.is_a?(String) ? Date.parse(p_1) : p_1
         @p_1m = p_1m
         @p_2 = p_2
@@ -86,12 +89,15 @@ module KSEF
         @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
       end
 
-      def to_rexml
+      def to_rexml # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
         doc = REXML::Document.new
         fa = doc.add_element("Fa")
 
         # KodWaluty
         add_element_if_present(fa, "KodWaluty", @kod_waluty)
+
+        # KursWaluty - kurz cizí měny (povinné pokud KodWaluty != PLN)
+        add_element_if_present(fa, "KursWaluty", format_decimal(@kurs_waluty)) if @kurs_waluty
 
         # P_1 - datum vystavení
         add_element_if_present(fa, "P_1", @p_1.strftime("%Y-%m-%d"))
@@ -160,6 +166,7 @@ module KSEF
       def self.from_nokogiri(element)
         new(
           kod_waluty: ValueObjects::KodWaluty.new(text_at(element, "KodWaluty")),
+          kurs_waluty: decimal_at(element, "KursWaluty"),
           p_1: date_at(element, "P_1"),
           p_1m: text_at(element, "P_1M"),
           p_2: text_at(element, "P_2"),
