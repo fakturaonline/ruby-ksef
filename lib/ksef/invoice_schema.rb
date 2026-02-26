@@ -23,6 +23,7 @@ require_relative "invoice_schema/dtos/rachunek_bankowy"
 require_relative "invoice_schema/dtos/termin_platnosci"
 require_relative "invoice_schema/dtos/platnosc"
 require_relative "invoice_schema/dtos/stopka"
+require_relative "invoice_schema/dtos/dane_fa_korygowanej"
 
 # Main components
 require_relative "invoice_schema/naglowek"

@@ -7,8 +7,9 @@ module KSEF
       include XMLSerializable
 
       attr_reader :kod_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
-                  :p_13_1, :p_14_1, :p_13_2, :p_14_2, :p_13_3, :p_14_3, 
-                  :p_13_4, :p_14_4, :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc
+                  :p_13_1, :p_14_1, :p_13_2, :p_14_2, :p_13_3, :p_14_3,
+                  :p_13_4, :p_14_4, :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc,
+                  :dane_fa_korygowanej
 
       # FA(3) format - správné názvy podle XSD:
       # P_13_1 = základ daně 23%, P_14_1 = DPH 23%
@@ -37,6 +38,7 @@ module KSEF
       # @param p_1m [String, nil] Místo vystavení
       # @param p_6 [Date, String, nil] Datum zdanitelného plnění (DUZP)
       # @param platnosc [DTOs::Platnosc, nil] Platební podmínky
+      # @param dane_fa_korygowanej [Array<DTOs::DaneFaKorygowanej>, DTOs::DaneFaKorygowanej, nil] Data původní faktury (KOR/KOR_ZAL/KOR_ROZ)
       def initialize(
         kod_waluty:,
         p_1:,
@@ -57,7 +59,8 @@ module KSEF
         p_14_5: nil,
         p_1m: nil,
         p_6: nil,
-        platnosc: nil
+        platnosc: nil,
+        dane_fa_korygowanej: nil
       )
         @kod_waluty = kod_waluty.is_a?(ValueObjects::KodWaluty) ? kod_waluty : ValueObjects::KodWaluty.new(kod_waluty)
         @p_1 = p_1.is_a?(String) ? Date.parse(p_1) : p_1
@@ -80,6 +83,7 @@ module KSEF
         @p_13_5 = p_13_5
         @p_14_5 = p_14_5
         @platnosc = platnosc
+        @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
       end
 
       def to_rexml
@@ -107,25 +111,25 @@ module KSEF
           add_element_if_present(fa, "P_13_1", format_decimal(@p_13_1)) if @p_13_1
           add_element_if_present(fa, "P_14_1", format_decimal(@p_14_1)) if @p_14_1
         end
-        
+
         # Sazba 8%
         if @p_13_2 || @p_14_2
           add_element_if_present(fa, "P_13_2", format_decimal(@p_13_2)) if @p_13_2
           add_element_if_present(fa, "P_14_2", format_decimal(@p_14_2)) if @p_14_2
         end
-        
+
         # Sazba 5%
         if @p_13_3 || @p_14_3
           add_element_if_present(fa, "P_13_3", format_decimal(@p_13_3)) if @p_13_3
           add_element_if_present(fa, "P_14_3", format_decimal(@p_14_3)) if @p_14_3
         end
-        
+
         # Sazba 0%
         if @p_13_4 || @p_14_4
           add_element_if_present(fa, "P_13_4", format_decimal(@p_13_4)) if @p_13_4
           add_element_if_present(fa, "P_14_4", format_decimal(@p_14_4)) if @p_14_4
         end
-        
+
         # Osvobozeno
         if @p_13_5 || @p_14_5
           add_element_if_present(fa, "P_13_5", format_decimal(@p_13_5)) if @p_13_5
@@ -140,6 +144,9 @@ module KSEF
 
         # RodzajFaktury
         add_element_if_present(fa, "RodzajFaktury", @rodzaj_faktury)
+
+        # DaneFaKorygowanej - data původní faktury (KOR/KOR_ZAL/KOR_ROZ)
+        add_child_elements(fa, @dane_fa_korygowanej)
 
         # FaWiersz - položky
         add_child_elements(fa, @fa_wiersz)
@@ -171,7 +178,8 @@ module KSEF
           adnotacje: object_at(element, "Adnotacje", DTOs::Adnotacje) || DTOs::Adnotacje.new,
           rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
           fa_wiersz: array_at(element, "FaWiersz", DTOs::FaWiersz),
-          platnosc: object_at(element, "Platnosc", DTOs::Platnosc)
+          platnosc: object_at(element, "Platnosc", DTOs::Platnosc),
+          dane_fa_korygowanej: array_at(element, "DaneFaKorygowanej", DTOs::DaneFaKorygowanej)
         )
       end
 
