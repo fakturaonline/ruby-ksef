@@ -15,7 +15,8 @@ module KSEF
       class Adnotacje < BaseDTO
         include XMLSerializable
 
-        attr_reader :p_16, :p_17, :p_18, :p_18a, :p_19n, :p_22n, :p_23, :p_pmarzy_n
+        attr_reader :p_16, :p_17, :p_18, :p_18a, :p_19n, :p_22n, :p_23,
+                    :p_pmarzy_n, :p_pmarzy_m, :p_pmarzy_t
 
         # @param p_16 [Integer] Metoda kasowa: 1=ano, 2=ne (default: 2)
         # @param p_17 [Integer] Samofakturowanie: 1=ano, 2=ne (default: 2)
@@ -24,16 +25,21 @@ module KSEF
         # @param p_19n [Integer] Není zwolnienie: 1 (default for normal VAT)
         # @param p_22n [Integer] Nejsou nové vozidla: 1 (default)
         # @param p_23 [Integer] Není procedura uproszczona: 2 (default)
-        # @param p_pmarzy_n [Integer] Není marže: 1 (default)
+        # PMarzy choice — exactly one must be set:
+        # @param p_pmarzy_n [Integer, nil] Není marže: 1 (default — not margin scheme)
+        # @param p_pmarzy_m [Integer, nil] Marže art. 119 (cestovní kancelář): 1
+        # @param p_pmarzy_t [Integer, nil] Marže art. 120 (použité zboží, umění, sběratelství): 1
         def initialize(
-          p_16: 2,        # Není metoda kasowa
-          p_17: 2,        # Není samofakturowanie
-          p_18: 2,        # Není odwrotné obciążení
-          p_18a: 2,       # Není split payment
-          p_19n: 1,       # Není zwolnienie (normal VAT)
-          p_22n: 1,       # Nejsou nové vozidla
-          p_23: 2,        # Není procedura uproszczona
-          p_pmarzy_n: 1   # Není marže
+          p_16: 2,
+          p_17: 2,
+          p_18: 2,
+          p_18a: 2,
+          p_19n: 1,
+          p_22n: 1,
+          p_23: 2,
+          p_pmarzy_n: nil,
+          p_pmarzy_m: nil,
+          p_pmarzy_t: nil
         )
           @p_16 = p_16 || 2
           @p_17 = p_17 || 2
@@ -42,7 +48,11 @@ module KSEF
           @p_19n = p_19n || 1
           @p_22n = p_22n || 1
           @p_23 = p_23 || 2
-          @p_pmarzy_n = p_pmarzy_n || 1
+          @p_pmarzy_n = p_pmarzy_n
+          @p_pmarzy_m = p_pmarzy_m
+          @p_pmarzy_t = p_pmarzy_t
+          # Default to N (not margin) when none explicitly specified
+          @p_pmarzy_n = 1 if @p_pmarzy_n.nil? && @p_pmarzy_m.nil? && @p_pmarzy_t.nil?
 
           validate!
         end
@@ -76,14 +86,21 @@ module KSEF
           # 7. P_23 - Procedura uproszczona
           add_element_if_present(adnotacje, "P_23", @p_23)
 
-          # 8. PMarzy - POVINNÉ! (choice: P_PMarzy+... nebo P_PMarzyN)
+          # 8. PMarzy - POVINNÉ! (choice: P_PMarzyN / P_PMarzyM / P_PMarzyT)
           pmarzy = adnotacje.add_element("PMarzy")
-          add_element_if_present(pmarzy, "P_PMarzyN", @p_pmarzy_n)
+          if @p_pmarzy_m
+            add_element_if_present(pmarzy, "P_PMarzyM", @p_pmarzy_m)
+          elsif @p_pmarzy_t
+            add_element_if_present(pmarzy, "P_PMarzyT", @p_pmarzy_t)
+          else
+            add_element_if_present(pmarzy, "P_PMarzyN", @p_pmarzy_n)
+          end
 
           doc
         end
 
         def self.from_nokogiri(element)
+          pmarzy_el = element.at_xpath("PMarzy")
           new(
             p_16: text_at(element, "P_16")&.to_i || 2,
             p_17: text_at(element, "P_17")&.to_i || 2,
@@ -92,7 +109,9 @@ module KSEF
             p_19n: text_at(element.at_xpath("Zwolnienie"), "P_19N")&.to_i || 1,
             p_22n: text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
             p_23: text_at(element, "P_23")&.to_i || 2,
-            p_pmarzy_n: text_at(element.at_xpath("PMarzy"), "P_PMarzyN")&.to_i || 1
+            p_pmarzy_n: text_at(pmarzy_el, "P_PMarzyN")&.to_i,
+            p_pmarzy_m: text_at(pmarzy_el, "P_PMarzyM")&.to_i,
+            p_pmarzy_t: text_at(pmarzy_el, "P_PMarzyT")&.to_i
           )
         end
 
@@ -106,7 +125,9 @@ module KSEF
           raise ArgumentError, "p_19n is required and must be 1" unless @p_19n == 1
           raise ArgumentError, "p_22n is required and must be 1" unless @p_22n == 1
           raise ArgumentError, "p_23 is required and must be 1 or 2" unless [1, 2].include?(@p_23)
-          raise ArgumentError, "p_pmarzy_n is required and must be 1" unless @p_pmarzy_n == 1
+
+          pmarzy_set = [@p_pmarzy_n, @p_pmarzy_m, @p_pmarzy_t].count { |v| v == 1 }
+          raise ArgumentError, "Exactly one PMarzy flag must be set to 1" unless pmarzy_set == 1
         end
       end
     end
