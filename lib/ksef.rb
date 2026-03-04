@@ -23,7 +23,8 @@ loader.inflector.inflect(
   "csr"              => "CSR",
   "csr_factory"      => "CSRFactory",
   "base_dto"         => "BaseDTO",
-  "xml_serializable" => "XMLSerializable"
+  "xml_serializable" => "XMLSerializable",
+  "dtos"             => "DTOs"
 )
 loader.push_dir File.expand_path("ksef", __dir__), namespace: KSEF
 loader.setup
