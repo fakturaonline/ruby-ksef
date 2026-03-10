@@ -24,12 +24,8 @@ module KSEF
           doc = REXML::Document.new
           rachunek = doc.add_element("RachunekBankowy")
 
-          # IBAN nebo NrRB podle formátu
-          if @nr_rb =~ /^[A-Z]{2}\d{2}/
-            add_element_if_present(rachunek, "NrRBIBAN", @nr_rb)
-          else
-            add_element_if_present(rachunek, "NrRB", @nr_rb)
-          end
+          # FA(3) XSD: always NrRB regardless of format (IBAN or local account)
+          add_element_if_present(rachunek, "NrRB", @nr_rb)
 
           add_element_if_present(rachunek, "SWIFT", @swift)
           add_element_if_present(rachunek, "NazwaBanku", @nazwa_banku)
