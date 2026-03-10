@@ -202,6 +202,41 @@ ruby bin/generate_test_cert.rb -t organization -n 9876543210 --name "Company Ltd
 ruby bin/generate_test_cert.rb -h
 ```
 
+## Signing AuthTokenRequest XML (manual upload flow)
+
+Some integrations (e.g. web apps with a "Upload signed XML" step) need to sign
+the `AuthTokenRequest` XML locally and upload the result. Use `bin/sign_auth_xml.rb`:
+
+### 1. Generate a certificate for your NIP
+
+```bash
+ruby bin/generate_test_cert.rb \
+  -t person \
+  -n 7841052826 \
+  --name "Jan Kowalski" \
+  -k rsa \
+  -o cert.p12 \
+  -p password
+```
+
+### 2. Sign the downloaded AuthTokenRequest XML
+
+```bash
+ruby bin/sign_auth_xml.rb \
+  --input ~/Downloads/ksef_auth_request.xml \
+  --output ~/Downloads/ksef_auth_request.signed.xml \
+  --p12 cert.p12 \
+  --password password
+```
+
+Upload the resulting `ksef_auth_request.signed.xml` via the KSeF UI ("Wgraj podpisany XML").
+
+> **Note:** The Challenge in the XML expires (~15 min). If KSeF rejects the upload,
+> download a fresh XML and re-run step 2.
+
+> **Security:** Never commit `.p12` files to git — they contain private keys.
+> Each developer should generate their own certificate with their NIP.
+
 ## Project Structure
 
 ```
@@ -215,7 +250,8 @@ ruby-ksef/
 │   ├── CHANGELOG.md        # Version history
 │   └── FILES_OVERVIEW.md   # File structure
 ├── bin/
-│   └── generate_test_cert.rb  # Certificate generator
+│   ├── generate_test_cert.rb  # Certificate generator
+│   └── sign_auth_xml.rb       # Sign AuthTokenRequest XML with XAdES
 ├── examples/
 │   └── simple_authentication.rb  # Example usage
 └── lib/ksef/

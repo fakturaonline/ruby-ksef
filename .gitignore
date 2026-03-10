@@ -63,3 +63,6 @@ Gemfile.lock
 *~
 
 ksef-php-client/*
+
+# Local test certificates (contain private keys — generate your own with bin/generate_test_cert.rb)
+*.p12
