@@ -109,9 +109,6 @@ module KSEF
         # KodWaluty
         add_element_if_present(fa, "KodWaluty", @kod_waluty)
 
-        # KursWaluty - kurz cizí měny (povinné pokud KodWaluty != PLN); přesnost 6 des. míst
-        add_element_if_present(fa, "KursWaluty", format_rate(@kurs_waluty)) if @kurs_waluty
-
         # P_1 - datum vystavení
         add_element_if_present(fa, "P_1", @p_1.strftime("%Y-%m-%d"))
 
@@ -123,6 +120,10 @@ module KSEF
 
         # P_6 - datum zdanitelného plnění (DUZP)
         add_element_if_present(fa, "P_6", @p_6.strftime("%Y-%m-%d")) if @p_6
+
+        # KursWaluty - kurz cizí měny (povinné pokud KodWaluty != PLN); přesnost 6 des. míst
+        # FA(3) XSD: KursWaluty must come AFTER P_6, not after KodWaluty
+        add_element_if_present(fa, "KursWaluty", format_rate(@kurs_waluty)) if @kurs_waluty
 
         # FA(3): Každá sazba DPH jako skupina (P_13_X + P_14_X)
         # Sazba 23%
