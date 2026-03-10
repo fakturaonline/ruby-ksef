@@ -159,9 +159,9 @@ module KSEF
         # P_15 - částka celkem
         add_element_if_present(fa, "P_15", format_decimal(@p_15))
 
-        # KursWaluty - kurz cizí měny (povinné pokud KodWaluty != PLN); přesnost 6 des. míst
-        # FA(3) XSD: KursWaluty must come AFTER P_15, before Adnotacje
-        add_element_if_present(fa, "KursWaluty", format_rate(@kurs_waluty)) if @kurs_waluty
+        # KursWalutyZ - kurz cizí měny (povinné pokud KodWaluty != PLN); přesnost 6 des. míst
+        # FA(3) XSD: element name is KursWalutyZ (not KursWaluty), comes after P_15, before Adnotacje
+        add_element_if_present(fa, "KursWalutyZ", format_rate(@kurs_waluty)) if @kurs_waluty
 
         # Adnotacje
         add_child_element(fa, @adnotacje)
@@ -184,7 +184,7 @@ module KSEF
       def self.from_nokogiri(element)
         new(
           kod_waluty: ValueObjects::KodWaluty.new(text_at(element, "KodWaluty")),
-          kurs_waluty: decimal_at(element, "KursWaluty"),
+          kurs_waluty: decimal_at(element, "KursWalutyZ"),
           p_1: date_at(element, "P_1"),
           p_1m: text_at(element, "P_1M"),
           p_2: text_at(element, "P_2"),
