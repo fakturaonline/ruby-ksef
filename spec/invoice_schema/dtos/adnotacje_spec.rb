@@ -42,6 +42,30 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adnotacje do
       expect(xml).to include("<P_17>2</P_17>")
     end
 
+    it "generates correct PMarzy XML for art. 120 margin (p_pmarzy_t)" do
+      adnotacje = described_class.new(p_pmarzy_t: 1)
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<PMarzy>")
+      expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
+      expect(xml).to include("<P_PMarzy_3_1>1</P_PMarzy_3_1>")
+      expect(xml).not_to include("P_PMarzyT")
+      expect(xml).not_to include("P_PMarzyN")
+    end
+
+    it "generates correct PMarzy XML for art. 119 travel agency margin (p_pmarzy_m)" do
+      adnotacje = described_class.new(p_pmarzy_m: 1)
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<PMarzy>")
+      expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
+      expect(xml).to include("<P_PMarzy_2>1</P_PMarzy_2>")
+      expect(xml).not_to include("P_PMarzyM")
+      expect(xml).not_to include("P_PMarzyN")
+    end
+
     it "does not include false boolean fields" do
       adnotacje = described_class.new(
         p_16: 2,   # Ne
