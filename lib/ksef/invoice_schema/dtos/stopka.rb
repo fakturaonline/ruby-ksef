@@ -26,14 +26,14 @@ module KSEF
 
           @informacje.each do |info|
             info_elem = stopka.add_element("Informacje")
-            info_elem.add_element("StInformacje").text = info.to_s
+            info_elem.add_element("StopkaFaktury").text = info.to_s
           end
 
           doc
         end
 
         def self.from_nokogiri(element)
-          informacje = element.xpath("Informacje/StInformacje").map(&:text)
+          informacje = element.xpath("Informacje/StopkaFaktury").map(&:text)
           new(informacje: informacje)
         end
       end

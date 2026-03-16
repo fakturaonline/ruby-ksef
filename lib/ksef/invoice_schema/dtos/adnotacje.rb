@@ -96,12 +96,18 @@ module KSEF
           # 7. P_23 - Procedura uproszczona
           add_element_if_present(adnotacje, "P_23", @p_23)
 
-          # 8. PMarzy - POVINNÉ! (choice: P_PMarzyN / P_PMarzyM / P_PMarzyT)
+          # 8. PMarzy - POVINNÉ! (choice: P_PMarzyN / sequence of P_PMarzy + sub-type)
+          # FA(3) XSD: P_PMarzy=1 (marker) + one of P_PMarzy_2 (art.119 travel) / P_PMarzy_3_1/3_2/3_3 (art.120)
+          # OR P_PMarzyN=1 (not margin)
           pmarzy = adnotacje.add_element("PMarzy")
           if @p_pmarzy_m
-            add_element_if_present(pmarzy, "P_PMarzyM", @p_pmarzy_m)
+            # Art. 119 - travel agency margin (procedura marży dla biur podróży)
+            add_element_if_present(pmarzy, "P_PMarzy", 1)
+            add_element_if_present(pmarzy, "P_PMarzy_2", 1)
           elsif @p_pmarzy_t
-            add_element_if_present(pmarzy, "P_PMarzyT", @p_pmarzy_t)
+            # Art. 120 - used goods margin (procedura marży - towary używane)
+            add_element_if_present(pmarzy, "P_PMarzy", 1)
+            add_element_if_present(pmarzy, "P_PMarzy_3_1", 1)
           else
             add_element_if_present(pmarzy, "P_PMarzyN", @p_pmarzy_n)
           end
@@ -122,8 +128,8 @@ module KSEF
             p_22n: text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
             p_23: text_at(element, "P_23")&.to_i || 2,
             p_pmarzy_n: text_at(pmarzy_el, "P_PMarzyN")&.to_i,
-            p_pmarzy_m: text_at(pmarzy_el, "P_PMarzyM")&.to_i,
-            p_pmarzy_t: text_at(pmarzy_el, "P_PMarzyT")&.to_i
+            p_pmarzy_m: text_at(pmarzy_el, "P_PMarzy_2")&.to_i,
+            p_pmarzy_t: text_at(pmarzy_el, "P_PMarzy_3_1") || text_at(pmarzy_el, "P_PMarzy_3_2") || text_at(pmarzy_el, "P_PMarzy_3_3") ? 1 : nil
           )
         end
 

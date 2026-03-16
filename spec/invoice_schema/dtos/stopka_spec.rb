@@ -13,7 +13,7 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Stopka do
 
       expect(xml).to include("<Stopka>")
       expect(xml).to include("<Informacje>")
-      expect(xml).to include("<StInformacje>Faktura vystavena elektronicky</StInformacje>")
+      expect(xml).to include("<StopkaFaktury>Faktura vystavena elektronicky</StopkaFaktury>")
     end
 
     it "generates XML with multiple infos" do
