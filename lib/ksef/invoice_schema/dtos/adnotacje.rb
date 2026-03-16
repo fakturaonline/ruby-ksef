@@ -15,7 +15,7 @@ module KSEF
       class Adnotacje < BaseDTO
         include XMLSerializable
 
-        attr_reader :p_16, :p_17, :p_18, :p_18a, :p_19n, :p_20, :p_22n, :p_23,
+        attr_reader :p_16, :p_17, :p_18, :p_18a, :p_19n, :p_19, :p_19a, :p_22n, :p_23,
                     :p_pmarzy_n, :p_pmarzy_m, :p_pmarzy_t
 
         # @param p_16 [Integer] Metoda kasowa: 1=ano, 2=ne (default: 2)
@@ -24,7 +24,8 @@ module KSEF
         # @param p_18a [Integer] Mechanizm podzielonej płatności: 1=ano, 2=ne (default: 2)
         # Zwolnienie choice — exactly one must be set:
         # @param p_19n [Integer, nil] Není zwolnienie: 1 (default — normal VAT invoice)
-        # @param p_20 [Integer, nil] Zwolnienie podmiotowe art. 113: 1 (non-VAT-registered seller)
+        # @param p_19 [Integer, nil] Zwolnienie przedmiotowe: 1 (object/subject VAT exemption)
+        # @param p_19a [String, nil] Legal basis for p_19 (e.g. "art. 113 ust. 1 ustawy")
         # @param p_22n [Integer] Nejsou nové vozidla: 1 (default)
         # @param p_23 [Integer] Není procedura uproszczona: 2 (default)
         # PMarzy choice — exactly one must be set:
@@ -37,7 +38,8 @@ module KSEF
           p_18: 2,
           p_18a: 2,
           p_19n: nil,
-          p_20: nil,
+          p_19: nil,
+          p_19a: nil,
           p_22n: 1,
           p_23: 2,
           p_pmarzy_n: nil,
@@ -49,9 +51,10 @@ module KSEF
           @p_18 = p_18 || 2
           @p_18a = p_18a || 2
           @p_19n = p_19n
-          @p_20 = p_20
+          @p_19 = p_19
+          @p_19a = p_19a
           # Default to P_19N=1 (normal VAT) when no Zwolnienie option specified
-          @p_19n = 1 if @p_19n.nil? && @p_20.nil?
+          @p_19n = 1 if @p_19n.nil? && @p_19.nil?
           @p_22n = p_22n || 1
           @p_23 = p_23 || 2
           @p_pmarzy_n = p_pmarzy_n
@@ -81,10 +84,13 @@ module KSEF
           # 4. P_18A - Mechanizm podzielonej płatności
           add_element_if_present(adnotacje, "P_18A", @p_18a)
 
-          # 5. Zwolnienie - POVINNÉ! (choice: P_19N nebo P_20 nebo P_21)
+          # 5. Zwolnienie - POVINNÉ! (choice: P_19+P_19A/B/C nebo P_19N)
+          # FA(3) XSD: Zwolnienie accepts only P_19 (with P_19A/B/C) or P_19N.
+          # P_20 does NOT exist inside Zwolnienie — use P_19+P_19A for art.113 exemptions.
           zwolnienie = adnotacje.add_element("Zwolnienie")
-          if @p_20
-            add_element_if_present(zwolnienie, "P_20", @p_20)
+          if @p_19
+            add_element_if_present(zwolnienie, "P_19", @p_19)
+            add_element_if_present(zwolnienie, "P_19A", @p_19a)
           else
             add_element_if_present(zwolnienie, "P_19N", @p_19n)
           end
@@ -119,14 +125,15 @@ module KSEF
           zwolnienie_el = element.at_xpath("Zwolnienie")
           pmarzy_el = element.at_xpath("PMarzy")
           new(
-            p_16: text_at(element, "P_16")&.to_i || 2,
-            p_17: text_at(element, "P_17")&.to_i || 2,
-            p_18: text_at(element, "P_18")&.to_i || 2,
-            p_18a: text_at(element, "P_18A")&.to_i || 2,
-            p_19n: text_at(zwolnienie_el, "P_19N")&.to_i,
-            p_20: text_at(zwolnienie_el, "P_20")&.to_i,
-            p_22n: text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
-            p_23: text_at(element, "P_23")&.to_i || 2,
+            p_16:       text_at(element, "P_16")&.to_i || 2,
+            p_17:       text_at(element, "P_17")&.to_i || 2,
+            p_18:       text_at(element, "P_18")&.to_i || 2,
+            p_18a:      text_at(element, "P_18A")&.to_i || 2,
+            p_19n:      text_at(zwolnienie_el, "P_19N")&.to_i,
+            p_19:       text_at(zwolnienie_el, "P_19")&.to_i,
+            p_19a:      text_at(zwolnienie_el, "P_19A"),
+            p_22n:      text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
+            p_23:       text_at(element, "P_23")&.to_i || 2,
             p_pmarzy_n: text_at(pmarzy_el, "P_PMarzyN")&.to_i,
             p_pmarzy_m: text_at(pmarzy_el, "P_PMarzy_2")&.to_i,
             p_pmarzy_t: text_at(pmarzy_el, "P_PMarzy_3_1") || text_at(pmarzy_el, "P_PMarzy_3_2") || text_at(pmarzy_el, "P_PMarzy_3_3") ? 1 : nil
@@ -143,8 +150,8 @@ module KSEF
           raise ArgumentError, "p_22n is required and must be 1" unless @p_22n == 1
           raise ArgumentError, "p_23 is required and must be 1 or 2" unless [1, 2].include?(@p_23)
 
-          zwolnienie_set = [@p_19n, @p_20].count { |v| v == 1 }
-          raise ArgumentError, "Exactly one Zwolnienie option (p_19n or p_20) must be set to 1" unless zwolnienie_set == 1
+          zwolnienie_set = [@p_19n, @p_19].count { |v| v == 1 }
+          raise ArgumentError, "Exactly one Zwolnienie option (p_19n or p_19) must be set to 1" unless zwolnienie_set == 1
 
           pmarzy_set = [@p_pmarzy_n, @p_pmarzy_m, @p_pmarzy_t].count { |v| v == 1 }
           raise ArgumentError, "Exactly one PMarzy flag must be set to 1" unless pmarzy_set == 1

@@ -66,6 +66,18 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adnotacje do
       expect(xml).not_to include("P_PMarzyN")
     end
 
+    it "generates correct Zwolnienie XML for non-VAT seller (art. 113 exemption)" do
+      adnotacje = described_class.new(p_19: 1, p_19a: "art. 113 ust. 1 ustawy")
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<Zwolnienie>")
+      expect(xml).to include("<P_19>1</P_19>")
+      expect(xml).to include("<P_19A>art. 113 ust. 1 ustawy</P_19A>")
+      expect(xml).not_to include("P_19N")
+      expect(xml).not_to include("P_20")
+    end
+
     it "does not include false boolean fields" do
       adnotacje = described_class.new(
         p_16: 2,   # Ne
