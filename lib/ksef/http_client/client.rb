@@ -89,8 +89,12 @@ module KSEF
           "Accept" => "application/json"
         }
 
-        # Add authorization header if access token exists
-        headers["Authorization"] = "Bearer #{@config.access_token.token}" if @config.access_token
+        # Add authorization header — Bearer for normal calls, RefreshToken for token refresh
+        if @config.access_token
+          headers["Authorization"] = "Bearer #{@config.access_token.token}"
+        elsif @config.refresh_token
+          headers["Authorization"] = "RefreshToken #{@config.refresh_token.token}"
+        end
 
         # Add encrypted key header if exists
         headers["EncryptedKey"] = @config.encrypted_key.to_s if @config.encrypted_key
@@ -117,6 +121,8 @@ module KSEF
         # Log Authorization header status
         if @config.access_token
           @config.logger.debug("Authorization: Bearer #{@config.access_token.token[0..30]}...")
+        elsif @config.refresh_token
+          @config.logger.debug("Authorization: RefreshToken #{@config.refresh_token.token[0..30]}...")
         else
           @config.logger.debug("Authorization: NONE")
         end
