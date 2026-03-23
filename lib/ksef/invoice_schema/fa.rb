@@ -9,7 +9,7 @@ module KSEF
       attr_reader :kod_waluty, :kurs_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
                   :p_13_1, :p_14_1, :p_14_1w, :p_13_2, :p_14_2, :p_14_2w,
                   :p_13_3, :p_14_3, :p_14_3w, :p_13_4, :p_14_4, :p_14_4w,
-                  :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc,
+                  :p_13_5, :p_14_5, :p_13_11, :p_1m, :p_6, :platnosc,
                   :dane_fa_korygowanej
 
       # FA(3) format - správné názvy podle XSD:
@@ -41,6 +41,7 @@ module KSEF
       # @param p_14_4w [Numeric, nil] DPH 0% v PLN
       # @param p_13_5 [Numeric, nil] Základ osvobozený
       # @param p_14_5 [Numeric, nil] Částka osvobozená
+      # @param p_13_11 [Numeric, nil] Suma hodnoty prodeje v proceduře marže (art. 119 a art. 120 ustawy)
       # @param p_1m [String, nil] Místo vystavení
       # @param p_6 [Date, String, nil] Datum zdanitelného plnění (DUZP)
       # @param platnosc [DTOs::Platnosc, nil] Platební podmínky
@@ -68,6 +69,7 @@ module KSEF
         p_14_4w: nil,
         p_13_5: nil,
         p_14_5: nil,
+        p_13_11: nil,
         p_1m: nil,
         p_6: nil,
         platnosc: nil,
@@ -98,6 +100,7 @@ module KSEF
         @p_14_4w = p_14_4w
         @p_13_5  = p_13_5
         @p_14_5  = p_14_5
+        @p_13_11 = p_13_11
         @platnosc = platnosc
         @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
       end
@@ -156,6 +159,9 @@ module KSEF
           add_element_if_present(fa, "P_14_5", format_decimal(@p_14_5)) if @p_14_5
         end
 
+        # P_13_11 - suma hodnoty prodeje v proceduře marže (art. 119 a art. 120 ustawy)
+        add_element_if_present(fa, "P_13_11", format_decimal(@p_13_11)) if @p_13_11
+
         # P_15 - částka celkem
         add_element_if_present(fa, "P_15", format_decimal(@p_15))
 
@@ -189,20 +195,21 @@ module KSEF
           p_1m: text_at(element, "P_1M"),
           p_2: text_at(element, "P_2"),
           p_6: date_at(element, "P_6"),
-          p_13_1:  decimal_at(element, "P_13_1"),
-          p_14_1:  decimal_at(element, "P_14_1"),
+          p_13_1: decimal_at(element, "P_13_1"),
+          p_14_1: decimal_at(element, "P_14_1"),
           p_14_1w: decimal_at(element, "P_14_1W"),
-          p_13_2:  decimal_at(element, "P_13_2"),
-          p_14_2:  decimal_at(element, "P_14_2"),
+          p_13_2: decimal_at(element, "P_13_2"),
+          p_14_2: decimal_at(element, "P_14_2"),
           p_14_2w: decimal_at(element, "P_14_2W"),
-          p_13_3:  decimal_at(element, "P_13_3"),
-          p_14_3:  decimal_at(element, "P_14_3"),
+          p_13_3: decimal_at(element, "P_13_3"),
+          p_14_3: decimal_at(element, "P_14_3"),
           p_14_3w: decimal_at(element, "P_14_3W"),
-          p_13_4:  decimal_at(element, "P_13_4"),
-          p_14_4:  decimal_at(element, "P_14_4"),
+          p_13_4: decimal_at(element, "P_13_4"),
+          p_14_4: decimal_at(element, "P_14_4"),
           p_14_4w: decimal_at(element, "P_14_4W"),
-          p_13_5:  decimal_at(element, "P_13_5"),
-          p_14_5:  decimal_at(element, "P_14_5"),
+          p_13_5: decimal_at(element, "P_13_5"),
+          p_14_5: decimal_at(element, "P_14_5"),
+          p_13_11: decimal_at(element, "P_13_11"),
           p_15: decimal_at(element, "P_15"),
           adnotacje: object_at(element, "Adnotacje", DTOs::Adnotacje) || DTOs::Adnotacje.new,
           rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
