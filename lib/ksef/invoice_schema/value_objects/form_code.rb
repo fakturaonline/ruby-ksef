@@ -13,7 +13,8 @@ module KSEF
 
         attr_reader :value
 
-        def initialize(value = 3)  # Default FA(3) for KSeF 2.0 API
+        # Default FA(3) for KSeF 2.0 API
+        def initialize(value = 3)
           # Accept integer or string
           @value = case value
                    when 2, "2", FA2, "FA(2)" then FA2  # Akceptuje i bez mezery pro BC

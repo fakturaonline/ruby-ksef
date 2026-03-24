@@ -120,7 +120,7 @@ RSpec.describe KSEF::Actions::ZipDocuments do
       it "handles binary content correctly" do
         documents = [
           (0..255).to_a.pack("C*"),
-          (255.downto(0)).to_a.pack("C*")
+          255.downto(0).to_a.pack("C*")
         ]
         result = action.call(documents)
 

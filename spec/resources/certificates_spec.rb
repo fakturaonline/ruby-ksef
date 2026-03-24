@@ -3,8 +3,9 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Certificates do
-  let(:http_client) { instance_double(KSEF::HttpClient) }
   subject(:certificates) { described_class.new(http_client) }
+
+  let(:http_client) { instance_double(KSEF::HttpClient) }
 
   describe "#enrollment_data" do
     it "calls EnrollmentDataHandler" do
@@ -48,7 +49,7 @@ RSpec.describe KSEF::Resources::Certificates do
 
   describe "#retrieve" do
     it "calls RetrieveHandler with serial numbers" do
-      serial_numbers = ["123456", "789012"]
+      serial_numbers = %w[123456 789012]
       handler = instance_double(KSEF::Requests::Certificates::RetrieveHandler)
       allow(KSEF::Requests::Certificates::RetrieveHandler).to receive(:new).with(http_client).and_return(handler)
       allow(handler).to receive(:call).with(serial_numbers).and_return({ certificates: [] })

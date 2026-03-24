@@ -3,7 +3,7 @@
 RSpec.describe KSEF::ValueObjects::AccessToken do
   describe "#initialize" do
     it "accepts token and expiration" do
-      expires_at = Time.now + 3600
+      expires_at = Time.zone.now + 3600
       token = described_class.new(token: "test_token", expires_at: expires_at)
 
       expect(token.token).to eq "test_token"
@@ -29,7 +29,7 @@ RSpec.describe KSEF::ValueObjects::AccessToken do
     it "returns false for future expiration" do
       token = described_class.new(
         token: "test_token",
-        expires_at: Time.now + 3600
+        expires_at: Time.zone.now + 3600
       )
       expect(token.expired?).to be false
     end
@@ -37,7 +37,7 @@ RSpec.describe KSEF::ValueObjects::AccessToken do
     it "returns true for past expiration" do
       token = described_class.new(
         token: "test_token",
-        expires_at: Time.now - 3600
+        expires_at: Time.zone.now - 3600
       )
       expect(token.expired?).to be true
     end
@@ -45,7 +45,7 @@ RSpec.describe KSEF::ValueObjects::AccessToken do
     it "considers buffer time" do
       token = described_class.new(
         token: "test_token",
-        expires_at: Time.now + 30
+        expires_at: Time.zone.now + 30
       )
       expect(token.expired?(buffer: 60)).to be true
       expect(token.expired?(buffer: 10)).to be false

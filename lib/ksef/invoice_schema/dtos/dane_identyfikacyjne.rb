@@ -57,9 +57,7 @@ module KSEF
           end
 
           # Optional Nazwa (required for Podmiot1, optional for Podmiot2)
-          if @nazwa
-            add_element_if_present(dane, "Nazwa", @nazwa)
-          end
+          add_element_if_present(dane, "Nazwa", @nazwa) if @nazwa
 
           doc
         end
@@ -84,9 +82,9 @@ module KSEF
           raise ArgumentError, "Must specify exactly one identifier (NIP, KodUE+NrVatUE, NrID, or BrakID)" if identifiers.empty?
 
           # KodUE and NrVatUE must go together
-          if (@kod_ue && !@nr_vat_ue) || (!@kod_ue && @nr_vat_ue)
-            raise ArgumentError, "KodUE and NrVatUE must be specified together"
-          end
+          return unless (@kod_ue && !@nr_vat_ue) || (!@kod_ue && @nr_vat_ue)
+
+          raise ArgumentError, "KodUE and NrVatUE must be specified together"
         end
       end
     end

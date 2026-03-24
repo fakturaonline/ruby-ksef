@@ -11,15 +11,15 @@ RSpec.describe KSEF::ValueObjects::CertificatePath do
     end
 
     it "validates path exists" do
-      expect {
+      expect do
         described_class.new(path: "/nonexistent/path.pem", passphrase: "pass")
-      }.to raise_error(KSEF::ValidationError, /does not exist/)
+      end.to raise_error(KSEF::ValidationError, /does not exist/)
     end
 
     it "validates passphrase is not nil" do
-      expect {
+      expect do
         described_class.new(path: __FILE__, passphrase: nil)
-      }.to raise_error(KSEF::ValidationError, /Passphrase cannot be nil/)
+      end.to raise_error(KSEF::ValidationError, /Passphrase cannot be nil/)
     end
   end
 

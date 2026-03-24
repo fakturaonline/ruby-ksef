@@ -64,31 +64,31 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.configure_rspec_metadata!
   config.allow_http_connections_when_no_cassette = false
-  
+
   # Filter sensitive data
-  config.filter_sensitive_data("<KSEF_TOKEN>") { |interaction|
-    if interaction.request.headers["Sessiontoken"]
-      interaction.request.headers["Sessiontoken"].first
-    end
-  }
-  
+  config.filter_sensitive_data("<KSEF_TOKEN>") do |interaction|
+    interaction.request.headers["Sessiontoken"]&.first
+  end
+
   config.filter_sensitive_data("<KSEF_TOKEN>") do |interaction|
     # Filter token from request body
     if interaction.request.body.include?("ksefToken")
-      interaction.request.body.match(/"ksefToken":\s*"([^"]+)"/)[1] rescue nil
+      begin
+        interaction.request.body.match(/"ksefToken":\s*"([^"]+)"/)[1]
+      rescue StandardError
+        nil
+      end
     end
   end
-  
+
   config.filter_sensitive_data("<NIP>") do |interaction|
     # Filter NIP from URLs
-    if interaction.request.uri.include?("7980332920")
-      "7980332920"
-    end
+    "7980332920" if interaction.request.uri.include?("7980332920")
   end
-  
+
   config.default_cassette_options = {
     record: :new_episodes,
-    match_requests_on: [:method, :uri, :body]
+    match_requests_on: %i[method uri body]
   }
 end
 

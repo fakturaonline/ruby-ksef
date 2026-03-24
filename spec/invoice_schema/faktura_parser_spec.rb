@@ -100,7 +100,7 @@ RSpec.describe KSEF::InvoiceSchema::Faktura, ".from_xml" do
       expect(parsed.fa.fa_wiersz.size).to eq(1)
       expect(parsed.fa.fa_wiersz.first.p_7).to eq("Test Service")
       expect(parsed.fa.fa_wiersz.first.p_9b).to eq(BigDecimal("1000.00"))
-      expect(parsed.fa.fa_wiersz.first.p_11).to eq(BigDecimal("230.00"))  # FA(3): P_11 = netto amount
+      expect(parsed.fa.fa_wiersz.first.p_11).to eq(BigDecimal("230.00")) # FA(3): P_11 = netto amount
     end
 
     it "handles multiple round-trips" do

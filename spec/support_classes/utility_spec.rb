@@ -33,7 +33,7 @@ RSpec.describe KSEF::Support::Utility do
       attempts = []
 
       described_class.retry(backoff: 0.1, retry_until: 0.5) do |*|
-        attempts << Time.now
+        attempts << Time.zone.now
         attempts.length == 3 ? "done" : nil
       end
 

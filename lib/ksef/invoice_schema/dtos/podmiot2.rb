@@ -4,7 +4,7 @@ module KSEF
   module InvoiceSchema
     module DTOs
       # Podmiot2 - nabywca (buyer) - FA(3) format
-      # 
+      #
       # @example
       #   Podmiot2.new(
       #     dane_identyfikacyjne: DaneIdentyfikacyjne.new(nip: "1234567890", nazwa: "Firma s.r.o."),
@@ -15,7 +15,7 @@ module KSEF
       class Podmiot2 < BaseDTO
         include XMLSerializable
 
-        attr_reader :nr_eori, :dane_identyfikacyjne, :adres, :adres_koresp, 
+        attr_reader :nr_eori, :dane_identyfikacyjne, :adres, :adres_koresp,
                     :dane_kontaktowe, :nr_klienta, :id_nabywcy, :jst, :gv
 
         # @param dane_identyfikacyjne [DaneIdentyfikacyjne] Dane identyfikacyjne (povinné)
@@ -47,7 +47,7 @@ module KSEF
           @id_nabywcy = id_nabywcy
           @jst = jst
           @gv = gv
-          
+
           validate!
         end
 
@@ -57,32 +57,30 @@ module KSEF
 
           # 1. NrEORI (volitelné)
           add_element_if_present(podmiot, "NrEORI", @nr_eori) if @nr_eori
-          
+
           # 2. DaneIdentyfikacyjne (povinné)
           add_child_element(podmiot, @dane_identyfikacyjne)
-          
+
           # 3. Adres (volitelné)
           add_child_element(podmiot, @adres) if @adres
-          
+
           # 4. AdresKoresp (volitelné)
           add_child_element(podmiot, @adres_koresp) if @adres_koresp
-          
+
           # 5. DaneKontaktowe (volitelné, max 3)
-          if @dane_kontaktowe
-            @dane_kontaktowe.first(3).each do |dk|
-              add_child_element(podmiot, dk)
-            end
+          @dane_kontaktowe&.first(3)&.each do |dk|
+            add_child_element(podmiot, dk)
           end
-          
+
           # 6. NrKlienta (volitelné)
           add_element_if_present(podmiot, "NrKlienta", @nr_klienta) if @nr_klienta
-          
+
           # 7. IDNabywcy (volitelné)
           add_element_if_present(podmiot, "IDNabywcy", @id_nabywcy) if @id_nabywcy
-          
+
           # 8. JST (povinné)
           add_element_if_present(podmiot, "JST", @jst)
-          
+
           # 9. GV (povinné)
           add_element_if_present(podmiot, "GV", @gv)
 
@@ -93,7 +91,7 @@ module KSEF
           dane_kontaktowe_elements = element.xpath("DaneKontaktowe").map do |dk_el|
             DaneKontaktowe.from_nokogiri(dk_el)
           end
-          
+
           new(
             nr_eori: text_at(element, "NrEORI"),
             dane_identyfikacyjne: object_at(element, "DaneIdentyfikacyjne", DaneIdentyfikacyjne),
@@ -106,9 +104,9 @@ module KSEF
             gv: text_at(element, "GV")&.to_i || 2
           )
         end
-        
+
         private
-        
+
         def validate!
           raise ArgumentError, "dane_identyfikacyjne is required" unless @dane_identyfikacyjne
           raise ArgumentError, "jst is required and must be 1 or 2" unless [1, 2].include?(@jst)

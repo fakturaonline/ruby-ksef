@@ -16,7 +16,7 @@ module KSEF
       def self.from_hash(hash)
         new(
           token: hash["token"],
-          expires_at: hash["validUntil"] ? Time.parse(hash["validUntil"]) : nil
+          expires_at: hash["validUntil"] ? Time.zone.parse(hash["validUntil"]) : nil
         )
       end
 
@@ -24,7 +24,7 @@ module KSEF
       def expired?
         return false if @expires_at.nil?
 
-        @expires_at <= Time.now
+        @expires_at <= Time.zone.now
       end
 
       # Check if token is valid
@@ -51,7 +51,7 @@ module KSEF
       private
 
       def validate!
-        raise ValidationError, "Token cannot be nil or empty" if @token.nil? || @token.empty?
+        raise ValidationError, "Token cannot be nil or empty" if @token.blank?
       end
     end
   end

@@ -11,7 +11,7 @@ module KSEF
       # @return Result of the block
       # @raise [RuntimeError] If timeout reached without success
       def self.retry(backoff: 10, retry_until: 120, &block)
-        start_time = Time.now
+        start_time = Time.zone.now
         attempt = 0
 
         loop do
@@ -20,7 +20,7 @@ module KSEF
 
           return result if result
 
-          elapsed = Time.now - start_time
+          elapsed = Time.zone.now - start_time
           raise Error, "Retry timeout after #{elapsed.round(2)}s (#{attempt} attempts)" if elapsed >= retry_until
 
           sleep backoff

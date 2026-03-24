@@ -108,11 +108,11 @@ RSpec.describe KSEF::Factories::EncryptionKeyFactory do
 
     context "performance" do
       it "generates keys quickly" do
-        start_time = Time.now
+        start_time = Time.zone.now
 
         100.times { described_class.generate_random }
 
-        elapsed = Time.now - start_time
+        elapsed = Time.zone.now - start_time
 
         # Should generate 100 keys in under 1 second
         expect(elapsed).to be < 1.0

@@ -10,7 +10,7 @@ RuboCop::RakeTask.new
 task default: %i[spec rubocop]
 
 desc "Open an irb session preloaded with this library"
-task :console do
+task console: :environment do
   require "irb"
   require_relative "lib/ksef"
 

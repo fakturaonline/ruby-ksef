@@ -3,8 +3,9 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Testdata do
-  let(:http_client) { instance_double(KSEF::HttpClient) }
   subject(:testdata) { described_class.new(http_client) }
+
+  let(:http_client) { instance_double(KSEF::HttpClient) }
 
   describe "#person_create" do
     it "calls PersonCreateHandler with required params" do

@@ -7,7 +7,7 @@ RSpec.describe KSEF::Requests::Certificates::RetrieveHandler do
 
   describe "#call" do
     it "retrieves certificates by serial numbers" do
-      result = subject.call(["123", "456"])
+      result = subject.call(%w[123 456])
 
       expect(result).to be_a(Hash)
       expect(result).to have_key("certificates")
@@ -16,9 +16,9 @@ RSpec.describe KSEF::Requests::Certificates::RetrieveHandler do
     it "calls POST certificates/retrieve endpoint" do
       expect(http_client).to receive(:post).with(
         "certificates/retrieve",
-        body: { certificateSerialNumbers: ["789", "012"] }
+        body: { certificateSerialNumbers: %w[789 012] }
       ).and_return(double(json: {}))
-      subject.call(["789", "012"])
+      subject.call(%w[789 012])
     end
   end
 end

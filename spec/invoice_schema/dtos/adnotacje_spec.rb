@@ -42,16 +42,46 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::Adnotacje do
       expect(xml).to include("<P_17>2</P_17>")
     end
 
-    it "generates correct PMarzy XML for art. 120 margin (p_pmarzy_t)" do
-      adnotacje = described_class.new(p_pmarzy_t: 1)
+    it "generates correct PMarzy XML for art. 120 used goods (p_pmarzy_3_1)" do
+      adnotacje = described_class.new(p_pmarzy_3_1: 1)
 
       xml = adnotacje.to_rexml.to_s
 
       expect(xml).to include("<PMarzy>")
       expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
       expect(xml).to include("<P_PMarzy_3_1>1</P_PMarzy_3_1>")
-      expect(xml).not_to include("P_PMarzyT")
       expect(xml).not_to include("P_PMarzyN")
+    end
+
+    it "generates correct PMarzy XML for art. 120 works of art (p_pmarzy_3_2)" do
+      adnotacje = described_class.new(p_pmarzy_3_2: 1)
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
+      expect(xml).to include("<P_PMarzy_3_2>1</P_PMarzy_3_2>")
+      expect(xml).not_to include("P_PMarzy_3_1")
+      expect(xml).not_to include("P_PMarzyN")
+    end
+
+    it "generates correct PMarzy XML for art. 120 collectibles (p_pmarzy_3_3)" do
+      adnotacje = described_class.new(p_pmarzy_3_3: 1)
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
+      expect(xml).to include("<P_PMarzy_3_3>1</P_PMarzy_3_3>")
+      expect(xml).not_to include("P_PMarzy_3_1")
+      expect(xml).not_to include("P_PMarzyN")
+    end
+
+    it "supports deprecated p_pmarzy_t as alias for p_pmarzy_3_1" do
+      adnotacje = described_class.new(p_pmarzy_t: 1)
+
+      xml = adnotacje.to_rexml.to_s
+
+      expect(xml).to include("<P_PMarzy>1</P_PMarzy>")
+      expect(xml).to include("<P_PMarzy_3_1>1</P_PMarzy_3_1>")
     end
 
     it "generates correct PMarzy XML for art. 119 travel agency margin (p_pmarzy_m)" do

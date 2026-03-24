@@ -3,12 +3,13 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Tokens do
-  let(:http_client) { instance_double(KSEF::HttpClient) }
   subject(:tokens) { described_class.new(http_client) }
+
+  let(:http_client) { instance_double(KSEF::HttpClient) }
 
   describe "#create" do
     it "calls CreateHandler with permissions and description" do
-      permissions = ["InvoiceRead", "InvoiceWrite"]
+      permissions = %w[InvoiceRead InvoiceWrite]
       handler = instance_double(KSEF::Requests::Tokens::CreateHandler)
       allow(KSEF::Requests::Tokens::CreateHandler).to receive(:new).with(http_client).and_return(handler)
       allow(handler).to receive(:call).with(

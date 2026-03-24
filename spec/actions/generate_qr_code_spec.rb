@@ -17,8 +17,8 @@ RSpec.describe KSEF::Actions::GenerateQrCode do
         result = generator.call
 
         expect(result[:png]).to be_a(ChunkyPNG::Image)
-        expect(result[:png].width).to be > 0
-        expect(result[:png].height).to be > 0
+        expect(result[:png].width).to be.positive?
+        expect(result[:png].height).to be.positive?
       end
 
       it "generates QR code SVG" do
