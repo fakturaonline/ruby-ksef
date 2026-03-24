@@ -16,13 +16,13 @@ RSpec.describe KSEF::Actions::SignDocumentV2 do
     cert.subject = OpenSSL::X509::Name.parse("/CN=Test Certificate/O=Test Org")
     cert.issuer = cert.subject
     cert.public_key = rsa_key.public_key
-    cert.not_before = Time.now
-    cert.not_after = Time.now + 365 * 24 * 60 * 60
+    cert.not_before = Time.zone.now
+    cert.not_after = Time.zone.now + (365 * 24 * 60 * 60)
     cert.sign(rsa_key, OpenSSL::Digest.new("SHA256"))
     cert
   end
 
-  # Note: EC certificate creation skipped - OpenSSL 3.0 incompatibility
+  # NOTE: EC certificate creation skipped - OpenSSL 3.0 incompatibility
 
   let(:simple_xml) do
     <<~XML
@@ -142,7 +142,8 @@ RSpec.describe KSEF::Actions::SignDocumentV2 do
         result = action.call(simple_xml, certificate: certificate, private_key: rsa_key)
         doc = Nokogiri::XML(result)
 
-        transform = doc.at_xpath("//ds:Reference[@URI='']/ds:Transforms/ds:Transform[@Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature']", "ds" => described_class::NS_DS)
+        transform = doc.at_xpath("//ds:Reference[@URI='']/ds:Transforms/ds:Transform[@Algorithm='http://www.w3.org/2000/09/xmldsig#enveloped-signature']",
+                                 "ds" => described_class::NS_DS)
         expect(transform).not_to be_nil
       end
 
@@ -155,7 +156,7 @@ RSpec.describe KSEF::Actions::SignDocumentV2 do
       end
     end
 
-    # Note: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
+    # NOTE: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
 
     context "with complex XML" do
       let(:complex_xml) do

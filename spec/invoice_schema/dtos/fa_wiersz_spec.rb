@@ -61,8 +61,8 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::FaWiersz do
       expect(wiersz.p_8a).to eq("szt")
       expect(wiersz.p_8b).to eq(BigDecimal("10.00"))
       expect(wiersz.p_9b).to eq(BigDecimal("1000.00"))
-      expect(wiersz.p_11).to eq(BigDecimal("230.00"))  # FA(3): P_11 = netto amount
-      expect(wiersz.p_12).to eq(23)  # FA(3): P_12 = stawka VAT
+      expect(wiersz.p_11).to eq(BigDecimal("230.00")) # FA(3): P_11 = netto amount
+      expect(wiersz.p_12).to eq(23) # FA(3): P_12 = stawka VAT
     end
 
     it "handles string VAT rate" do

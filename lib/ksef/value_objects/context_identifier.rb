@@ -53,9 +53,7 @@ module KSEF
       private
 
       def validate!
-        unless VALID_TYPES.include?(@type)
-          raise ArgumentError, "Invalid context identifier type: #{@type}. Valid types: #{VALID_TYPES.join(', ')}"
-        end
+        raise ArgumentError, "Invalid context identifier type: #{@type}. Valid types: #{VALID_TYPES.join(", ")}" unless VALID_TYPES.include?(@type)
 
         raise ArgumentError, "Context identifier value cannot be empty" if @value.nil? || @value.to_s.empty?
       end

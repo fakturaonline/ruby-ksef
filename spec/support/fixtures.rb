@@ -33,11 +33,11 @@ module Fixtures
     {
       "accessToken" => {
         "token" => "Bearer #{SecureRandom.hex(32)}",
-        "validUntil" => (Time.now + 3600).utc.iso8601
+        "validUntil" => (Time.zone.now + 3600).utc.iso8601
       },
       "refreshToken" => {
         "token" => "Bearer #{SecureRandom.hex(32)}",
-        "validUntil" => (Time.now + 86_400).utc.iso8601
+        "validUntil" => (Time.zone.now + 86_400).utc.iso8601
       }
     }
   end
@@ -46,7 +46,7 @@ module Fixtures
   def refresh_token_response_fixture
     {
       "token" => "Bearer #{SecureRandom.hex(32)}",
-      "validUntil" => (Time.now + 3600).utc.iso8601
+      "validUntil" => (Time.zone.now + 3600).utc.iso8601
     }
   end
 
@@ -126,7 +126,7 @@ module Fixtures
         <Naglowek>
           <KodFormularza kodSystemowy="FA (2)" wersjaSchemy="1-0E">FA</KodFormularza>
           <WariantFormularza>2</WariantFormularza>
-          <DataWytworzeniaFa>#{Time.now.strftime("%Y-%m-%dT%H:%M:%S")}</DataWytworzeniaFa>
+          <DataWytworzeniaFa>#{Time.zone.now.strftime("%Y-%m-%dT%H:%M:%S")}</DataWytworzeniaFa>
           <SystemInfo>Test System</SystemInfo>
         </Naglowek>
         <Podmiot1>
@@ -136,8 +136,8 @@ module Fixtures
           </DaneIdentyfikacyjne>
         </Podmiot1>
         <Fa>
-          <P_1>#{Time.now.strftime("%Y-%m-%d")}</P_1>
-          <P_2>#{Time.now.strftime("%Y-%m-%d")}</P_2>
+          <P_1>#{Time.zone.now.strftime("%Y-%m-%d")}</P_1>
+          <P_2>#{Time.zone.now.strftime("%Y-%m-%d")}</P_2>
           <P_13_1>1000.00</P_13_1>
         </Fa>
       </Faktura>

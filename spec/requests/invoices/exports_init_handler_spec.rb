@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe KSEF::Requests::Invoices::ExportsInitHandler do
+  subject { described_class.new(http_client, config) }
+
   let(:encryption_key) { double(key: "encrypted_key", iv: "initialization_vector") }
   let(:config) { double(encryption_key: encryption_key) }
   let(:http_client) { stub_http_client(response_body: { "referenceNumber" => "EXPORT-123" }) }
-
-  subject { described_class.new(http_client, config) }
 
   describe "#call" do
     it "initializes export with filters and encryption" do
@@ -36,9 +36,9 @@ RSpec.describe KSEF::Requests::Invoices::ExportsInitHandler do
       config_without_key = double(encryption_key: nil)
       handler = described_class.new(http_client, config_without_key)
 
-      expect {
+      expect do
         handler.call(filters: { subject_type: "subject1" })
-      }.to raise_error("Encrypted key is required")
+      end.to raise_error("Encrypted key is required")
     end
   end
 end

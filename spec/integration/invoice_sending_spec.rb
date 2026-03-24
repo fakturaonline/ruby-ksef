@@ -23,7 +23,7 @@ RSpec.describe "Invoice Sending Integration" do
       # Missing cassette for: POST https://api-test.ksef.mf.gov.pl/v2/auth/token/refresh
       cassette_name: "invoice_sending/successful_fa3_highlevel",
       record: :once,
-      match_requests_on: [:method, :uri]  # Don't match on body - encrypted tokens contain timestamps
+      match_requests_on: %i[method uri] # Don't match on body - encrypted tokens contain timestamps
     } do
       # Build client within VCR context so authentication is recorded/replayed
       nip = test_nip
@@ -41,10 +41,10 @@ RSpec.describe "Invoice Sending Integration" do
       expect(xml).to be_a(String)
       expect(xml).to include("<KodFormularza")
 
-      puts "\n" + "=" * 80
+      puts "\n#{"=" * 80}"
       puts "GENERATED INVOICE XML (size: #{xml.bytesize} bytes)"
       puts "=" * 80
-      puts xml[0..500] + "..." if xml.length > 500
+      puts "#{xml[0..500]}..." if xml.length > 500
       puts "=" * 80
 
       # 3. Send invoice using high-level API
@@ -63,7 +63,7 @@ RSpec.describe "Invoice Sending Integration" do
       puts "\n✅ Invoice sent and session closed automatically!"
       puts "  Invoice Reference: #{invoice_reference}"
       puts "  Session Reference: #{session_reference}"
-      puts "  Session closed: #{response['sessionClosed']}"
+      puts "  Session closed: #{response["sessionClosed"]}"
 
       # 7. Wait a bit for processing (KSeF needs time to process)
       puts "\n⏳ Waiting for KSeF to process invoice..."
@@ -89,12 +89,12 @@ RSpec.describe "Invoice Sending Integration" do
         invoice_count = query_result.dig("invoices", "invoiceMetadata")&.length || 0
         puts "  ✓ Found #{invoice_count} invoice(s) from today"
 
-        if invoice_count > 0
+        if invoice_count.positive?
           puts "  ✓ Invoice is being processed by KSeF!"
         else
           puts "  ℹ Invoice may still be processing (not yet in query results)"
         end
-      rescue => e
+      rescue StandardError => e
         puts "  ⚠ Could not query invoices: #{e.message}"
         puts "  (This is normal - invoice may need more time to process)"
       end
@@ -174,7 +174,7 @@ RSpec.describe "Invoice Sending Integration" do
       kod_waluty: KSEF::InvoiceSchema::ValueObjects::KodWaluty.new("PLN"),
       p_1: Date.today,
       p_2: "TEST/#{Time.now.to_i}/001",
-      p_6: Date.today,  # DUZP - datum zdanitelného plnění (POVINNÉ pro FA(3))
+      p_6: Date.today, # DUZP - datum zdanitelného plnění (POVINNÉ pro FA(3))
       p_15: 123.00,
       fa_wiersz: polozky,
       p_13_1: 100.00,  # Základ daně 23%
@@ -194,5 +194,4 @@ RSpec.describe "Invoice Sending Integration" do
       fa: fa
     )
   end
-
 end

@@ -27,7 +27,7 @@ module KSEF
 
       # Parse response body as JSON
       def json
-        @json ||= MultiJson.load(body) if body && !body.empty?
+        @json ||= MultiJson.load(body) if body.present?
       rescue MultiJson::ParseError => e
         raise ApiError, "Failed to parse JSON response: #{e.message}"
       end

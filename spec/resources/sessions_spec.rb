@@ -3,8 +3,9 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Sessions do
-  let(:http_client) { instance_double(KSEF::HttpClient) }
   subject(:sessions) { described_class.new(http_client) }
+
+  let(:http_client) { instance_double(KSEF::HttpClient) }
 
   describe "#send_online" do
     it "calls SendOnlineHandler with reference number and params" do

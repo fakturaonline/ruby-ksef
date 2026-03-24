@@ -80,9 +80,9 @@ begin
   # List available token scopes/permissions
   # For test purposes, we'll create a token with basic permissions
   token_response = client.tokens.create(
-    description: "Test token generated at #{Time.now}",
+    description: "Test token generated at #{Time.zone.now}",
     type: "standard",
-    permissions: ["InvoiceQuery", "InvoiceRead", "InvoiceWrite"]
+    permissions: %w[InvoiceQuery InvoiceRead InvoiceWrite]
   )
 
   puts "✓ KSeF token created!"
@@ -93,22 +93,21 @@ begin
   puts token_response["token"]
   puts "=" * 80
   puts
-  puts "Token ID: #{token_response['tokenId']}"
-  puts "Description: #{token_response['description']}"
-  puts "Permissions: #{token_response['permissions'].join(', ')}"
+  puts "Token ID: #{token_response["tokenId"]}"
+  puts "Description: #{token_response["description"]}"
+  puts "Permissions: #{token_response["permissions"].join(", ")}"
   puts
   puts "This token can be used for authentication without certificate:"
   puts
   puts "  client = KSEF.build do"
   puts "    mode :test"
   puts "    identifier '#{nip}'"
-  puts "    ksef_token '#{token_response['token']}'"
+  puts "    ksef_token '#{token_response["token"]}'"
   puts "  end"
   puts
   puts "=" * 80
   puts "✓ Done! Copy the token above to your test configuration."
   puts "=" * 80
-
 rescue KSEF::ApiError => e
   puts "❌ API Error: #{e.message}"
   puts

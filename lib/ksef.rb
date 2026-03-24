@@ -18,13 +18,13 @@ end
 
 loader = Zeitwerk::Loader.for_gem
 loader.inflector.inflect(
-  "ksef"             => "KSEF",
-  "nip"              => "NIP",
-  "csr"              => "CSR",
-  "csr_factory"      => "CSRFactory",
-  "base_dto"         => "BaseDTO",
+  "ksef" => "KSEF",
+  "nip" => "NIP",
+  "csr" => "CSR",
+  "csr_factory" => "CSRFactory",
+  "base_dto" => "BaseDTO",
   "xml_serializable" => "XMLSerializable",
-  "dtos"             => "DTOs"
+  "dtos" => "DTOs"
 )
 loader.push_dir File.expand_path("ksef", __dir__), namespace: KSEF
 loader.setup

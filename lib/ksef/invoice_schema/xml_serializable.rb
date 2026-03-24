@@ -61,7 +61,7 @@ module KSEF
       # @param children [Array<XMLSerializable>] Array of child objects
       # @return [void]
       def add_child_elements(parent, children)
-        return if children.nil? || children.empty?
+        return if children.blank?
 
         children.each do |child|
           add_child_element(parent, child)

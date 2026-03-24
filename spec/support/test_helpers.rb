@@ -14,12 +14,8 @@ module TestHelpers
     )
 
     # Allow HTTP methods with any arguments
-    allow(http_client).to receive(:get).and_return(response)
-    allow(http_client).to receive(:post).and_return(response)
-    allow(http_client).to receive(:put).and_return(response)
-    allow(http_client).to receive(:delete).and_return(response)
-    allow(http_client).to receive(:request).and_return(response)
-    allow(http_client).to receive(:config).and_return(KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test)))
+    allow(http_client).to receive_messages(get: response, post: response, put: response, delete: response, request: response,
+                                           config: KSEF::Config.new(mode: KSEF::ValueObjects::Mode.new(:test)))
 
     http_client
   end
@@ -30,7 +26,7 @@ module TestHelpers
       mode: KSEF::ValueObjects::Mode.new(:test),
       access_token: KSEF::ValueObjects::AccessToken.new(
         token: "test_access_token",
-        expires_at: Time.now + 3600
+        expires_at: Time.zone.now + 3600
       ),
       identifier: KSEF::ValueObjects::NIP.new("1111111111")
     }
@@ -52,7 +48,7 @@ module TestHelpers
   def expired_access_token
     KSEF::ValueObjects::AccessToken.new(
       token: "expired_token",
-      expires_at: Time.now - 3600
+      expires_at: Time.zone.now - 3600
     )
   end
 
@@ -60,7 +56,7 @@ module TestHelpers
   def valid_refresh_token
     KSEF::ValueObjects::RefreshToken.new(
       token: "refresh_token",
-      expires_at: Time.now + 86_400 # 24 hours
+      expires_at: Time.zone.now + 86_400 # 24 hours
     )
   end
 end

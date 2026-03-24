@@ -31,7 +31,7 @@ module KSEF
       private
 
       def validate!
-        raise ValidationError, "Certificate path cannot be nil or empty" if @path.nil? || @path.empty?
+        raise ValidationError, "Certificate path cannot be nil or empty" if @path.blank?
         raise ValidationError, "Certificate file does not exist: #{@path}" unless exists?
         raise ValidationError, "Passphrase cannot be nil" if @passphrase.nil?
       end

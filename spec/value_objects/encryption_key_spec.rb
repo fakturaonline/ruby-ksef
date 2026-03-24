@@ -12,15 +12,15 @@ RSpec.describe KSEF::ValueObjects::EncryptionKey do
     end
 
     it "validates key size" do
-      expect {
+      expect do
         described_class.new(key: "short", iv: OpenSSL::Random.random_bytes(16))
-      }.to raise_error(KSEF::ValidationError, /Encryption key must be 32 bytes/)
+      end.to raise_error(KSEF::ValidationError, /Encryption key must be 32 bytes/)
     end
 
     it "validates iv size" do
-      expect {
+      expect do
         described_class.new(key: OpenSSL::Random.random_bytes(32), iv: "short")
-      }.to raise_error(KSEF::ValidationError, /IV must be 16 bytes/)
+      end.to raise_error(KSEF::ValidationError, /IV must be 16 bytes/)
     end
   end
 

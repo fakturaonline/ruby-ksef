@@ -23,7 +23,7 @@ module KSEF
           platnosc = doc.add_element("Platnosc")
 
           # Termíny platby
-          if @termin_platnosci && !@termin_platnosci.empty?
+          if @termin_platnosci.present?
             @termin_platnosci.each do |termin|
               add_child_element(platnosc, termin)
             end
@@ -33,7 +33,7 @@ module KSEF
           add_element_if_present(platnosc, "FormaPlatnosci", @forma_platnosci)
 
           # Bankovní účty
-          if @rachunek_bankowy && !@rachunek_bankowy.empty?
+          if @rachunek_bankowy.present?
             @rachunek_bankowy.each do |rachunek|
               add_child_element(platnosc, rachunek)
             end

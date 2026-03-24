@@ -5,25 +5,25 @@
 
 module KSeFConfig
   # Certificate configuration
-  CERT_PATH = 'path/to/your/certificate.p12'
-  CERT_PASSPHRASE = 'your_certificate_password'
+  CERT_PATH = "path/to/your/certificate.p12"
+  CERT_PASSPHRASE = "your_certificate_password"
 
   # Your NIP (tax ID)
-  NIP = 'your_nip_number'
+  NIP = "your_nip_number"
 
   # Environment
-  ENV = :test  # :test, :demo, or :production
+  ENV = :test # :test, :demo, or :production
 
   # Build configured client
   def self.build_client
-    require_relative 'lib/ksef'
+    require_relative "lib/ksef"
 
     KSEF::ClientBuilder.new
-      .mode(ENV)
-      .certificate_path(CERT_PATH, CERT_PASSPHRASE)
-      .identifier(NIP)
-      .random_encryption_key  # Auto-generate encryption key
-      .build
+                       .mode(ENV)
+                       .certificate_path(CERT_PATH, CERT_PASSPHRASE)
+                       .identifier(NIP)
+                       .random_encryption_key # Auto-generate encryption key
+                       .build
   end
 end
 

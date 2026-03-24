@@ -3,7 +3,7 @@
 RSpec.describe KSEF::ValueObjects::RefreshToken do
   describe ".new" do
     it "creates refresh token with token and expires_at" do
-      expires_at = Time.now + 3600
+      expires_at = Time.zone.now + 3600
       token = described_class.new(token: "refresh_token_123", expires_at: expires_at)
 
       expect(token.token).to eq("refresh_token_123")
@@ -12,9 +12,9 @@ RSpec.describe KSEF::ValueObjects::RefreshToken do
     end
 
     it "validates token is not nil" do
-      expect {
+      expect do
         described_class.new(token: nil)
-      }.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
+      end.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
     end
 
     it "allows expires_at to be nil" do
@@ -25,12 +25,12 @@ RSpec.describe KSEF::ValueObjects::RefreshToken do
 
   describe "#expired?" do
     it "returns false when token is not expired" do
-      token = described_class.new(token: "token", expires_at: Time.now + 3600)
+      token = described_class.new(token: "token", expires_at: Time.zone.now + 3600)
       expect(token.expired?).to be false
     end
 
     it "returns true when token is expired" do
-      token = described_class.new(token: "token", expires_at: Time.now - 3600)
+      token = described_class.new(token: "token", expires_at: Time.zone.now - 3600)
       expect(token.expired?).to be true
     end
   end
