@@ -35,10 +35,14 @@ module KSEF
     end
 
     # Create new config with updated mode
+    # NOTE: api_url is reset to nil so the constructor recalculates it from the
+    # new mode's default_url. Without this, switching from :test to :production
+    # would keep the old test URL — a critical bug that caused all non-test
+    # environments to silently hit the test API.
     def with_mode(mode)
       self.class.new(
         mode: mode,
-        api_url: @api_url,
+        api_url: nil,
         access_token: @access_token,
         refresh_token: @refresh_token,
         ksef_token: @ksef_token,
