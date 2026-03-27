@@ -109,8 +109,9 @@ RSpec.describe KSEF::InvoiceSchema::DTOs::DaneFaKorygowanej do
         ).to_rexml.to_s
       end
 
-      it "generates KSeF reference instead of NrKSeFN" do
-        expect(subject).to include("<NrKSeF>9999999999-20260115-ABCDEF-01</NrKSeF>")
+      it "generates KSeF marker and reference instead of NrKSeFN" do
+        expect(subject).to include("<NrKSeF>1</NrKSeF>")
+        expect(subject).to include("<NrKSeFFaKorygowanej>9999999999-20260115-ABCDEF-01</NrKSeFFaKorygowanej>")
         expect(subject).not_to include("NrKSeFN")
       end
     end
