@@ -43,7 +43,7 @@ module KSEF
           add_element_if_present(element, "NrFaKorygowanej", @nr_fa_korygowanej)
 
           if @nr_ksef_fa_korygowanej
-            add_element_if_present(element, "NrKSeFFaKorygowanej", @nr_ksef_fa_korygowanej)
+            add_element_if_present(element, "NrKSeF", @nr_ksef_fa_korygowanej)
           else
             add_element_if_present(element, "NrKSeFN", @nr_ksef_n)
           end
@@ -57,7 +57,7 @@ module KSEF
           new(
             data_wyst_fa_korygowanej: date_at(element, "DataWystFaKorygowanej"),
             nr_fa_korygowanej: text_at(element, "NrFaKorygowanej"),
-            nr_ksef_fa_korygowanej: text_at(element, "NrKSeFFaKorygowanej"),
+            nr_ksef_fa_korygowanej: text_at(element, "NrKSeF"),
             nr_ksef_n: integer_at(element, "NrKSeFN")
           )
         end
