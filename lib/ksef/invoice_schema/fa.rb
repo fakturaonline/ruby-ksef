@@ -10,7 +10,7 @@ module KSEF
                   :p_13_1, :p_14_1, :p_14_1w, :p_13_2, :p_14_2, :p_14_2w,
                   :p_13_3, :p_14_3, :p_14_3w, :p_13_4, :p_14_4, :p_14_4w,
                   :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc,
-                  :dane_fa_korygowanej
+                  :dane_fa_korygowanej, :tp
 
       # FA(3) format - správné názvy podle XSD:
       # P_13_1 = základ daně 23%, P_14_1 = DPH 23%
@@ -71,7 +71,8 @@ module KSEF
         p_1m: nil,
         p_6: nil,
         platnosc: nil,
-        dane_fa_korygowanej: nil
+        dane_fa_korygowanej: nil,
+        tp: nil
       )
         @kod_waluty = kod_waluty.is_a?(ValueObjects::KodWaluty) ? kod_waluty : ValueObjects::KodWaluty.new(kod_waluty)
         @kurs_waluty = kurs_waluty
@@ -100,6 +101,7 @@ module KSEF
         @p_14_5  = p_14_5
         @platnosc = platnosc
         @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
+        @tp = tp
       end
 
       def to_rexml # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
@@ -175,6 +177,9 @@ module KSEF
         # FaWiersz - položky
         add_child_elements(fa, @fa_wiersz)
 
+        # TP - Transakcje powiązane (connected parties)
+        add_element_if_present(fa, "TP", @tp) if @tp
+
         # Platnosc - platební podmínky
         add_child_element(fa, @platnosc) if @platnosc
 
@@ -208,7 +213,8 @@ module KSEF
           rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
           fa_wiersz: array_at(element, "FaWiersz", DTOs::FaWiersz),
           platnosc: object_at(element, "Platnosc", DTOs::Platnosc),
-          dane_fa_korygowanej: array_at(element, "DaneFaKorygowanej", DTOs::DaneFaKorygowanej)
+          dane_fa_korygowanej: array_at(element, "DaneFaKorygowanej", DTOs::DaneFaKorygowanej),
+          tp: text_at(element, "TP")&.to_i
         )
       end
 

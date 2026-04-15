@@ -51,6 +51,64 @@ RSpec.describe KSEF::InvoiceSchema::Fa do
     end
   end
 
+  describe 'tp (Transakcje powiązane)' do
+    subject(:fa_with_tp) do
+      described_class.new(
+        kod_waluty: 'PLN',
+        p_1: Date.new(2025, 1, 15),
+        p_2: 'FV/001/2025',
+        p_15: 1000.00,
+        tp: 1
+      )
+    end
+
+    subject(:fa_without_tp) do
+      described_class.new(
+        kod_waluty: 'PLN',
+        p_1: Date.new(2025, 1, 15),
+        p_2: 'FV/001/2025',
+        p_15: 1000.00
+      )
+    end
+
+    it 'includes <TP>1</TP> in XML when tp: 1' do
+      xml = fa_with_tp.to_rexml.to_s
+      expect(xml).to include('<TP>1</TP>')
+    end
+
+    it 'omits <TP> in XML when tp is nil (default)' do
+      xml = fa_without_tp.to_rexml.to_s
+      expect(xml).not_to include('<TP>')
+    end
+
+    it 'exposes tp attribute' do
+      expect(fa_with_tp.tp).to eq(1)
+    end
+
+    it 'parses <TP>1</TP> from XML via from_nokogiri' do
+      xml_str = <<~XML
+        <Fa>
+          <KodWaluty>PLN</KodWaluty>
+          <P_1>2025-01-15</P_1>
+          <P_2>FV/001/2025</P_2>
+          <P_15>1000.00</P_15>
+          <Adnotacje>
+            <P_16>2</P_16><P_17>2</P_17><P_18>2</P_18><P_18A>2</P_18A>
+            <Zwolnienie><P_19N>1</P_19N></Zwolnienie>
+            <NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>
+            <P_23>2</P_23>
+            <PMarzy><P_PMarzyN>1</P_PMarzyN></PMarzy>
+          </Adnotacje>
+          <RodzajFaktury>VAT</RodzajFaktury>
+          <TP>1</TP>
+        </Fa>
+      XML
+      doc = Nokogiri::XML(xml_str)
+      fa = described_class.from_nokogiri(doc.root)
+      expect(fa.tp).to eq(1)
+    end
+  end
+
   describe "#to_rexml" do
     it "generates XML with all fields" do
       platnosc = KSEF::InvoiceSchema::DTOs::Platnosc.new(
