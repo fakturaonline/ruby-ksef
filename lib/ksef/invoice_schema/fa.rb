@@ -174,11 +174,11 @@ module KSEF
         # DaneFaKorygowanej - data původní faktury (KOR/KOR_ZAL/KOR_ROZ)
         add_child_elements(fa, @dane_fa_korygowanej)
 
+        # TP - Transakcje powiązane (connected parties) — XSD řádek 3037, před FaWiersz
+        add_element_if_present(fa, "TP", @tp) if @tp
+
         # FaWiersz - položky
         add_child_elements(fa, @fa_wiersz)
-
-        # TP - Transakcje powiązane (connected parties)
-        add_element_if_present(fa, "TP", @tp) if @tp
 
         # Platnosc - platební podmínky
         add_child_element(fa, @platnosc) if @platnosc

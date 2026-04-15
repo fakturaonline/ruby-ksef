@@ -52,7 +52,7 @@ RSpec.describe KSEF::InvoiceSchema::Fa do
   end
 
   describe 'tp (Transakcje powiązane)' do
-    subject(:fa_with_tp) do
+    let(:fa_with_tp) do
       described_class.new(
         kod_waluty: 'PLN',
         p_1: Date.new(2025, 1, 15),
@@ -62,7 +62,7 @@ RSpec.describe KSEF::InvoiceSchema::Fa do
       )
     end
 
-    subject(:fa_without_tp) do
+    let(:fa_without_tp) do
       described_class.new(
         kod_waluty: 'PLN',
         p_1: Date.new(2025, 1, 15),
@@ -83,6 +83,19 @@ RSpec.describe KSEF::InvoiceSchema::Fa do
 
     it 'exposes tp attribute' do
       expect(fa_with_tp.tp).to eq(1)
+    end
+
+    it 'places <TP> before <FaWiersz> per XSD schema' do
+      fa = described_class.new(
+        kod_waluty: 'PLN',
+        p_1: Date.new(2025, 1, 15),
+        p_2: 'FV/001/2025',
+        p_15: 1000.00,
+        fa_wiersz: [fa_wiersz],
+        tp: 1
+      )
+      xml = fa.to_rexml.to_s
+      expect(xml.index('<TP>')).to be < xml.index('<FaWiersz>')
     end
 
     it 'parses <TP>1</TP> from XML via from_nokogiri' do
