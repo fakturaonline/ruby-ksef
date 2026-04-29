@@ -9,15 +9,26 @@ module KSEF
       attr_reader :kod_waluty, :kurs_waluty, :p_1, :p_2, :p_15, :fa_wiersz, :adnotacje, :rodzaj_faktury,
                   :p_13_1, :p_14_1, :p_14_1w, :p_13_2, :p_14_2, :p_14_2w,
                   :p_13_3, :p_14_3, :p_14_3w, :p_13_4, :p_14_4, :p_14_4w,
-                  :p_13_5, :p_14_5, :p_1m, :p_6, :platnosc,
+                  :p_13_5, :p_14_5,
+                  :p_13_6_1, :p_13_6_2, :p_13_6_3,
+                  :p_13_7, :p_13_8, :p_13_9, :p_13_10, :p_13_11,
+                  :p_1m, :p_6, :platnosc,
                   :dane_fa_korygowanej, :tp
 
-      # FA(3) format - správné názvy podle XSD:
-      # P_13_1 = základ daně 23%, P_14_1 = DPH 23%
-      # P_13_2 = základ daně 8%, P_14_2 = DPH 8%
-      # P_13_3 = základ daně 5%, P_14_3 = DPH 5%
-      # P_13_4 = základ daně 0%, P_14_4 = DPH 0%
-      # P_13_5 = základ osvobozené, P_14_5 = částka osvobozené
+      # FA(3) format — pole P_13_X / P_14_X podle oficiálního XSD schematu:
+      #   P_13_1 / P_14_1 — základní sazba (aktuálně 23% nebo 22%)
+      #   P_13_2 / P_14_2 — obniżona pierwsza (aktuálně 8% nebo 7%)
+      #   P_13_3 / P_14_3 — obniżona druga (aktuálně 5%)
+      #   P_13_4 / P_14_4 — ryczałt dla taksówek osobowych (NE generické 0%!)
+      #   P_13_5 / P_14_5 — procedura szczególna (dział XII rozdz. 6a — OSS/IOSS), NE „zwolniona"!
+      #   P_13_6_1 — sprzedaż 0% (tuzemsko, mimo WDT/export)
+      #   P_13_6_2 — sprzedaż 0% při WDT (intra-community supply)
+      #   P_13_6_3 — sprzedaż 0% při eksportu
+      #   P_13_7   — sprzedaż zwolniona od podatku (pole pro „zw")
+      #   P_13_8   — dostawa towarów / świadczenie usług poza terytorium kraju
+      #   P_13_9   — usługi art. 100 ust. 1 pkt 4
+      #   P_13_10  — reverse charge krajowy (art. 17 ust. 1 pkt 7, 8)
+      #   P_13_11  — procedura marży (art. 119 a 120)
       #
       # @param kod_waluty [ValueObjects::KodWaluty] Kód měny
       # @param kurs_waluty [Numeric, nil] Kurz měny (PLN za 1 jednotku cizí měny); povinné pokud KodWaluty != PLN
@@ -27,20 +38,28 @@ module KSEF
       # @param fa_wiersz [Array<DTOs::FaWiersz>] Položky faktury
       # @param adnotacje [DTOs::Adnotacje] Poznámky
       # @param rodzaj_faktury [ValueObjects::RodzajFaktury] Typ faktury
-      # @param p_13_1 [Numeric, nil] Základ daně 23%
-      # @param p_14_1 [Numeric, nil] DPH 23% (v měně faktury)
-      # @param p_14_1w [Numeric, nil] DPH 23% v PLN (povinné pro cizí měnu)
-      # @param p_13_2 [Numeric, nil] Základ daně 8%
-      # @param p_14_2 [Numeric, nil] DPH 8% (v měně faktury)
-      # @param p_14_2w [Numeric, nil] DPH 8% v PLN
-      # @param p_13_3 [Numeric, nil] Základ daně 5%
-      # @param p_14_3 [Numeric, nil] DPH 5% (v měně faktury)
-      # @param p_14_3w [Numeric, nil] DPH 5% v PLN
-      # @param p_13_4 [Numeric, nil] Základ daně 0%
-      # @param p_14_4 [Numeric, nil] DPH 0%
-      # @param p_14_4w [Numeric, nil] DPH 0% v PLN
-      # @param p_13_5 [Numeric, nil] Základ osvobozený
-      # @param p_14_5 [Numeric, nil] Částka osvobozená
+      # @param p_13_1 [Numeric, nil] Základ standardní sazby (23%/22%)
+      # @param p_14_1 [Numeric, nil] DPH standardní sazby (v měně faktury)
+      # @param p_14_1w [Numeric, nil] DPH standardní sazby v PLN (povinné pro cizí měnu)
+      # @param p_13_2 [Numeric, nil] Základ obniżonej pierwszej (8%/7%)
+      # @param p_14_2 [Numeric, nil] DPH obniżonej pierwszej (v měně faktury)
+      # @param p_14_2w [Numeric, nil] DPH obniżonej pierwszej v PLN
+      # @param p_13_3 [Numeric, nil] Základ obniżonej drugiej (5%)
+      # @param p_14_3 [Numeric, nil] DPH obniżonej drugiej (v měně faktury)
+      # @param p_14_3w [Numeric, nil] DPH obniżonej drugiej v PLN
+      # @param p_13_4 [Numeric, nil] Základ ryczałtu dla taksówek osobowych
+      # @param p_14_4 [Numeric, nil] Daň z ryczałtu dla taksówek osobowych
+      # @param p_14_4w [Numeric, nil] Daň z ryczałtu v PLN
+      # @param p_13_5 [Numeric, nil] Základ procedury szczególnej (dział XII rozdz. 6a — OSS/IOSS)
+      # @param p_14_5 [Numeric, nil] Daň procedury szczególnej
+      # @param p_13_6_1 [Numeric, nil] Sprzedaż 0% (tuzemsko, mimo WDT/export)
+      # @param p_13_6_2 [Numeric, nil] Sprzedaż 0% při WDT
+      # @param p_13_6_3 [Numeric, nil] Sprzedaż 0% při eksportu
+      # @param p_13_7 [Numeric, nil] Sprzedaż zwolniona od podatku (pole pro „zw")
+      # @param p_13_8 [Numeric, nil] Dostawa/usługi poza terytorium kraju
+      # @param p_13_9 [Numeric, nil] Usługi art. 100 ust. 1 pkt 4
+      # @param p_13_10 [Numeric, nil] Reverse charge krajowy (art. 17 ust. 1 pkt 7, 8)
+      # @param p_13_11 [Numeric, nil] Procedura marży (art. 119, 120)
       # @param p_1m [String, nil] Místo vystavení
       # @param p_6 [Date, String, nil] Datum zdanitelného plnění (DUZP)
       # @param platnosc [DTOs::Platnosc, nil] Platební podmínky
@@ -68,6 +87,14 @@ module KSEF
         p_14_4w: nil,
         p_13_5: nil,
         p_14_5: nil,
+        p_13_6_1: nil,
+        p_13_6_2: nil,
+        p_13_6_3: nil,
+        p_13_7: nil,
+        p_13_8: nil,
+        p_13_9: nil,
+        p_13_10: nil,
+        p_13_11: nil,
         p_1m: nil,
         p_6: nil,
         platnosc: nil,
@@ -99,6 +126,14 @@ module KSEF
         @p_14_4w = p_14_4w
         @p_13_5  = p_13_5
         @p_14_5  = p_14_5
+        @p_13_6_1 = p_13_6_1
+        @p_13_6_2 = p_13_6_2
+        @p_13_6_3 = p_13_6_3
+        @p_13_7  = p_13_7
+        @p_13_8  = p_13_8
+        @p_13_9  = p_13_9
+        @p_13_10 = p_13_10
+        @p_13_11 = p_13_11
         @platnosc = platnosc
         @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
         @tp = tp
@@ -145,18 +180,38 @@ module KSEF
           add_element_if_present(fa, "P_14_3W", format_decimal(@p_14_3w)) if @p_14_3w
         end
 
-        # Sazba 0%
+        # Ryczałt dla taksówek osobowych
         if @p_13_4 || @p_14_4
           add_element_if_present(fa, "P_13_4",  format_decimal(@p_13_4))  if @p_13_4
           add_element_if_present(fa, "P_14_4",  format_decimal(@p_14_4))  if @p_14_4
           add_element_if_present(fa, "P_14_4W", format_decimal(@p_14_4w)) if @p_14_4w
         end
 
-        # Osvobozeno
+        # Procedura szczególna (dział XII rozdz. 6a — OSS/IOSS)
         if @p_13_5 || @p_14_5
           add_element_if_present(fa, "P_13_5", format_decimal(@p_13_5)) if @p_13_5
           add_element_if_present(fa, "P_14_5", format_decimal(@p_14_5)) if @p_14_5
         end
+
+        # Sazba 0% — P_13_6_1 (tuzemsko) / P_13_6_2 (WDT) / P_13_6_3 (eksport)
+        add_element_if_present(fa, "P_13_6_1", format_decimal(@p_13_6_1)) if @p_13_6_1
+        add_element_if_present(fa, "P_13_6_2", format_decimal(@p_13_6_2)) if @p_13_6_2
+        add_element_if_present(fa, "P_13_6_3", format_decimal(@p_13_6_3)) if @p_13_6_3
+
+        # Sprzedaż zwolniona od podatku (pole pro „zw")
+        add_element_if_present(fa, "P_13_7", format_decimal(@p_13_7)) if @p_13_7
+
+        # Dostawa/usługi poza terytorium kraju
+        add_element_if_present(fa, "P_13_8", format_decimal(@p_13_8)) if @p_13_8
+
+        # Usługi art. 100 ust. 1 pkt 4
+        add_element_if_present(fa, "P_13_9", format_decimal(@p_13_9)) if @p_13_9
+
+        # Reverse charge krajowy (art. 17 ust. 1 pkt 7, 8)
+        add_element_if_present(fa, "P_13_10", format_decimal(@p_13_10)) if @p_13_10
+
+        # Procedura marży (art. 119, 120)
+        add_element_if_present(fa, "P_13_11", format_decimal(@p_13_11)) if @p_13_11
 
         # P_15 - částka celkem
         add_element_if_present(fa, "P_15", format_decimal(@p_15))
@@ -208,6 +263,14 @@ module KSEF
           p_14_4w: decimal_at(element, "P_14_4W"),
           p_13_5:  decimal_at(element, "P_13_5"),
           p_14_5:  decimal_at(element, "P_14_5"),
+          p_13_6_1: decimal_at(element, "P_13_6_1"),
+          p_13_6_2: decimal_at(element, "P_13_6_2"),
+          p_13_6_3: decimal_at(element, "P_13_6_3"),
+          p_13_7:  decimal_at(element, "P_13_7"),
+          p_13_8:  decimal_at(element, "P_13_8"),
+          p_13_9:  decimal_at(element, "P_13_9"),
+          p_13_10: decimal_at(element, "P_13_10"),
+          p_13_11: decimal_at(element, "P_13_11"),
           p_15: decimal_at(element, "P_15"),
           adnotacje: object_at(element, "Adnotacje", DTOs::Adnotacje) || DTOs::Adnotacje.new,
           rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
