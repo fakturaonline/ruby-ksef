@@ -10,15 +10,15 @@ RSpec.describe KSEF::ValueObjects::KsefToken do
     end
 
     it "validates token is not nil" do
-      expect {
+      expect do
         described_class.new(nil)
-      }.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
+      end.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
     end
 
     it "validates token is not empty" do
-      expect {
+      expect do
         described_class.new("")
-      }.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
+      end.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
     end
   end
 

@@ -238,8 +238,8 @@ module KSEF
         key_to_encrypt,
         {
           rsa_padding_mode: "oaep",
-          rsa_oaep_md:      "sha256",
-          rsa_mgf1_md:      "sha256"
+          rsa_oaep_md: "sha256",
+          rsa_mgf1_md: "sha256"
         }
       )
 

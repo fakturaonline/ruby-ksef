@@ -67,7 +67,7 @@ module KSEF
 
         def validate!
           raise ArgumentError, "data_wyst_fa_korygowanej is required" if @data_wyst_fa_korygowanej.nil?
-          raise ArgumentError, "nr_fa_korygowanej is required" if @nr_fa_korygowanej.nil? || @nr_fa_korygowanej.empty?
+          raise ArgumentError, "nr_fa_korygowanej is required" if @nr_fa_korygowanej.blank?
 
           both_set = !@nr_ksef_fa_korygowanej.nil? && !@nr_ksef_n.nil?
           raise ArgumentError, "Specify either nr_ksef_fa_korygowanej or nr_ksef_n, not both" if both_set

@@ -89,9 +89,7 @@ module KSEF
         signature_data = sign_data(signed_info_c14n, private_key)
 
         # Convert ECDSA DER to raw if needed
-        if private_key.is_a?(OpenSSL::PKey::EC)
-          signature_data = convert_ecdsa_der_to_raw(signature_data, 32)
-        end
+        signature_data = convert_ecdsa_der_to_raw(signature_data, 32) if private_key.is_a?(OpenSSL::PKey::EC)
 
         sig_value.content = Base64.strict_encode64(signature_data)
 
@@ -117,7 +115,7 @@ module KSEF
       def canonicalize_exclusive(node)
         # Use exclusive canonicalization (C14N exclusive)
         xml_string = node.to_xml
-        doc = Nokogiri::XML(xml_string) { |config| config.noblanks }
+        doc = Nokogiri::XML(xml_string, &:noblanks)
         doc.canonicalize(Nokogiri::XML::XML_C14N_EXCLUSIVE_1_0)
       end
 

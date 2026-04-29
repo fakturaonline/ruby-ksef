@@ -13,8 +13,8 @@ prodejce_dane = KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
 # FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
 prodejce_adres = KSEF::InvoiceSchema::DTOs::Adres.new(
   kod_kraju: "PL",
-  adres_l1: "Marszałkowska 1/10",      # První řádek: ulice + číslo
-  adres_l2: "00-001 Warszawa"           # Druhý řádek: PSČ + město
+  adres_l1: "Marszałkowska 1/10", # První řádek: ulice + číslo
+  adres_l2: "00-001 Warszawa" # Druhý řádek: PSČ + město
 )
 
 prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(

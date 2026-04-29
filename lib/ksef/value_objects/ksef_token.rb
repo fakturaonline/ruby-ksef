@@ -28,7 +28,7 @@ module KSEF
       private
 
       def validate!
-        raise ValidationError, "KSEF token cannot be nil or empty" if @token.nil? || @token.empty?
+        raise ValidationError, "KSEF token cannot be nil or empty" if @token.blank?
       end
     end
   end

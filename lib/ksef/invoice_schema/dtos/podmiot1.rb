@@ -66,10 +66,8 @@ module KSEF
           add_child_element(podmiot, @adres_koresp) if @adres_koresp
 
           # 6. DaneKontaktowe (optional, max 3)
-          if @dane_kontaktowe
-            @dane_kontaktowe.first(3).each do |dk|
-              add_child_element(podmiot, dk)
-            end
+          @dane_kontaktowe&.first(3)&.each do |dk|
+            add_child_element(podmiot, dk)
           end
 
           # 7. StatusInfoPodatnika (optional)

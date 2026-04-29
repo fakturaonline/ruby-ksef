@@ -20,19 +20,19 @@ module KSEF
         encryption_key = Factories::EncryptionKeyFactory.generate_random
 
         # 3. Encrypt AES key with RSA public key
-        key_encryptor = Actions::EncryptKey.new(certificate['certificate'])
+        key_encryptor = Actions::EncryptKey.new(certificate["certificate"])
         encrypted_aes_key = key_encryptor.call(encryption_key)
         init_vector = Base64.strict_encode64(encryption_key.iv)
 
         # 4. Open online session with encrypted key
         session_response = @client.sessions.open_online(
-          invoice_version: 'FA (3)',  # KSeF 2.0 requires FA(3)
+          invoice_version: "FA (3)", # KSeF 2.0 requires FA(3)
           encryption_info: {
             encrypted_key: encrypted_aes_key,
-            init_vector:   init_vector
+            init_vector: init_vector
           }
         )
-        session_ref = session_response['referenceNumber']
+        session_ref = session_response["referenceNumber"]
 
         # 5. Encrypt invoice content with AES
         encryptor = Actions::EncryptDocument.new(encryption_key)
@@ -46,10 +46,10 @@ module KSEF
         # 7. Send encrypted invoice
         response = @client.sessions.send_online(
           session_ref,
-          invoice_hash:              invoice_hash,
-          invoice_size:              invoice_xml.bytesize,
-          encrypted_invoice_hash:    encrypted_hash,
-          encrypted_invoice_size:    encrypted_content.bytesize,
+          invoice_hash: invoice_hash,
+          invoice_size: invoice_xml.bytesize,
+          encrypted_invoice_hash: encrypted_hash,
+          encrypted_invoice_size: encrypted_content.bytesize,
           encrypted_invoice_content: encrypted_content_base64
         )
 
@@ -58,9 +58,9 @@ module KSEF
 
         # 9. Return response with session info
         response.merge(
-          'sessionReferenceNumber' => session_ref,
-          'xmlContent'            => invoice_xml,
-          'sessionClosed'         => true
+          "sessionReferenceNumber" => session_ref,
+          "xmlContent" => invoice_xml,
+          "sessionClosed" => true
         )
       end
 
@@ -70,9 +70,9 @@ module KSEF
         certificates = @client.security.public_key_certificates
 
         # Find certificate for SymmetricKeyEncryption
-        cert = certificates.find { |c| c['usage']&.include?('SymmetricKeyEncryption') }
+        cert = certificates.find { |c| c["usage"]&.include?("SymmetricKeyEncryption") }
 
-        raise Error, 'No SymmetricKeyEncryption certificate found' unless cert
+        raise Error, "No SymmetricKeyEncryption certificate found" unless cert
 
         cert
       end

@@ -148,7 +148,7 @@ RSpec.describe KSEF::Actions::SplitDocumentIntoParts do
               <Timestamp>#{Time.now.iso8601}</Timestamp>
             </Header>
             <Body>
-              #{'<Item>Content</Item>' * 100}
+              #{"<Item>Content</Item>" * 100}
             </Body>
           </Document>
         XML
@@ -160,7 +160,7 @@ RSpec.describe KSEF::Actions::SplitDocumentIntoParts do
         expect(result.length).to be > 1
         expect(result.join).to eq(xml_document)
 
-        # Note: Parts may not be valid XML individually,
+        # NOTE: Parts may not be valid XML individually,
         # but concatenation should restore original
         concatenated = result.join
         doc = Nokogiri::XML(concatenated)

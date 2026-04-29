@@ -60,8 +60,8 @@ RSpec.describe KSEF::Actions::ConvertDerToPem do
         cert.subject = OpenSSL::X509::Name.parse("/CN=Test")
         cert.issuer = cert.subject
         cert.public_key = key.public_key
-        cert.not_before = Time.now
-        cert.not_after = Time.now + 365 * 24 * 60 * 60
+        cert.not_before = Time.zone.now
+        cert.not_after = Time.zone.now + (365 * 24 * 60 * 60)
         cert.sign(key, OpenSSL::Digest.new("SHA256"))
 
         der = cert.to_der

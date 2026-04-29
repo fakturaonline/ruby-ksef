@@ -13,11 +13,11 @@ module KSEF
       # @param system_info [String, nil] Nazwa systemu teleinformatycznego
       def initialize(
         wariant_formularza: ValueObjects::FormCode.new,
-        data_wytworzenia_fa: Time.now,
+        data_wytworzenia_fa: Time.zone.now,
         system_info: nil
       )
         @wariant_formularza = wariant_formularza
-        @data_wytworzenia_fa = data_wytworzenia_fa.is_a?(String) ? Time.parse(data_wytworzenia_fa) : data_wytworzenia_fa
+        @data_wytworzenia_fa = data_wytworzenia_fa.is_a?(String) ? Time.zone.parse(data_wytworzenia_fa) : data_wytworzenia_fa
         @system_info = system_info
       end
 

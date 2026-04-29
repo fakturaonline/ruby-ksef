@@ -3,8 +3,9 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Auth do
-  let(:http_client) { instance_double(KSEF::HttpClient) }
   subject(:auth) { described_class.new(http_client) }
+
+  let(:http_client) { instance_double(KSEF::HttpClient) }
 
   describe "#challenge" do
     it "calls ChallengeHandler" do
@@ -37,9 +38,9 @@ RSpec.describe KSEF::Resources::Auth do
       handler = instance_double(KSEF::Requests::Auth::RedeemHandler)
       allow(KSEF::Requests::Auth::RedeemHandler).to receive(:new).with(http_client).and_return(handler)
       allow(handler).to receive(:call).and_return({
-                                                     access_token: "access123",
-                                                     refresh_token: "refresh123"
-                                                   })
+                                                    access_token: "access123",
+                                                    refresh_token: "refresh123"
+                                                  })
 
       result = auth.redeem
 

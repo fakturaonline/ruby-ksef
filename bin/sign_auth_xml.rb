@@ -24,7 +24,10 @@ OptionParser.new do |opts|
   opts.on("--output PATH", "Output signed XML file") { |v| options[:output] = v }
   opts.on("--p12 PATH", "PKCS12 certificate (.p12) file") { |v| options[:p12] = v }
   opts.on("--password PASS", "Certificate password") { |v| options[:password] = v }
-  opts.on("-h", "--help") { puts opts; exit }
+  opts.on("-h", "--help") do
+    puts opts
+    exit
+  end
 end.parse!
 
 missing = %i[input output p12 password].reject { |k| options[k] }
