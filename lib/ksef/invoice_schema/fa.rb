@@ -13,7 +13,7 @@ module KSEF
                   :p_13_6_1, :p_13_6_2, :p_13_6_3,
                   :p_13_7, :p_13_8, :p_13_9, :p_13_10, :p_13_11,
                   :p_1m, :p_6, :platnosc,
-                  :dane_fa_korygowanej, :tp
+                  :przyczyna_korekty, :dane_fa_korygowanej, :tp
 
       # FA(3) format — pole P_13_X / P_14_X podle oficiálního XSD schematu:
       #   P_13_1 / P_14_1 — základní sazba (aktuálně 23% nebo 22%)
@@ -63,6 +63,7 @@ module KSEF
       # @param p_1m [String, nil] Místo vystavení
       # @param p_6 [Date, String, nil] Datum zdanitelného plnění (DUZP)
       # @param platnosc [DTOs::Platnosc, nil] Platební podmínky
+      # @param przyczyna_korekty [String, nil] Důvod opravy (KOR/KOR_ZAL/KOR_ROZ); max 256 znaků dle FA(3) XSD
       # @param dane_fa_korygowanej [Array<DTOs::DaneFaKorygowanej>, DTOs::DaneFaKorygowanej, nil] Data původní faktury (KOR/KOR_ZAL/KOR_ROZ)
       def initialize(
         kod_waluty:,
@@ -98,6 +99,7 @@ module KSEF
         p_1m: nil,
         p_6: nil,
         platnosc: nil,
+        przyczyna_korekty: nil,
         dane_fa_korygowanej: nil,
         tp: nil
       )
@@ -135,6 +137,7 @@ module KSEF
         @p_13_10 = p_13_10
         @p_13_11 = p_13_11
         @platnosc = platnosc
+        @przyczyna_korekty = przyczyna_korekty
         @dane_fa_korygowanej = Array(dane_fa_korygowanej).compact
         @tp = tp
       end
@@ -226,6 +229,9 @@ module KSEF
         # RodzajFaktury
         add_element_if_present(fa, "RodzajFaktury", @rodzaj_faktury)
 
+        # PrzyczynaKorekty - důvod opravy (KOR/KOR_ZAL/KOR_ROZ); XSD: před DaneFaKorygowanej
+        add_element_if_present(fa, "PrzyczynaKorekty", @przyczyna_korekty) if @przyczyna_korekty
+
         # DaneFaKorygowanej - data původní faktury (KOR/KOR_ZAL/KOR_ROZ)
         add_child_elements(fa, @dane_fa_korygowanej)
 
@@ -276,6 +282,7 @@ module KSEF
           rodzaj_faktury: ValueObjects::RodzajFaktury.new(text_at(element, "RodzajFaktury") || "VAT"),
           fa_wiersz: array_at(element, "FaWiersz", DTOs::FaWiersz),
           platnosc: object_at(element, "Platnosc", DTOs::Platnosc),
+          przyczyna_korekty: text_at(element, "PrzyczynaKorekty"),
           dane_fa_korygowanej: array_at(element, "DaneFaKorygowanej", DTOs::DaneFaKorygowanej),
           tp: text_at(element, "TP")&.to_i
         )

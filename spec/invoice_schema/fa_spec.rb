@@ -122,6 +122,77 @@ RSpec.describe KSEF::InvoiceSchema::Fa do
     end
   end
 
+  describe 'przyczyna_korekty (PrzyczynaKorekty)' do
+    let(:base_args) do
+      {
+        kod_waluty: 'PLN',
+        p_1: Date.new(2025, 1, 15),
+        p_2: 'FV/KOR/001/2025',
+        p_15: 1000.00,
+        rodzaj_faktury: KSEF::InvoiceSchema::ValueObjects::RodzajFaktury::KOR
+      }
+    end
+
+    it 'emits <PrzyczynaKorekty> when value is provided' do
+      fa = described_class.new(**base_args, przyczyna_korekty: 'Pomyłka w cenie jednostkowej')
+      xml = fa.to_rexml.to_s
+
+      expect(xml).to include('<PrzyczynaKorekty>Pomyłka w cenie jednostkowej</PrzyczynaKorekty>')
+    end
+
+    it 'omits <PrzyczynaKorekty> when value is nil (default)' do
+      fa = described_class.new(**base_args)
+      xml = fa.to_rexml.to_s
+
+      expect(xml).not_to include('<PrzyczynaKorekty>')
+    end
+
+    it 'places <PrzyczynaKorekty> after <RodzajFaktury> and before <DaneFaKorygowanej> per XSD' do
+      dane = KSEF::InvoiceSchema::DTOs::DaneFaKorygowanej.new(
+        data_wyst_fa_korygowanej: Date.new(2024, 12, 1),
+        nr_fa_korygowanej: 'FV/001/2024',
+        nr_ksef_n: 1
+      )
+      fa = described_class.new(
+        **base_args,
+        przyczyna_korekty: 'Zwrot towaru',
+        dane_fa_korygowanej: dane
+      )
+      xml = fa.to_rexml.to_s
+
+      expect(xml.index('<RodzajFaktury>')).to be < xml.index('<PrzyczynaKorekty>')
+      expect(xml.index('<PrzyczynaKorekty>')).to be < xml.index('<DaneFaKorygowanej>')
+    end
+
+    it 'exposes przyczyna_korekty attribute' do
+      fa = described_class.new(**base_args, przyczyna_korekty: 'Korekta ceny')
+      expect(fa.przyczyna_korekty).to eq('Korekta ceny')
+    end
+
+    it 'parses <PrzyczynaKorekty> from XML via from_nokogiri' do
+      xml_str = <<~XML
+        <Fa>
+          <KodWaluty>PLN</KodWaluty>
+          <P_1>2025-01-15</P_1>
+          <P_2>FV/KOR/001/2025</P_2>
+          <P_15>1000.00</P_15>
+          <Adnotacje>
+            <P_16>2</P_16><P_17>2</P_17><P_18>2</P_18><P_18A>2</P_18A>
+            <Zwolnienie><P_19N>1</P_19N></Zwolnienie>
+            <NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>
+            <P_23>2</P_23>
+            <PMarzy><P_PMarzyN>1</P_PMarzyN></PMarzy>
+          </Adnotacje>
+          <RodzajFaktury>KOR</RodzajFaktury>
+          <PrzyczynaKorekty>Pomyłka w ilości</PrzyczynaKorekty>
+        </Fa>
+      XML
+      doc = Nokogiri::XML(xml_str)
+      fa = described_class.from_nokogiri(doc.root)
+      expect(fa.przyczyna_korekty).to eq('Pomyłka w ilości')
+    end
+  end
+
   describe "#to_rexml" do
     it "generates XML with all fields" do
       platnosc = KSEF::InvoiceSchema::DTOs::Platnosc.new(
