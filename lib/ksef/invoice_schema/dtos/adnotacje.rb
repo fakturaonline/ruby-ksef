@@ -16,7 +16,7 @@ module KSEF
         include XMLSerializable
 
         attr_reader :p_16, :p_17, :p_18, :p_18a, :p_19n, :p_19, :p_19a, :p_22n, :p_23,
-                    :p_pmarzy_n, :p_pmarzy_m, :p_pmarzy_t
+                    :p_pmarzy_n, :p_pmarzy_m, :p_pmarzy_3_1, :p_pmarzy_3_2, :p_pmarzy_3_3
 
         # @param p_16 [Integer] Metoda kasowa: 1=ano, 2=ne (default: 2)
         # @param p_17 [Integer] Samofakturowanie: 1=ano, 2=ne (default: 2)
@@ -30,9 +30,12 @@ module KSEF
         # @param p_23 [Integer] Není procedura uproszczona: 2 (default)
         # PMarzy choice — exactly one must be set:
         # @param p_pmarzy_n [Integer, nil] Není marže: 1 (default — not margin scheme)
-        # @param p_pmarzy_m [Integer, nil] Marže art. 119 (cestovní kancelář): 1
-        # @param p_pmarzy_t [Integer, nil] Marže art. 120 (použité zboží, umění, sběratelství): 1
-        def initialize(
+        # @param p_pmarzy_m [Integer, nil] Marže art. 119 — cestovní kancelář (P_PMarzy_2): 1
+        # @param p_pmarzy_3_1 [Integer, nil] Marže art. 120 — towary używane (P_PMarzy_3_1): 1
+        # @param p_pmarzy_3_2 [Integer, nil] Marže art. 120 — dzieła sztuki (P_PMarzy_3_2): 1
+        # @param p_pmarzy_3_3 [Integer, nil] Marže art. 120 — przedmioty kolekcjonerskie i antyki (P_PMarzy_3_3): 1
+        # @param p_pmarzy_t [Integer, nil] DEPRECATED — alias for p_pmarzy_3_1 (backward compat)
+        def initialize( # rubocop:disable Metrics/ParameterLists
           p_16: 2,
           p_17: 2,
           p_18: 2,
@@ -44,6 +47,9 @@ module KSEF
           p_23: 2,
           p_pmarzy_n: nil,
           p_pmarzy_m: nil,
+          p_pmarzy_3_1: nil,
+          p_pmarzy_3_2: nil,
+          p_pmarzy_3_3: nil,
           p_pmarzy_t: nil
         )
           @p_16 = p_16 || 2
@@ -59,9 +65,14 @@ module KSEF
           @p_23 = p_23 || 2
           @p_pmarzy_n = p_pmarzy_n
           @p_pmarzy_m = p_pmarzy_m
-          @p_pmarzy_t = p_pmarzy_t
+          # Backward compat: p_pmarzy_t maps to p_pmarzy_3_1
+          @p_pmarzy_3_1 = p_pmarzy_3_1 || p_pmarzy_t
+          @p_pmarzy_3_2 = p_pmarzy_3_2
+          @p_pmarzy_3_3 = p_pmarzy_3_3
           # Default to P_PMarzyN=1 (not margin) when none explicitly specified
-          @p_pmarzy_n = 1 if @p_pmarzy_n.nil? && @p_pmarzy_m.nil? && @p_pmarzy_t.nil?
+          if @p_pmarzy_n.nil? && @p_pmarzy_m.nil? && @p_pmarzy_3_1.nil? && @p_pmarzy_3_2.nil? && @p_pmarzy_3_3.nil?
+            @p_pmarzy_n = 1
+          end
 
           validate!
         end
@@ -110,10 +121,18 @@ module KSEF
             # Art. 119 - travel agency margin (procedura marży dla biur podróży)
             add_element_if_present(pmarzy, "P_PMarzy", 1)
             add_element_if_present(pmarzy, "P_PMarzy_2", 1)
-          elsif @p_pmarzy_t
-            # Art. 120 - used goods margin (procedura marży - towary używane)
+          elsif @p_pmarzy_3_1
+            # Art. 120 - used goods (procedura marży — towary używane)
             add_element_if_present(pmarzy, "P_PMarzy", 1)
             add_element_if_present(pmarzy, "P_PMarzy_3_1", 1)
+          elsif @p_pmarzy_3_2
+            # Art. 120 - works of art (procedura marży — dzieła sztuki)
+            add_element_if_present(pmarzy, "P_PMarzy", 1)
+            add_element_if_present(pmarzy, "P_PMarzy_3_2", 1)
+          elsif @p_pmarzy_3_3
+            # Art. 120 - collectibles & antiques (procedura marży — przedmioty kolekcjonerskie i antyki)
+            add_element_if_present(pmarzy, "P_PMarzy", 1)
+            add_element_if_present(pmarzy, "P_PMarzy_3_3", 1)
           else
             add_element_if_present(pmarzy, "P_PMarzyN", @p_pmarzy_n)
           end
@@ -125,18 +144,20 @@ module KSEF
           zwolnienie_el = element.at_xpath("Zwolnienie")
           pmarzy_el = element.at_xpath("PMarzy")
           new(
-            p_16:       text_at(element, "P_16")&.to_i || 2,
-            p_17:       text_at(element, "P_17")&.to_i || 2,
-            p_18:       text_at(element, "P_18")&.to_i || 2,
-            p_18a:      text_at(element, "P_18A")&.to_i || 2,
-            p_19n:      text_at(zwolnienie_el, "P_19N")&.to_i,
-            p_19:       text_at(zwolnienie_el, "P_19")&.to_i,
-            p_19a:      text_at(zwolnienie_el, "P_19A"),
-            p_22n:      text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
-            p_23:       text_at(element, "P_23")&.to_i || 2,
+            p_16: text_at(element, "P_16")&.to_i || 2,
+            p_17: text_at(element, "P_17")&.to_i || 2,
+            p_18: text_at(element, "P_18")&.to_i || 2,
+            p_18a: text_at(element, "P_18A")&.to_i || 2,
+            p_19n: text_at(zwolnienie_el, "P_19N")&.to_i,
+            p_19: text_at(zwolnienie_el, "P_19")&.to_i,
+            p_19a: text_at(zwolnienie_el, "P_19A"),
+            p_22n: text_at(element.at_xpath("NoweSrodkiTransportu"), "P_22N")&.to_i || 1,
+            p_23: text_at(element, "P_23")&.to_i || 2,
             p_pmarzy_n: text_at(pmarzy_el, "P_PMarzyN")&.to_i,
             p_pmarzy_m: text_at(pmarzy_el, "P_PMarzy_2")&.to_i,
-            p_pmarzy_t: text_at(pmarzy_el, "P_PMarzy_3_1") || text_at(pmarzy_el, "P_PMarzy_3_2") || text_at(pmarzy_el, "P_PMarzy_3_3") ? 1 : nil
+            p_pmarzy_3_1: text_at(pmarzy_el, "P_PMarzy_3_1")&.to_i,
+            p_pmarzy_3_2: text_at(pmarzy_el, "P_PMarzy_3_2")&.to_i,
+            p_pmarzy_3_3: text_at(pmarzy_el, "P_PMarzy_3_3")&.to_i
           )
         end
 
@@ -153,7 +174,7 @@ module KSEF
           zwolnienie_set = [@p_19n, @p_19].count { |v| v == 1 }
           raise ArgumentError, "Exactly one Zwolnienie option (p_19n or p_19) must be set to 1" unless zwolnienie_set == 1
 
-          pmarzy_set = [@p_pmarzy_n, @p_pmarzy_m, @p_pmarzy_t].count { |v| v == 1 }
+          pmarzy_set = [@p_pmarzy_n, @p_pmarzy_m, @p_pmarzy_3_1, @p_pmarzy_3_2, @p_pmarzy_3_3].count { |v| v == 1 }
           raise ArgumentError, "Exactly one PMarzy flag must be set to 1" unless pmarzy_set == 1
         end
       end
