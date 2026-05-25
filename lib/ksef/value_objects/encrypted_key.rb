@@ -28,7 +28,7 @@ module KSEF
       private
 
       def validate!
-        raise ValidationError, "Encrypted key cannot be nil or empty" if @value.nil? || @value.empty?
+        raise ValidationError, "Encrypted key cannot be nil or empty" if @value.blank?
       end
     end
   end

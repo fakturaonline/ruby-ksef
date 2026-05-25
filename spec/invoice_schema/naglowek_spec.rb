@@ -40,7 +40,7 @@ RSpec.describe KSEF::InvoiceSchema::Naglowek do
     end
 
     it "formats date correctly" do
-      time = Time.new(2024, 1, 15, 10, 30, 45)
+      time = Time.zone.local(2024, 1, 15, 10, 30, 45)
       naglowek = described_class.new(data_wytworzenia_fa: time)
 
       xml = naglowek.to_rexml.to_s

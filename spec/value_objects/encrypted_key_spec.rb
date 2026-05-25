@@ -10,15 +10,15 @@ RSpec.describe KSEF::ValueObjects::EncryptedKey do
     end
 
     it "validates value is not nil" do
-      expect {
+      expect do
         described_class.new(nil)
-      }.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
+      end.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
     end
 
     it "validates value is not empty" do
-      expect {
+      expect do
         described_class.new("")
-      }.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
+      end.to raise_error(KSEF::ValidationError, /cannot be nil or empty/)
     end
   end
 

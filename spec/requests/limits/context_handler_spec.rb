@@ -12,7 +12,7 @@ RSpec.describe KSEF::Requests::Limits::ContextHandler do
         json: {
           "maxSessions" => 100,
           "maxInvoicesPerSession" => 1000,
-          "maxInvoicesPerDay" => 10000
+          "maxInvoicesPerDay" => 10_000
         }
       )
 

@@ -43,12 +43,12 @@ module KSEF
 
           # Send authentication request
           body = {
-            challenge:         challenge_response["challenge"],
+            challenge: challenge_response["challenge"],
             contextIdentifier: {
-              type:  @context_type,
+              type: @context_type,
               value: @identifier.value
             },
-            encryptedToken:    encrypted_token
+            encryptedToken: encrypted_token
           }
 
           response = @http_client.post("auth/ksef-token", body: body)
@@ -63,8 +63,8 @@ module KSEF
             data,
             {
               rsa_padding_mode: "oaep",
-              rsa_oaep_md:      "sha256",
-              rsa_mgf1_md:      "sha256"
+              rsa_oaep_md: "sha256",
+              rsa_mgf1_md: "sha256"
             }
           )
           Base64.strict_encode64(encrypted)

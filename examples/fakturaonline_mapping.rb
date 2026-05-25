@@ -77,14 +77,14 @@ prodejce = KSEF::InvoiceSchema::DTOs::Podmiot1.new(
   # FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: invoice_data[:seller][:country_code],
-    adres_l1: invoice_data[:seller][:street],                           # První řádek: ulice + číslo
-    adres_l2: "#{invoice_data[:seller][:postcode]} #{invoice_data[:seller][:city]}"  # Druhý řádek: PSČ + město
+    adres_l1: invoice_data[:seller][:street], # První řádek: ulice + číslo
+    adres_l2: "#{invoice_data[:seller][:postcode]} #{invoice_data[:seller][:city]}" # Druhý řádek: PSČ + město
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:seller][:email],
     telefon: invoice_data[:seller][:phone]
   )
-  # Note: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
+  # NOTE: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
 )
 
 # 2. Kupující (Buyer -> Podmiot2)
@@ -96,8 +96,8 @@ kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   # FA(3): Adresa má pouze 2 řádky (AdresL1, AdresL2)
   adres: KSEF::InvoiceSchema::DTOs::Adres.new(
     kod_kraju: invoice_data[:buyer][:country_code],
-    adres_l1: invoice_data[:buyer][:street],                            # První řádek: ulice + číslo
-    adres_l2: "#{invoice_data[:buyer][:postcode]} #{invoice_data[:buyer][:city]}"   # Druhý řádek: PSČ + město
+    adres_l1: invoice_data[:buyer][:street], # První řádek: ulice + číslo
+    adres_l2: "#{invoice_data[:buyer][:postcode]} #{invoice_data[:buyer][:city]}" # Druhý řádek: PSČ + město
   ),
   dane_kontaktowe: KSEF::InvoiceSchema::DTOs::DaneKontaktowe.new(
     email: invoice_data[:buyer][:email],
@@ -106,7 +106,7 @@ kupujici = KSEF::InvoiceSchema::DTOs::Podmiot2.new(
   jst: 2,  # FA(3): Není jednotka podřízená JST (1=ano, 2=ne)
   gv: 2    # FA(3): Není člen skupiny VAT (1=ano, 2=ne)
 )
-# Note: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
+# NOTE: VAT ID je v DaneIdentyfikacyjne jako NIP nebo kod_ue+nr_vat_ue
 
 # 3. Položky faktury (lines -> FaWiersz)
 polozky = invoice_data[:lines].map.with_index do |line, idx|

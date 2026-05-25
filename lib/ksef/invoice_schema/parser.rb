@@ -51,7 +51,7 @@ module KSEF
       # @return [Time, nil] Time or nil
       def time_at(element, xpath)
         text = text_at(element, xpath)
-        text ? Time.parse(text) : nil
+        text ? Time.zone.parse(text) : nil
       end
 
       # Helper to get decimal from element

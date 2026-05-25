@@ -5,10 +5,10 @@ RSpec.describe KSEF::Requests::Security::PublicKeyHandler do
 
   let(:http_client) do
     stub_http_client(response_body: {
-      "keys" => [
-        { "usage" => "SymmetricKeyEncryption", "certificate" => "base64cert" }
-      ]
-    })
+                       "keys" => [
+                         { "usage" => "SymmetricKeyEncryption", "certificate" => "base64cert" }
+                       ]
+                     })
   end
 
   describe "#call" do

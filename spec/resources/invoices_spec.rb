@@ -3,9 +3,10 @@
 require "spec_helper"
 
 RSpec.describe KSEF::Resources::Invoices do
+  subject(:invoices) { described_class.new(http_client, config) }
+
   let(:http_client) { instance_double(KSEF::HttpClient) }
   let(:config) { instance_double(KSEF::Config) }
-  subject(:invoices) { described_class.new(http_client, config) }
 
   describe "#download" do
     it "calls DownloadHandler with KSEF number" do

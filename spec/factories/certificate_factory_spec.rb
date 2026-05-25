@@ -13,8 +13,8 @@ RSpec.describe KSEF::Factories::CertificateFactory do
       cert.subject = OpenSSL::X509::Name.parse("/CN=Test/O=Test Org")
       cert.issuer = cert.subject
       cert.public_key = key.public_key
-      cert.not_before = Time.now
-      cert.not_after = Time.now + 365 * 24 * 60 * 60
+      cert.not_before = Time.zone.now
+      cert.not_after = Time.zone.now + (365 * 24 * 60 * 60)
       cert.sign(key, OpenSSL::Digest.new("SHA256"))
       cert
     end
@@ -109,7 +109,7 @@ RSpec.describe KSEF::Factories::CertificateFactory do
       end
     end
 
-    # Note: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
+    # NOTE: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
   end
 
   describe ".from_pem" do
@@ -121,8 +121,8 @@ RSpec.describe KSEF::Factories::CertificateFactory do
       cert.subject = OpenSSL::X509::Name.parse("/CN=Test PEM/O=Test Org")
       cert.issuer = cert.subject
       cert.public_key = key.public_key
-      cert.not_before = Time.now
-      cert.not_after = Time.now + 365 * 24 * 60 * 60
+      cert.not_before = Time.zone.now
+      cert.not_after = Time.zone.now + (365 * 24 * 60 * 60)
       cert.sign(key, OpenSSL::Digest.new("SHA256"))
       cert
     end
@@ -258,6 +258,6 @@ RSpec.describe KSEF::Factories::CertificateFactory do
       end
     end
 
-    # Note: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
+    # NOTE: EC key tests skipped due to OpenSSL 3.0 incompatibility with cert.public_key = ec_key.public_key
   end
 end
