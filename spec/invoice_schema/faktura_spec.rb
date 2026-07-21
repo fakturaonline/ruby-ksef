@@ -147,4 +147,52 @@ RSpec.describe KSEF::InvoiceSchema::Faktura do
       expect(root.namespaces["etd"]).to include("DefinicjeTypy")
     end
   end
+
+  describe "with podmiot3" do
+    let(:podmiot3) do
+      KSEF::InvoiceSchema::DTOs::Podmiot3.new(
+        dane_identyfikacyjne: KSEF::InvoiceSchema::DTOs::DaneIdentyfikacyjne.new(
+          brak_id: 1,
+          nazwa: "Szkola Podstawowa nr 1"
+        ),
+        adres: KSEF::InvoiceSchema::DTOs::Adres.new(
+          kod_kraju: "PL",
+          adres_l1: "Szkolna 1",
+          adres_l2: "00-001 Warszawa"
+        ),
+        rola: 8
+      )
+    end
+
+    let(:faktura_jst) do
+      described_class.new(
+        naglowek: naglowek,
+        podmiot1: podmiot1,
+        podmiot2: podmiot2,
+        podmiot3: podmiot3,
+        fa: fa
+      )
+    end
+
+    it "serializes Podmiot3 between Podmiot2 and Fa" do
+      xml = faktura_jst.to_xml
+
+      expect(xml).to include("<Podmiot3>")
+      expect(xml).to include("<Rola>8</Rola>")
+      expect(xml.index("<Podmiot2>")).to be < xml.index("<Podmiot3>")
+      expect(xml.index("<Podmiot3>")).to be < xml.index("<Fa>")
+    end
+
+    it "omits Podmiot3 when not provided" do
+      expect(faktura.to_xml).not_to include("<Podmiot3>")
+    end
+
+    it "round-trips podmiot3 through from_xml" do
+      parsed = described_class.from_xml(faktura_jst.to_xml)
+
+      expect(parsed.podmiot3).not_to be_nil
+      expect(parsed.podmiot3.rola).to eq(8)
+      expect(parsed.podmiot3.dane_identyfikacyjne.nazwa).to eq("Szkola Podstawowa nr 1")
+    end
+  end
 end

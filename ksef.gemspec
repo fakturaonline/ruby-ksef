@@ -49,6 +49,9 @@ Gem::Specification.new do |spec|
   # ZIP compression
   spec.add_dependency "rubyzip", "~> 2.3"
 
+  # ActiveSupport core extensions (lib uses e.g. Object#blank?, Time.zone)
+  spec.add_dependency "activesupport", ">= 6.0"
+
   # Utilities
   spec.add_dependency "zeitwerk", "~> 2.6"
 
