@@ -22,6 +22,9 @@ end
 
 require "ksef"
 
+# Lib code uses Time.zone (host Rails app sets it); mirror that in specs
+Time.zone = "Europe/Warsaw"
+
 # Manually require test dependencies
 require "ksef/client_builder"
 require "ksef/config"
